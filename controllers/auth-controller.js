@@ -1,4 +1,4 @@
-var Student = require('../models/student');
+var Student = require('../student/student');
 var jwt = require('jwt-simple');
 var config = require('../config');
 
