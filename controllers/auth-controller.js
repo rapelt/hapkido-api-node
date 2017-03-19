@@ -12,8 +12,8 @@ function tokenForUser(student) {
 
 exports.signup = function (req, res, next) {
   console.log(req.body);
-  var firstname = req.body.firstname;
-  var lastname = req.body.lastname;
+  var firstname = req.body.name.firstname;
+  var lastname = req.body.name.lastname;
   var hbId = req.body.hbId;
 
   if(!firstname || !lastname || !hbId) {

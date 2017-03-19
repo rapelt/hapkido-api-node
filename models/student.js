@@ -1,22 +1,67 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var validateHbId = hbId => (/hb+\d{3}$/).test(hbId);
+
+var validatePinNumber = pinNumber => (/^[0-9]{4}$/).test(pinNumber);
+
 var studentSchema = new Schema({
+  name : {
+    firstname: {
+      type: String,
+      required: [true, 'First name is required.'],
+      trim: true
+    },
+    lastname: {
+      type: String,
+      required: [true, 'Last name is required.'],
+      trim: true
+    }
+  },
   hbId: {
     type: String,
-    required: 'hbId is required.',
+    required: [true, 'hbId is required.'],
+    lowercase: true,
+    validate: [validateHbId, 'Hapkido Brisbane Id must start with a hb and end in a 3 digit number'],
+    trim: true
+  },
+  pinNumber: {
+    type: Number,
+    required: [true, 'Pin Number is required.'],
+    validate: [validatePinNumber, 'A pin number must be 4 numbers'],
+  },
+  grade: {
+    type: Number,
+    required: [true, 'A grade is required'],
+    trim: true,
     lowercase: true
   },
-  firstname: {
-    type: String,
-    required: 'First name is required.',
-    lowercase: true
+  isAdmin: {
+    type: Boolean,
+    required: [true, 'Is Admin is required'],
   },
-  lastname: {
-    type: String,
-    required: 'First name is required.',
-    lowercase: true
-  }
+  classes: [{
+    id: {
+      type: Number
+    }
+  }],
+  gradingDates: [{
+    class:{
+      type: Number
+    },
+    grade: {
+      type: Number
+    }
+  }],
+  feedback: [{
+    date: {
+      type: Date
+    },
+    comment: {
+      type: String
+    }
+  }]
+
 });
 
 var Student = mongoose.model('student', studentSchema);
