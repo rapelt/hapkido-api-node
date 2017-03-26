@@ -73,7 +73,15 @@ exports.createNewStudent = function (req, res, next) {
       return res.status(422).send({error: "hbId is in use"});
     }
 
-    var newStudent = new Student (req.body);
+    var newStudent = new Student ();
+
+    newStudent.name.firstname = req.body.name.firstname;
+    newStudent.name.lastname = req.body.name.lastname;
+    newStudent.hbId = req.body.hbId;
+    newStudent.pinNumber = "0000";
+    newStudent.grade = req.body.grade;
+    newStudent.isAdmin = req.body.isAdmin;
+
 
     console.log("student", newStudent);
 

@@ -26,7 +26,7 @@ var studentSchema = new Schema({
     trim: true
   },
   pinNumber: {
-    type: Number,
+    type: String,
     required: [true, 'Pin Number is required.'],
     validate: [validatePinNumber, 'A pin number must be 4 numbers'],
   },
