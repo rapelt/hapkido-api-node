@@ -81,7 +81,7 @@ exports.createNewStudent = function (req, res, next) {
       console.log("err", err);
       if(err) {
         if(err.errors && err.errors.hbId) {
-          return res.status(422).send({error: err.errors.hbId.message});
+          return res.status(422).send({error: err.errors.hbId.message, body: newStudent});
         }
         return next(err);
       }
