@@ -4,7 +4,7 @@ var router = require('./router');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var config = require("./config");
-var cors = require('cors');
+//var cors = require('cors');
 
 let username = config.dbusername;
 let password = config.dbpassword;
@@ -21,7 +21,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(cors({origin: 'http://localhost:8100'}));
+//app.use(cors({origin: 'http://localhost:8100'}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
