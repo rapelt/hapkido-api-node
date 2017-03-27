@@ -21,7 +21,7 @@ var app = express();
   next();
 });*/
 
-app.use(cors({origin: 'http://localhost:8100'}));
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
