@@ -28,6 +28,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.options('/*', function(request, response){
+  response.sendStatus(200);
+});
+
 app.use('/v1', router);
 
 var server = http.createServer(app);
