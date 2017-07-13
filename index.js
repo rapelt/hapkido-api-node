@@ -17,8 +17,7 @@ require('dns').resolve('www.google.com', function(err) { if (err) { console.log(
 //Mongo DB
 var options = {
     server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
-    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } },
-    useMongoClient: true
+    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }
 };
 
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
