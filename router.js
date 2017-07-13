@@ -9,11 +9,11 @@ var router = express.Router();
 router.post('/student/add', StudentController.createNewStudent);
 router.post('/student/:id/delete', StudentController.deleteStudent);
 router.get('/all', StudentController.getAllStudents);*/
-/*router.get('/:id', function(req, res, next){
+router.get('/:id', function(req, res, next){
     console.log("req BLARG", req);
     res.send({"Blarg": "Blarg"});
-});*/
+});
 
-router.get('/:id', StudentController.getStudent);
+//router.get('/:id', StudentController.getStudent);
 
 module.exports = router;
