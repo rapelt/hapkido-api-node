@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - "7"
-  deploy:
+deploy:
   provider: lambda
   function_name: "hapkidoApi"
   region: "ap-southeast-2"
