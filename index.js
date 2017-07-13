@@ -5,40 +5,50 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var config = require("./config");
 var cors = require('cors');
-
-let username = config.dbusername;
-let password = config.dbpassword;
-
-mongoose.connect(`mongodb://${username}:${password}@ds135680.mlab.com:35680/hapkido`);
+var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
 var app = express();
 
-/*app.post('/!*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Credentials', false);
-  next();
-});*/
+app.use(cors());
 
-const corsOptions = {
-  origin: 'http://localhost:8100'
-}
+require('dns').resolve('www.google.com', function(err) { if (err) { console.log("No connection"); } else { console.log("Connected"); } });
 
-app.use(cors(corsOptions));
+
+//Mongo DB
+var options = { server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } } };
+
+var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
+
+mongoose.connect(mongodbUri, options);
+var conn = mongoose.connection;
+
+conn.on('error', console.error.bind(console, 'connection error:'));
+
+conn.once('open', function() {
+    console.log("Mongo Connected");
+    // Wait for the database connection to establish, then start the app.
+});
+
+//End Mongo Db
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/v1', router);
+app.use(awsServerlessExpressMiddleware.eventContext());
 
-var server = http.createServer(app);
+app.use("/student", router);
 
-var port = process.env.PORT || 4000;
-var host = process.env.HOST || '127.0.0.1';
+if(process.env.LH === true) {
+  var server = http.createServer(app);
+  var port = process.env.PORT || 4000;
+  var host = process.env.HOST || '127.0.0.1';
+  console.log(port, host);
 
-console.log(port, host);
+  server.listen(port, host);
+}
 
-server.listen(port, host);
+
+module.exports = app;

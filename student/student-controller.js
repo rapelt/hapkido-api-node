@@ -20,6 +20,8 @@ exports.getAllStudents = function (req, res, next) {
 exports.getStudent = function (req, res, next) {
   var hbId = req.params.id;
 
+  console.log("get Student",hbId, req);
+
   Student.findOne({hbId: hbId}, function (err, student) {
     if(err) {
       return next(err);

@@ -2,15 +2,23 @@ var express = require('express');
 var AuthController = require('./controllers/auth-controller');
 var StudentController = require('./student/student-controller');
 
-
 var router = express.Router();
+router.get("/", function (req, res) {
+    res.send({"ssd;fsf": "skjd"});
+});
 
-router.route('/signup').post(AuthController.signup);
 
+
+/*router.post('/signup', AuthController.signup);
 //students
-router.route('/student/add').post(StudentController.createNewStudent);
-router.route('/student/:id/delete').post(StudentController.deleteStudent);
-router.route('/student/all').get(StudentController.getAllStudents);
-router.route('/student/:id').get(StudentController.getStudent);
+router.post('/student/add', StudentController.createNewStudent);
+router.post('/student/:id/delete', StudentController.deleteStudent);
+router.get('/all', StudentController.getAllStudents);*/
+/*router.get('/:id', function(req, res, next){
+    console.log("req BLARG", req);
+    res.send({"Blarg": "Blarg"});
+});*/
+
+router.get('/:id', StudentController.getStudent);
 
 module.exports = router;

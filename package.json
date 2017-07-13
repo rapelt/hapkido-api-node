@@ -2,9 +2,10 @@
   "name": "hapkido-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "mkdir -p dist/hapkido-api; cp -r controllers models student app.js config.js index.js router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;"
   },
   "author": "",
   "license": "ISC",
