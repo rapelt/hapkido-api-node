@@ -26,6 +26,8 @@ var conn = mongoose.connection;
 
 conn.on('error', console.error.bind(console, 'connection error:'));
 
+console.log("I got htis far");
+
 conn.once('open', function() {
     console.log("Mongo Connected");
     // Wait for the database connection to establish, then start the app.
