@@ -1,13 +1,8 @@
 var express = require('express');
-var AuthController = require('./controllers/auth-controller');
+//var AuthController = require('./controllers/auth-controller');
 var StudentController = require('./student/student-controller');
 
 var router = express.Router();
-router.get("/", function (req, res) {
-    res.send({"ssd;fsf": "skjd"});
-});
-
-
 
 /*router.post('/signup', AuthController.signup);
 //students
