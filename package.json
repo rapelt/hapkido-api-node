@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha",
     "zip": "mkdir -p dist/hapkido-api; cp -r controllers models student app.js config.js index.js router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "cors": "^2.8.1",
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
+    "mocha": "^3.4.2",
     "mongoose": "^4.9.0"
   }
 }
