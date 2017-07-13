@@ -20,14 +20,16 @@ exports.getAllStudents = function (req, res, next) {
 exports.getStudent = function (req, res, next) {
   var hbId = req.params.id;
 
-  console.log("get Student",hbId, req);
+  console.log("get Student",hbId);
 
   Student.findOne({hbId: hbId}, function (err, student) {
     if(err) {
+      console.log("-----error-----", err);
       return next(err);
     }
 
     if (student) {
+      console.log("-----student-----", student);
       // return user (without hashed password)
       res.json({student: student});
     } else {
