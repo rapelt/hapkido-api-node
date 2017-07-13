@@ -16,6 +16,6 @@
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
     "mocha": "^3.4.2",
-    "mongoose": "git4.10.0"
+    "mongoose": "4.10.0"
   }
 }
