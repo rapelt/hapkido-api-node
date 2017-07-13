@@ -8,16 +8,14 @@ var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware'
 
 var app = express();
 
-console.log("I was deployed");
-
 app.use(cors());
 
 require('dns').resolve('www.google.com', function(err) { if (err) { console.log("No connection"); } else { console.log("Connected to the internet"); } });
 
 //Mongo DB
 var options = {
-    server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
-    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }
+    /*server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }*/
 };
 
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
@@ -26,8 +24,6 @@ mongoose.connect(mongodbUri, options);
 var conn = mongoose.connection;
 
 conn.on('error', console.error.bind(console, 'connection error:'));
-
-console.log("I got htis far");
 
 conn.once('open', function() {
     console.log("Mongo Connected");
