@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
+    "test": "mocha",
     "zip": "mkdir -p dist/hapkido-api; cp -r controllers models student app.js config.js index.js router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;"
   },
   "author": "",
