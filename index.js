@@ -9,6 +9,8 @@ var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware'
 
 var app = express();
 
+console.log("I was deployed");
+
 app.use(cors());
 
 require('dns').resolve('www.google.com', function(err) { if (err) { console.log("No connection"); } else { console.log("Connected"); } });
