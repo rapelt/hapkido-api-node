@@ -14,10 +14,12 @@ app.use(cors());
 
 require('dns').resolve('www.google.com', function(err) { if (err) { console.log("No connection"); } else { console.log("Connected to the internet"); } });
 
-
 //Mongo DB
-var options = { server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
-    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } } };
+var options = {
+    server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } },
+    useMongoClient: true
+};
 
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
 
