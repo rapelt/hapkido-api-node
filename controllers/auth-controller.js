@@ -1,13 +1,11 @@
 var Student = require('../student/student');
 var jwt = require('jwt-simple');
-var config = require('../config');
 
 function tokenForUser(student) {
   return jwt.encode({
     sub: student._id,
     iat: new Date().getTime()
-  },
-  config.secret)
+  }, process.env.PW)
 }
 
 exports.signup = function (req, res, next) {

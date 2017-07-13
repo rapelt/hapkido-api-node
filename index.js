@@ -3,7 +3,6 @@ var http = require('http');
 var router = require('./router');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var config = require("./config");
 var cors = require('cors');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
