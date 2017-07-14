@@ -16,17 +16,33 @@ exports.dbconnect = function (callback) {
     console.log("Mongoose ready State 1", mongoose.connection.readyState);
     console.log("Ready for connections");
 
-    conn.on('error', function(err) {
-        console.log("This is my error for mongo db", err);
+
+
+    var promise = new Promise(function(resolve, reject) {
+        mongoose.connect(mongodbUri);
+
+        conn.on('error', function(err) {
+            reject(err);
+            console.log("This is my error for mongo db", err);
+        });
+
+        conn.once('open', function() {
+            // Wait for the database connection to establish, then start the app.
+            console.log("Mongo Connected");
+            resolve("Done");
+        });
     });
 
-    conn.once('open', function() {
-        // Wait for the database connection to establish, then start the app.
-        console.log("Mongo Connected");
-        callback();
-    });
+    promise.then(function( message ) {
+            console.log( message );
+            callback();
+        },
+        function( err ) {
+            console.log( err );
+        });
 
-    mongoose.connect(mongodbUri);
+
+
 
     //End Mongo Db
 };
