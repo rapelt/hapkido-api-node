@@ -18,7 +18,11 @@ var options = {
     replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }
 };
 
+console.log(process.env.USER , process.env.PW);
+
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
+console.log(mongodbUri);
+
 
 console.log("1 mongo db connection", mongoose.connection.readyState);
 
