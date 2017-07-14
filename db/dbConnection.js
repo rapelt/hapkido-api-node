@@ -12,7 +12,6 @@ exports.dbconnect = function (callback) {
 
     var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
 
-    mongoose.connect(mongodbUri);
     var conn = mongoose.connection;
     console.log("Mongoose ready State 1", mongoose.connection.readyState);
     console.log("Ready for connections");
@@ -26,6 +25,8 @@ exports.dbconnect = function (callback) {
         console.log("Mongo Connected");
         callback();
     });
+
+    mongoose.connect(mongodbUri);
 
     //End Mongo Db
 };
