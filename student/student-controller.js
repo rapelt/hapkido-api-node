@@ -1,4 +1,5 @@
 var Student = require('./student');
+var db = require('../db/dbConnection');
 
 exports.getAllStudents = function (req, res, next) {
   Student.find({}, function (err, students) {
@@ -18,25 +19,30 @@ exports.getAllStudents = function (req, res, next) {
 
 
 exports.getStudent = function (req, res, next) {
-  var hbId = req.params.id;
+  db.dbconnect(function () {
+      var hbId = req.params.id;
 
-    console.log("get Student",hbId);
+      console.log("get Student",hbId);
 
-    Student.findOne({hbId: hbId}, function (err, student) {
-    if(err) {
-      console.log("-----error-----", err);
-      return next(err);
-    }
+      Student.findOne({hbId: hbId}, function (err, student) {
+          if(err) {
+              console.log("-----error-----", err);
+              db.dbdisconnect();
+              return next(err);
+          }
 
-    if (student) {
-      console.log("-----student-----", student);
-      // return user (without hashed password)
-      res.json({student: student});
-    } else {
-      // user not found
-      return res.status(422).send({error: "no student found"});
-    }
-  });
+          if (student) {
+              console.log("-----student-----", student);
+              // return user (without hashed password)
+              db.dbdisconnect();
+              res.json({student: student});
+          } else {
+              // user not found
+              db.dbdisconnect();
+              return res.status(422).send({error: "no student found"});
+          }
+      });
+  })
 };
 
 exports.deleteStudent = function (req, res, next) {

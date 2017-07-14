@@ -52,8 +52,4 @@ if(process.env.LH === true) {
     server.listen(port, host);
 }
 
-
-
-
-
 module.exports = app;
