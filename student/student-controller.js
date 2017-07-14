@@ -19,7 +19,7 @@ exports.getAllStudents = function (req, res, next) {
 
 
 exports.getStudent = function (req, res, next) {
-  //db.dbconnect(function () {
+  db.dbconnect(function () {
       var hbId = req.params.id;
 
       console.log("get Student",hbId);
@@ -46,7 +46,7 @@ exports.getStudent = function (req, res, next) {
               return res.status(422).send({error: "no student found"});
           }
       });
-  //})
+  })
 };
 
 exports.deleteStudent = function (req, res, next) {
