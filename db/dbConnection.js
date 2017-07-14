@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 exports.dbconnect = function (callback) {
     //Mongo DB
     this.dbdisconnect();
+    console.log("Mongoose ready State 1", mongoose.connection.readyState);
     console.log("I got to DB Connect");
     var options = {
         /*server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
@@ -13,7 +14,7 @@ exports.dbconnect = function (callback) {
 
     mongoose.connect(mongodbUri);
     var conn = mongoose.connection;
-
+    console.log("Mongoose ready State 1", mongoose.connection.readyState);
     console.log("Ready for connections");
 
     conn.on('error', function(err) {
