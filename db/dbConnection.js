@@ -4,13 +4,13 @@ exports.dbconnect = function (callback) {
     //Mongo DB
     console.log("I got to DB Connect");
     var options = {
-        server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
-        replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }
+        /*server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
+        replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }*/
     };
 
     var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
 
-    mongoose.connect(mongodbUri, options);
+    mongoose.connect(mongodbUri);
     var conn = mongoose.connection;
 
     console.log("Ready for connections");

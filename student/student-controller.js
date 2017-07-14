@@ -25,6 +25,7 @@ exports.getStudent = function (req, res, next) {
       console.log("get Student",hbId);
 
       Student.findOne({hbId: hbId}, function (err, student) {
+        console.log("I got to Student.findOne");
           if(err) {
               console.log("-----error-----", err);
               db.dbdisconnect();
