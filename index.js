@@ -20,6 +20,8 @@ var options = {
 
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
 
+console.log(mongoose.connection.readyState);
+
 mongoose.connect(mongodbUri, options);
 var conn = mongoose.connection;
 
