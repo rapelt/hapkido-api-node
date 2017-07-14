@@ -19,11 +19,12 @@ exports.dbconnect = function (callback) {
 
 
     var promise = new Promise(function(resolve, reject) {
+        console.log("I am in the promsie");
         mongoose.connect(mongodbUri);
 
         conn.on('error', function(err) {
-            reject(err);
             console.log("This is my error for mongo db", err);
+            reject(err);
         });
 
         conn.once('open', function() {
@@ -34,6 +35,7 @@ exports.dbconnect = function (callback) {
     });
 
     promise.then(function( message ) {
+            console.log("I am in the promsie 2");
             console.log( message );
             callback();
         },
