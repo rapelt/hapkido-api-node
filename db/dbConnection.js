@@ -42,6 +42,7 @@ exports.dbconnect = function (callback) {
         function( err ) {
             console.log( err );
         });*/
+/*
 
     mongoose.connect(mongodbUri, function(err, db) {
         if (err) {
@@ -51,6 +52,7 @@ exports.dbconnect = function (callback) {
             callback();
         }
     });
+*/
 
 
 

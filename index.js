@@ -12,7 +12,7 @@ app.use(cors());
 
 require('dns').resolve('www.google.com', function(err) { if (err) { console.log("No connection"); } else { console.log("Connected to the internet"); } });
 
-/*//Mongo DB
+//Mongo DB
 var options = {
     server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
     replset: { socketOptions: { keepAlive: 30000, connectTimeoutMS : 30000 } }
@@ -32,7 +32,7 @@ conn.once('open', function() {
     console.log("Mongo Connected");
 });
 
-//End Mongo Db*/
+//End Mongo Db
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
