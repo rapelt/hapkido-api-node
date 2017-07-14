@@ -20,9 +20,9 @@ exports.getAllStudents = function (req, res, next) {
 exports.getStudent = function (req, res, next) {
   var hbId = req.params.id;
 
-  console.log("get Student",hbId);
+    console.log("get Student",hbId);
 
-  Student.findOne({hbId: hbId}, function (err, student) {
+    Student.findOne({hbId: hbId}, function (err, student) {
     if(err) {
       console.log("-----error-----", err);
       return next(err);

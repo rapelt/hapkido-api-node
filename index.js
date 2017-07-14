@@ -20,7 +20,7 @@ var options = {
 
 var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
 
-console.log(mongoose.connection.readyState);
+console.log("1 mongo db connection", mongoose.connection.readyState);
 
 mongoose.connect(mongodbUri, options);
 var conn = mongoose.connection;
@@ -32,26 +32,28 @@ conn.on('error', function(err) {
 conn.once('open', function() {
     // Wait for the database connection to establish, then start the app.
     console.log("Mongo Connected");
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }));
-
-    app.use(awsServerlessExpressMiddleware.eventContext());
-
-    app.use("/student", router);
-
-    if(process.env.LH === true) {
-        var server = http.createServer(app);
-        var port = process.env.PORT || 4000;
-        var host = process.env.HOST || '127.0.0.1';
-        console.log(port, host);
-
-        server.listen(port, host);
-    }
-//End Mongo Db
+    console.log("2 mongo db connection", mongoose.connection.readyState);
 
 });
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(awsServerlessExpressMiddleware.eventContext());
+
+app.use("/student", router);
+
+if(process.env.LH === true) {
+    var server = http.createServer(app);
+    var port = process.env.PORT || 4000;
+    var host = process.env.HOST || '127.0.0.1';
+    console.log(port, host);
+
+    server.listen(port, host);
+}
+//End Mongo Db
 
 
 
