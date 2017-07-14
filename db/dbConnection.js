@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 exports.dbconnect = function (callback) {
     //Mongo DB
+    this.dbdisconnect();
     console.log("I got to DB Connect");
     var options = {
         /*server: { socketOptions: { keepAlive: 30000, connectTimeoutMS: 30000 } },
@@ -22,9 +23,8 @@ exports.dbconnect = function (callback) {
     conn.once('open', function() {
         // Wait for the database connection to establish, then start the app.
         console.log("Mongo Connected");
+        callback();
     });
-    callback();
-
 
     //End Mongo Db
 };
