@@ -25,24 +25,17 @@ exports.getStudent = function (req, res, next) {
       console.log("get Student",hbId);
 
       Student.findOne({hbId: hbId}, function (err, student) {
-        console.log("I got to Student.findOne");
           if(err) {
               console.log("-----error-----", err);
               db.dbdisconnect();
-              console.log("Mongo Disconnected");
               return next(err);
           }
 
           if (student) {
-              console.log("-----student-----", student);
-              // return user (without hashed password)
               db.dbdisconnect();
-              console.log("Mongo Disconnected");
               res.json({student: student});
           } else {
-              // user not found
               db.dbdisconnect();
-              console.log("Mongo Disconnected");
               return res.status(422).send({error: "no student found"});
           }
       });

@@ -13,7 +13,7 @@ router.get('/all', StudentController.getAllStudents);*/
     console.log("req BLARG");
     res.send({"Blarg": "Blarg"});
 });*/
-
+router.get('/all', StudentController.getAllStudents);
 router.get('/:id', StudentController.getStudent);
 
 module.exports = router;
