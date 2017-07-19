@@ -2,19 +2,21 @@ var Student = require('./student');
 var db = require('../db/dbConnection');
 
 exports.getAllStudents = function (req, res, next) {
-  Student.find({}, function (err, students) {
-    if(err) {
-      return next(err);
-    }
+    db.dbconnect(function () {
+        Student.find({}, function (err, students) {
+            if(err) {
+                return next(err);
+            }
 
-    if (students) {
-      // return user (without hashed password)
-      res.json({students: students});
-    } else {
-      // user not found
-      return res.status(422).send({error: "no students found"});
-    }
-  });
+            if (students) {
+                // return user (without hashed password)
+                res.json({students: students});
+            } else {
+                // user not found
+                return res.status(422).send({error: "no students found"});
+            }
+        });
+    });
 };
 
 
