@@ -8,16 +8,12 @@ exports.getAllStudents = function (req, res, next) {
         }
 
         if (students) {
-            // return user (without hashed password)
-            res.json({students: students});
-
+            res.json(students);
         } else {
-            // user not found
             return res.status(422).send({error: "no students found"});
         }
     });
 };
-
 
 exports.getStudent = function (req, res, next) {
     var hbId = req.params.id;
@@ -30,7 +26,7 @@ exports.getStudent = function (req, res, next) {
         }
 
         if (student) {
-          res.json({student: student});
+          res.json(student);
         } else {
           return res.status(422).send({error: "no student found"});
         }
