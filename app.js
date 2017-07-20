@@ -4,5 +4,6 @@ const app = require('./index');
 const server = awsServerlessExpress.createServer(app);
 
 exports.handler = (event, context) => {
+    console.log("I am in the Handler");
     awsServerlessExpress.proxy(server, event, context);
 };

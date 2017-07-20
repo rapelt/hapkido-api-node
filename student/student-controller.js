@@ -2,15 +2,23 @@ var Student = require('./student');
 var db = require('../db/dbConnection');
 
 exports.getAllStudents = function (req, res, next) {
+    console.log("I am in the get All Students Method before DB Connection");
+
     db.dbconnect(function () {
+        console.log("I am connected to the DB 2");
+
         Student.find({}, function (err, students) {
+            console.log("I finished the student.find method");
+            db.dbdisconnect();
             if(err) {
                 return next(err);
             }
 
             if (students) {
+                console.log("I found students");
                 // return user (without hashed password)
                 res.json({students: students});
+
             } else {
                 // user not found
                 return res.status(422).send({error: "no students found"});
@@ -23,24 +31,24 @@ exports.getAllStudents = function (req, res, next) {
 exports.getStudent = function (req, res, next) {
   db.dbconnect(function () {
       var hbId = req.params.id;
-
       console.log("get Student",hbId);
 
+      return res.json({student: "Blarg"});
+
+/*
       Student.findOne({hbId: hbId}, function (err, student) {
+          db.dbdisconnect();
           if(err) {
               console.log("-----error-----", err);
-              db.dbdisconnect();
               return next(err);
           }
 
           if (student) {
-              db.dbdisconnect();
               res.json({student: student});
           } else {
-              db.dbdisconnect();
               return res.status(422).send({error: "no student found"});
           }
-      });
+      });*/
   })
 };
 
