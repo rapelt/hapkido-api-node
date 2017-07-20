@@ -8,8 +8,7 @@ var router = express.Router();
 //students
 router.post('/student/add', StudentController.createNewStudent);
 router.post('/student/:id/delete', StudentController.deleteStudent);
-router.get('/all', StudentController.getAllStudents);*/
-/*router.get('/:id', function(req, res, next){
+router.get('/:id', function(req, res, next){
     console.log("req BLARG");
     res.send({"Blarg": "Blarg"});
 });*/

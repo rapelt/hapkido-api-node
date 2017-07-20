@@ -25,7 +25,7 @@ describe('Student model', function() {
         });
     });
 
-    it('Should be invalid if pin number is empty', function(done) {
+    it('Should be invalid if grade is empty', function(done) {
         student.validate(function(err) {
             expect(err.errors.grade).to.exist;
             expect(err.errors.grade.message).to.equal("A grade is required");
@@ -33,7 +33,7 @@ describe('Student model', function() {
         });
     });
 
-    it('Should be invalid if pin number is empty', function(done) {
+    it('Should be invalid if admin is empty', function(done) {
         student.validate(function(err) {
             expect(err.errors.isAdmin).to.exist;
             expect(err.errors.isAdmin.message).to.equal("Is Admin is required");
