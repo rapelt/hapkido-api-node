@@ -1,55 +1,40 @@
 var Student = require('./student');
-var db = require('../db/dbConnection');
 
 exports.getAllStudents = function (req, res, next) {
-    console.log("I am in the get All Students Method before DB Connection");
+    Student.find({}, function (err, students) {
+        console.log("Finding all students");
+        if(err) {
+            return next(err);
+        }
 
-    db.dbconnect(function () {
-        console.log("I am connected to the DB 2");
+        if (students) {
+            // return user (without hashed password)
+            res.json({students: students});
 
-        Student.find({}, function (err, students) {
-            console.log("I finished the student.find method");
-            db.dbdisconnect();
-            if(err) {
-                return next(err);
-            }
-
-            if (students) {
-                console.log("I found students");
-                // return user (without hashed password)
-                res.json({students: students});
-
-            } else {
-                // user not found
-                return res.status(422).send({error: "no students found"});
-            }
-        });
+        } else {
+            // user not found
+            return res.status(422).send({error: "no students found"});
+        }
     });
 };
 
 
 exports.getStudent = function (req, res, next) {
-  db.dbconnect(function () {
-      var hbId = req.params.id;
-      console.log("get Student",hbId);
+    var hbId = req.params.id;
+    console.log("get Student",hbId);
 
-      return res.json({student: "Blarg"});
+    Student.findOne({hbId: hbId}, function (err, student) {
+        if(err) {
+          console.log("-----error-----", err);
+          return next(err);
+        }
 
-/*
-      Student.findOne({hbId: hbId}, function (err, student) {
-          db.dbdisconnect();
-          if(err) {
-              console.log("-----error-----", err);
-              return next(err);
-          }
-
-          if (student) {
-              res.json({student: student});
-          } else {
-              return res.status(422).send({error: "no student found"});
-          }
-      });*/
-  })
+        if (student) {
+          res.json({student: student});
+        } else {
+          return res.status(422).send({error: "no student found"});
+        }
+    });
 };
 
 exports.deleteStudent = function (req, res, next) {
