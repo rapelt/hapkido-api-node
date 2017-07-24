@@ -59,12 +59,13 @@ exports.deleteStudent = function (req, res, next) {
 };
 
 exports.createNewStudent = function (req, res, next) {
-  console.log(req.body);
+  console.log("Create Student", req.body);
 
   var hbId = req.body.hbId;
 
   Student.findOne({hbId: hbId}, function (err, existingStudent) {
     if(err) {
+      console.log(err);
       return next(err);
     }
     if(existingStudent){
@@ -72,6 +73,7 @@ exports.createNewStudent = function (req, res, next) {
     }
 
     var newStudent = new Student ();
+    console.log("Add new Student Body", req.body);
 
     newStudent.name.firstname = req.body.name.firstname;
     newStudent.name.lastname = req.body.name.lastname;

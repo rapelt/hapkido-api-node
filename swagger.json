@@ -117,6 +117,9 @@
           },
           "405": {
             "description": "Invalid Input"
+          },
+          "422": {
+            "description": "Id in use"
           }
         }
       }
