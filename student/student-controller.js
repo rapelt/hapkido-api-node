@@ -35,6 +35,7 @@ exports.getStudent = function (req, res, next) {
 
 exports.deleteStudent = function (req, res, next) {
   var hbId = req.params.id;
+  console.log("Delete student", hbId);
 
   Student.findOne({hbId: hbId}, function (err, student) {
     if(err) {
