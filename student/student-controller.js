@@ -84,9 +84,9 @@ exports.createNewStudent = function (req, res, next) {
     console.log("student", newStudent);
 
     newStudent.save(function(err) {
-      console.log("err", err);
       if(err) {
-        if(err.errors && err.errors.hbId) {
+          console.log("err", err);
+          if(err.errors && err.errors.hbId) {
           return res.status(422).send({error: err.errors.hbId.message, body: newStudent});
         }
         return next(err);
@@ -108,35 +108,31 @@ exports.updateStudent = function (req, res, next) {
         }
         if(existingStudent){
             if(existingStudent.name.firstname !== req.body.name.firstname){
-                console.log("Updating Firstname from ", existingStudent.name.firstname, " to ", req.body.name.firstname);
                 existingStudent.name.firstname = req.body.name.firstname;
             }
 
             if(existingStudent.name.lastname !== req.body.name.lastname){
-                console.log("Updating lastname from ", existingStudent.name.lastname, " to ", req.body.name.lastname);
                 existingStudent.name.lastname = req.body.name.lastname;
             }
 
             if(existingStudent.pinNumber !== req.body.pinNumber){
-                console.log("Updating pinNumber");
                 existingStudent.pinNumber = req.body.pinNumber;
             }
 
             if(existingStudent.grade !== req.body.grade){
-                console.log("Updating grade");
                 existingStudent.grade = req.body.grade;
             }
 
             existingStudent.save(function(err) {
-                console.log("err", err);
                 if(err) {
+                    console.log("err", err);
                     if(err.errors && err.errors.hbId) {
                         return res.status(422).send({error: err.errors.message, body: existingStudent});
                     }
                     return next(err);
                 }
 
-                res.json({ studentId: newStudent._id});
+                res.json({ studentId: existingStudent._id});
             });
         }
     });
