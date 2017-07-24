@@ -88,6 +88,38 @@
           }
         }
       }
+    },
+    "/student/create": {
+      "post": {
+        "tags": [
+          "student"
+        ],
+        "summary": "create student",
+        "description": "creates a new student",
+        "operationId": "createStudent",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "student",
+            "in": "body",
+            "description": "student to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Student"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "405": {
+            "description": "Invalid Input"
+          }
+        }
+      }
     }
   },
   "definitions": {

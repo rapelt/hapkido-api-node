@@ -12,7 +12,10 @@ router.get('/:id', function(req, res, next){
     console.log("req BLARG");
     res.send({"Blarg": "Blarg"});
 });*/
+
+router.get('/create', StudentController.createNewStudent);
 router.get('/all', StudentController.getAllStudents);
 router.get('/:id', StudentController.getStudent);
+
 
 module.exports = router;
