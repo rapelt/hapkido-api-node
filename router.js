@@ -13,7 +13,7 @@ router.get('/:id', function(req, res, next){
     res.send({"Blarg": "Blarg"});
 });*/
 
-router.get('/create', StudentController.createNewStudent);
+router.post('/create', StudentController.createNewStudent);
 router.get('/all', StudentController.getAllStudents);
 router.get('/:id', StudentController.getStudent);
 
