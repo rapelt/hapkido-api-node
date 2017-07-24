@@ -5,6 +5,19 @@ var studentController = require('../../student/student-controller');
 var Student = require('../../student/student');
 
 describe('routes', function() {
+
+    
+    const existingStudent = new Student({
+        hbId: 'hb030',
+        name: {
+            firstname: 'rebekah',
+            lastname: 'apelt'
+        },
+        pinNumber: '2222',
+        grade: '3',
+        isAdmin: false
+    });
+    
     it('should get all Students', function() {
         sinon.stub(Student, 'find');
 
@@ -28,11 +41,11 @@ describe('routes', function() {
     it('should get 1 Student', function() {
         sinon.stub(Student, 'findOne');
 
-        var a = { name: 'a', hbid: "hb040" };
-        var b = { name: 'b', hbid: "hb030" };
+        var a = { name: 'a', hbid: 'hb040' };
+        var b = { name: 'b', hbid: 'hb030' };
         var expectedModels = {students: [a, b]};
         Student.findOne.yields(null, expectedModels);
-        var req = { params: { id: "hb030"} };
+        var req = { params: { id: 'hb030'} };
         var res = {
             send: sinon.stub(),
             json: sinon.stub()
