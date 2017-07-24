@@ -15,7 +15,7 @@ router.get('/:id', function(req, res, next){
 
 router.post('/create', StudentController.createNewStudent);
 router.get('/all', StudentController.getAllStudents);
-router.post('/:id/update', StudentController.updateStudent);
+router.post('/update/:id', StudentController.updateStudent);
 router.get('/:id', StudentController.getStudent);
 
 module.exports = router;
