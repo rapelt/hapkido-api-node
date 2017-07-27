@@ -19,7 +19,6 @@ exports.getAllClasses = function (req, res, next) {
 exports.createNewClasses = function (req, res, next) {
     console.log("Create Classes", req.body);
 
-
     var newClassesToCreate = req.body.classes;
 
     var classesToCreate = [];
