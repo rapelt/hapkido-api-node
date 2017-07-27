@@ -44,6 +44,6 @@ var classSchema = new Schema({
     }
 });
 
-var Class = mongoose.model('class', classSchema);
+var AClass = mongoose.model('class', classSchema);
 
-module.exports = Class;
+module.exports = AClass;

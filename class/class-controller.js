@@ -1,8 +1,8 @@
-var Class = require('./class');
+var AClass = require('./class');
 var shortid = require('shortid');
 
 exports.getAllClasses = function (req, res, next) {
-    Class.find({}, function (err, classes) {
+    AClass.find({}, function (err, classes) {
         console.log("Finding all classes");
         if(err) {
             return next(err);
@@ -30,12 +30,12 @@ exports.createNewClasses = function (req, res, next) {
     var classesCreated = [];
 
     newClassesToCreate.forEach((aclass)=>{
-        Class.findOne({date: aclass.date, classType: aclass.classType}, function (err, existingClass) {
+        AClass.findOne({date: aclass.date, classType: aclass.classType}, function (err, existingClass) {
             if(err) {
                 errors.push(err);
             }
             if(!existingClass) {
-                var newClass = new Class();
+                var newClass = new AClass();
                 newClass.classId = shortid.generate();
                 newClass.classType = aclass.classType;
                 newClass.attendance = [];
@@ -65,8 +65,11 @@ exports.createNewClasses = function (req, res, next) {
 
     var classesNotCreated = newClassesToCreate.length - classesCreated.length;
 
-    res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
+    if(classesCreated.length === 0){
+        return res.status(422).send({error: errors});
+    }
 
+    res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
 
 };
 
