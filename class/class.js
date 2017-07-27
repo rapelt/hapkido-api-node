@@ -1,18 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Moment = require('Moment');
-
-//var validateHbId = hbId => (/hb+\d{3}$/).test(hbId);
-
-//var validatePinNumber = pinNumber => (/^[0-9]{4}$/).test(pinNumber);
-
-
-/*public classid: string,
-public classType: string,
-public attendance: Array<string>,
-public isGrading: boolean,
-public date: Moment,
-public startTime: string*/
 
 var classSchema = new Schema({
     classId: {
