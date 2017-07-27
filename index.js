@@ -1,6 +1,8 @@
 var express = require('express');
 var http = require('http');
-var router = require('./router');
+var studentRouter = require('./student/studentRouter');
+var classRouter = require('./class/classRouter');
+
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
@@ -15,7 +17,9 @@ app.use(bodyParser.urlencoded({
 
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-app.use("/student", router);
+app.use("/student", studentRouter);
+app.use("/class", classRouter);
+
 
 if(process.env.LH === true) {
     var server = http.createServer(app);
