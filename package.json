@@ -17,6 +17,7 @@
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
     "mocha": "^3.4.2",
+    "moment": "^2.18.1",
     "mongoose": "4.7.1",
     "shortid": "^2.2.8",
     "sinon": "^2.3.8"
