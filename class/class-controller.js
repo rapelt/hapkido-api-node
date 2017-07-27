@@ -19,6 +19,7 @@ exports.getAllClasses = function (req, res, next) {
 exports.createNewClasses = function (req, res, next) {
     console.log("Create Classes", req.body);
 
+
     var newClassesToCreate = req.body.classes;
 
     var classesToCreate = [];
@@ -29,47 +30,65 @@ exports.createNewClasses = function (req, res, next) {
 
     var classesCreated = [];
 
-    newClassesToCreate.forEach((aclass)=>{
-        AClass.findOne({date: aclass.date, classType: aclass.classType}, function (err, existingClass) {
-            if(err) {
-                errors.push(err);
-            }
-            if(!existingClass) {
-                var newClass = new AClass();
-                newClass.classId = shortid.generate();
-                newClass.classType = aclass.classType;
-                newClass.attendance = [];
-                newClass.isGrading = aclass.isGrading;
-                newClass.date = aclass.date;
-                newClass.startTime = aclass.startTime;
+    var promise = new Promise((fulfill, reject) => {
+        newClassesToCreate.forEach((aclass, index)=>{
+            AClass.findOne({date: aclass.date, classType: aclass.classType}, function (err, existingClass) {
+                if(err) {
+                    errors.push(err);
+                }
+                if(!existingClass) {
+                    var newClass = new AClass();
+                    newClass.classId = shortid.generate();
+                    newClass.classType = aclass.classType;
+                    newClass.attendance = [];
+                    newClass.isGrading = aclass.isGrading;
+                    newClass.date = aclass.date;
+                    newClass.startTime = aclass.startTime;
 
-                console.log("class", newClass);
-                classesToCreate.push(newClass);
-            } else {
-                existingClasses.push(existingClass);
-            }
+                    console.log("class", newClass);
+
+                    classesToCreate.push(newClass);
+
+                } else {
+                    existingClasses.push(existingClass);
+                }
+
+                if(newClassesToCreate.length - 1 === index){
+                    fulfill();
+                }
+            });
         });
     });
 
-    classesToCreate.forEach((aclass)=> {
+    promise.then(()=>{
+        var promiseSave = new Promise((fulfill, reject) => {
+            classesToCreate.forEach((aclass, index) => {
+                aclass.save(function (err) {
+                    if (err) {
+                        errors.push(err);
 
-        aclass.save(function (err) {
-            if (err) {
-                errors.push(err);
+                    } else {
+                        classesCreated.push(aclass);
+                    }
+
+                    if(classesToCreate.length - 1 === index){
+                        fulfill();
+                    }
+
+                });
+            });
+        });
+
+        promiseSave.then(() =>{
+            var classesNotCreated = newClassesToCreate.length - classesCreated.length;
+
+            if(classesCreated.length === 0){
+                return res.status(422).send({error: errors});
             }
 
-            classesCreated.push(aclass);
-
+            res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
         });
+
     });
-
-    var classesNotCreated = newClassesToCreate.length - classesCreated.length;
-
-    if(classesCreated.length === 0){
-        return res.status(422).send({error: errors});
-    }
-
-    res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-
 };
 
