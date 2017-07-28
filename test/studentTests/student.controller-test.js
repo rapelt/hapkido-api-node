@@ -6,7 +6,6 @@ var Student = require('../../student/student');
 
 describe('routes', function() {
 
-    
     const existingStudent = new Student({
         hbId: 'hb030',
         name: {

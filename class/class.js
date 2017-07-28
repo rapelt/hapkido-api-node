@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var classSchema = new Schema({
     classId: {
         type: String,
-        required: [true, 'ID is required.'],
+        required: [true, 'ClassId is required.'],
         lowercase: true,
         trim: true
     },
