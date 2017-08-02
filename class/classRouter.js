@@ -5,7 +5,7 @@ var router = express.Router();
 
 router.post('/create', ClassController.createNewClasses);
 router.get('/all', ClassController.getAllClasses);
-router.post('/delete/:id', ClassController.deleteStudent);
+router.post('/delete/:id', ClassController.deleteClass);
 
 /*router.post('/update/:id', ClassController.updateStudent);
 router.get('/:id', ClassController.getStudent);*/
