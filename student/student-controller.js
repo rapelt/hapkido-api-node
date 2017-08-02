@@ -139,4 +139,82 @@ exports.updateStudent = function (req, res, next) {
     });
 };
 
+exports.addToClass = function (req, res, next) {
+    var hbId = req.params.id;
+    var classId = req.body.classId;
+    console.log("add to class", classId, hbId);
+
+    Student.findOne({hbId: hbId}, function (err, student) {
+        if(err) {
+            return next(err);
+        }
+
+        if(student.classes > 0){
+            var studentAlreadyAttended = false;
+            student.classes.forEach((aclass)=>{
+                if(classId === aclass){
+                    studentAlreadyAttended = true;
+                }
+            });
+
+            if(studentAlreadyAttended){
+                return res.status(422).send({error: "Student is already in attendance"});
+            } else {
+                student.classes.push(hbId);
+            }
+
+        } else {
+            student.classes.push(hbId);
+        }
+
+        student.save(function (err) {
+            if (err) {
+                return res.status(422).send({error: err});
+            }
+            return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId});
+        });
+    });
+};
+
+
+exports.removeFromClass = function (req, res, next) {
+    var hbId = req.params.id;
+    var classId = req.body.classId;
+    console.log("remove from class", classId, hbId);
+
+    Student.findOne({hbId: hbId}, function (err, student) {
+        if(err) {
+            return next(err);
+        }
+
+        if(student.classes > 0){
+            var studentAlreadyAttended = false;
+            var index = null;
+            student.classes.forEach((studentId, i)=>{
+                if(studentId === hbId){
+                    studentAlreadyAttended = true;
+                    index = i;
+                }
+            });
+
+            if(studentAlreadyAttended){
+                student.classes.splice(index, 1);
+            } else {
+                return res.status(422).send({error: "Student is not in attendance"});
+            }
+
+        } else {
+            return res.status(422).send({error: "Student is not in attendance"});
+        }
+
+        student.save(function (err) {
+            if (err) {
+                return res.status(422).send({error: err});
+            }
+            return res.status(200).send({message: "Student " + hbId + " has been removed from class " + classId});
+        });
+    });
+};
+
+
 
