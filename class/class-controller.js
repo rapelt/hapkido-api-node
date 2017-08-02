@@ -91,3 +91,33 @@ exports.createNewClasses = function (req, res, next) {
     });
 };
 
+exports.deleteClass = function (req, res, next) {
+    var classId = req.params.id;
+    console.log("Delete class", classId);
+
+    AClass.findOne({classId: classId}, function (err, aclass) {
+        if(err) {
+            return next(err);
+        }
+
+        if (aclass) {
+            if(aclass.attendance.length > 0){
+                return res.status(422).send({error: "Can not delete class if class has attendance"});
+            } else {
+                aclass.remove(function (err, product) {
+                    if (err) return handleError(err);
+                    AClass.findOne({classId: classId}, function (err, aclass) {
+                        if(aclass){
+                            return res.status(422).send({error: "Class not deleted"});
+                        }
+                        return res.status(200).send({message: "Class deleted"});
+                    })
+                });
+            }
+        } else {
+            // user not found
+            return res.status(422).send({error: "No class found"});
+        }
+    });
+};
+
