@@ -4,7 +4,7 @@ node_js:
 jobs:
   include:
     - stage: unit tests
-      script: "npm run tests"
+      script: "npm run test"
     - stage: deploy to dev
       script: skip
       deploy:
