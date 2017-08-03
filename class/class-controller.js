@@ -131,7 +131,7 @@ exports.addToClass = function (req, res, next) {
             return next(err);
         }
 
-        if(aclass.attendance > 0){
+        if(aclass.attendance.length > 0){
             var studentAlreadyAttended = false;
             aclass.attendance.forEach((studentId)=>{
                 if(studentId === hbId){

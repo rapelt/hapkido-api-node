@@ -149,7 +149,7 @@ exports.addToClass = function (req, res, next) {
             return next(err);
         }
 
-        if(student.classes > 0){
+        if(student.classes.length > 0){
             var studentAlreadyAttended = false;
             student.classes.forEach((aclass)=>{
                 if(classId === aclass){
@@ -164,7 +164,7 @@ exports.addToClass = function (req, res, next) {
             }
 
         } else {
-            student.classes.push(hbId);
+            student.classes.push(classId);
         }
 
         student.save(function (err) {
@@ -187,7 +187,7 @@ exports.removeFromClass = function (req, res, next) {
             return next(err);
         }
 
-        if(student.classes > 0){
+        if(student.classes.length > 0){
             var studentAlreadyAttended = false;
             var index = null;
             student.classes.forEach((studentId, i)=>{

@@ -12,11 +12,7 @@ var classSchema = new Schema({
         type: String,
         required: [true, 'Class type is required.'],
     },
-    attendance: [{
-        studentId: {
-            type: String,
-        }
-    }],
+    attendance: [],
     isGrading: {
         type: Boolean,
         required: [true, 'Is grading is required'],
