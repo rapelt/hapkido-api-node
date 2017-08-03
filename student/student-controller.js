@@ -190,8 +190,8 @@ exports.removeFromClass = function (req, res, next) {
         if(student.classes.length > 0){
             var studentAlreadyAttended = false;
             var index = null;
-            student.classes.forEach((studentId, i)=>{
-                if(studentId === hbId){
+            student.classes.forEach((aclassId, i)=>{
+                if(aclassId === classId){
                     studentAlreadyAttended = true;
                     index = i;
                 }

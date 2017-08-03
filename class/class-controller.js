@@ -168,7 +168,7 @@ exports.removeFromClass = function (req, res, next) {
             return next(err);
         }
 
-        if(aclass.attendance > 0){
+        if(aclass.attendance.length > 0){
             var studentAlreadyAttended = false;
             var index = null;
             aclass.attendance.forEach((studentId, i)=>{
