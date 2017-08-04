@@ -6,6 +6,7 @@ var db = require('./db/dbConnection');
 const config = require('./config/config.prod');
 
 exports.handler = (event, context) => {
+    console.log("In handler - Rebekah");
     db.dbconnect(function () {
         console.log("Connected to Db");
     }, config.dbLocation);
