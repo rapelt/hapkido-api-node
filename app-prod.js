@@ -3,7 +3,7 @@ const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./index');
 const server = awsServerlessExpress.createServer(app);
 var db = require('./db/dbConnection');
-const config = require('./config/config.dev');
+const config = require('./config/config.prod');
 
 exports.handler = (event, context) => {
     db.dbconnect(function () {

@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-exports.dbconnect = function (callback) {
+exports.dbconnect = function (callback, dbLocation) {
     if(mongoose.connection.readyState === 0){
-        var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + '@ds135680.mlab.com:35680/hapkido';
+        var mongodbUri = 'mongodb://' + process.env.USER + ':' + process.env.PW + dbLocation;
 
         mongoose.connect(mongodbUri, function(err, db) {
             if (err) {
