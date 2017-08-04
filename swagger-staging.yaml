@@ -24,6 +24,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -50,6 +51,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -72,6 +74,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -98,6 +101,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -120,6 +124,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -146,6 +151,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -173,6 +179,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -199,6 +206,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -226,6 +234,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -252,6 +261,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -279,6 +289,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -305,6 +316,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -328,6 +340,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -354,6 +367,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -376,6 +390,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -402,6 +417,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -429,6 +445,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -455,6 +472,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -482,6 +500,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -508,6 +527,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -535,6 +555,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -561,6 +582,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -591,6 +613,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -613,6 +636,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -659,3 +683,12 @@ x-amazon-apigateway-gateway-responses:
       gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
       gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+    - "hapkidoApiStaging"
+    - "ConfigHandlerLambdaFunction"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: "!Ref ConfigHandlerLambdaFunction"
+      Principal: "apigateway.amazonaws.com"
