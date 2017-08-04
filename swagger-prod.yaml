@@ -30,7 +30,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -80,7 +80,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -130,7 +130,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -185,7 +185,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -240,7 +240,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -295,7 +295,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -346,7 +346,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -396,7 +396,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -451,7 +451,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -506,7 +506,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -561,7 +561,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
@@ -619,7 +619,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:HapkidoApiProd/invocations"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
