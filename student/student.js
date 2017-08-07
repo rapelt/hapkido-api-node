@@ -40,23 +40,8 @@ var studentSchema = new Schema({
     type: Boolean,
     required: [true, 'Is Admin is required'],
   },
-  classes: [],
-  gradingDates: [{
-    class:{
-      type: Number
-    },
-    grade: {
-      type: Number
-    }
-  }],
-  feedback: [{
-    date: {
-      type: Date
-    },
-    comment: {
-      type: String
-    }
-  }]
+  gradingDates: [],
+  feedback: []
 
 });
 
