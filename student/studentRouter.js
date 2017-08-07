@@ -9,8 +9,8 @@ router.get('/all', StudentController.getAllStudents);
 router.post('/update/:id', StudentController.updateStudent);
 router.post('/delete/:id', StudentController.deleteStudent);
 router.get('/:id', StudentController.getStudent);
-router.get('/deactivate/:id', StudentController.deactivateStudent);
-router.get('/reactivate/:id', StudentController.reactivateStudent);
+router.post('/deactivate/:id', StudentController.deactivateStudent);
+router.post('/reactivate/:id', StudentController.reactivateStudent);
 
 
 module.exports = router;

@@ -140,7 +140,7 @@ exports.updateStudent = function (req, res, next) {
 
 exports.deactivateStudent = function (req, res, next) {
     console.log("Deactivate Student", req.body);
-    var hbId = req.body.hbId;
+    var hbId = req.params.id;
 
     Student.findOne({hbId: hbId}, function (err, existingStudent) {
         if(err) {
@@ -167,7 +167,7 @@ exports.deactivateStudent = function (req, res, next) {
 
 exports.reactivateStudent = function (req, res, next) {
     console.log("Reactivate Student", req.body);
-    var hbId = req.body.hbId;
+    var hbId = req.params.id;
 
     Student.findOne({hbId: hbId}, function (err, existingStudent) {
         if(err) {
