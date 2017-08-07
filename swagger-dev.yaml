@@ -364,6 +364,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -468,6 +469,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
