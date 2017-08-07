@@ -41,7 +41,11 @@ var studentSchema = new Schema({
     required: [true, 'Is Admin is required'],
   },
   gradingDates: [],
-  feedback: []
+  feedback: [],
+  isActive: {
+    type: Boolean,
+    required: [true, 'Is Active is required'],
+  },
 
 });
 

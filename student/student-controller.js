@@ -81,8 +81,7 @@ exports.createNewStudent = function (req, res, next) {
     newStudent.pinNumber = "0000";
     newStudent.grade = req.body.grade;
     newStudent.isAdmin = req.body.isAdmin;
-
-    console.log("student", newStudent);
+    newStudent.isActive = req.body.isActive;
 
     newStudent.save(function(err) {
       if(err) {
@@ -138,4 +137,59 @@ exports.updateStudent = function (req, res, next) {
         }
     });
 };
+
+exports.deactivateStudent = function (req, res, next) {
+    console.log("Deactivate Student", req.body);
+    var hbId = req.body.hbId;
+
+    Student.findOne({hbId: hbId}, function (err, existingStudent) {
+        if(err) {
+            console.log(err);
+            return next(err);
+        }
+        if(existingStudent){
+            existingStudent.isActive = false;
+
+            existingStudent.save(function(err) {
+                if(err) {
+                    console.log("err", err);
+                    if(err.errors && err.errors.hbId) {
+                        return res.status(422).send({error: err.errors.message, body: existingStudent});
+                    }
+                    return next(err);
+                }
+
+                res.json({ studentId: existingStudent._id});
+            });
+        }
+    });
+};
+
+exports.reactivateStudent = function (req, res, next) {
+    console.log("Reactivate Student", req.body);
+    var hbId = req.body.hbId;
+
+    Student.findOne({hbId: hbId}, function (err, existingStudent) {
+        if(err) {
+            console.log(err);
+            return next(err);
+        }
+        if(existingStudent){
+            existingStudent.isActive = true;
+
+            existingStudent.save(function(err) {
+                if(err) {
+                    console.log("err", err);
+                    if(err.errors && err.errors.hbId) {
+                        return res.status(422).send({error: err.errors.message, body: existingStudent});
+                    }
+                    return next(err);
+                }
+
+                res.json({ studentId: existingStudent._id});
+            });
+        }
+    });
+};
+
 

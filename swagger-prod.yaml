@@ -24,7 +24,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -38,8 +38,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -51,7 +49,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -65,8 +63,6 @@ paths:
         type: "mock"
   /class/all:
     get:
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -74,7 +70,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -88,8 +84,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -101,7 +95,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -115,8 +109,6 @@ paths:
         type: "mock"
   /class/create:
     post:
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -124,7 +116,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -138,8 +130,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -151,7 +141,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -165,8 +155,6 @@ paths:
         type: "mock"
   /class/delete/{ClassId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "ClassId"
         in: "path"
@@ -179,7 +167,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -193,8 +181,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -206,7 +192,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -220,8 +206,6 @@ paths:
         type: "mock"
   /class/removefromclass/{ClassId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "ClassId"
         in: "path"
@@ -234,7 +218,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -248,8 +232,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -261,62 +243,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
-        responses:
-          default:
-            statusCode: "200"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-        requestTemplates:
-          application/json: "{\"statusCode\": 200}"
-        passthroughBehavior: "when_no_match"
-        type: "mock"
-  /student/addtoclass/{StudentHbId}:
-    post:
-      produces:
-      - "application/json"
-      parameters:
-      - name: "StudentHbId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-      x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
-        responses:
-          default:
-            statusCode: "200"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
-        passthroughBehavior: "when_no_match"
-        httpMethod: "POST"
-        contentHandling: "CONVERT_TO_TEXT"
-        type: "aws_proxy"
-    options:
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
-      x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -331,8 +258,6 @@ paths:
   /student/all:
     get:
       operationId: "getAllStudent"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -340,7 +265,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -354,8 +279,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -367,7 +290,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -381,8 +304,6 @@ paths:
         type: "mock"
   /student/create:
     post:
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -390,7 +311,59 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApiProd/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /student/deactivate/{StudentHbId}:
+    post:
+      produces:
+      - "application/json"
+      parameters:
+      - name: "StudentHbId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
         responses:
           default:
             statusCode: "200"
@@ -417,7 +390,6 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -431,8 +403,6 @@ paths:
         type: "mock"
   /student/delete/{StudentHbId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "StudentHbId"
         in: "path"
@@ -445,7 +415,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -459,8 +429,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -472,7 +440,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -484,7 +452,7 @@ paths:
           application/json: "{\"statusCode\": 200}"
         passthroughBehavior: "when_no_match"
         type: "mock"
-  /student/removefromclass/{StudentHbId}:
+  /student/reactivate/{StudentHbId}:
     post:
       produces:
       - "application/json"
@@ -500,7 +468,6 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -527,7 +494,6 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -541,8 +507,6 @@ paths:
         type: "mock"
   /student/update/{StudentHbId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "StudentHbId"
         in: "path"
@@ -555,7 +519,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -569,8 +533,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -582,7 +544,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -613,7 +575,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -627,8 +589,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -636,7 +596,7 @@ paths:
             Access-Control-Allow-Origin:
               type: "string"
       x-amazon-apigateway-integration:
-        credentials : "arn:aws:iam::845320091708:role/lambda_basic_execution"
+        credentials: "arn:aws:iam::845320091708:role/lambda_basic_execution"
         responses:
           default:
             statusCode: "200"
@@ -673,13 +633,13 @@ definitions:
       feedback:
         type: "array"
 x-amazon-apigateway-gateway-responses:
-  DEFAULT_4XX:
-    responseParameters:
-      gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
   DEFAULT_5XX:
     responseParameters:
       gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
       gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+  DEFAULT_4XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"

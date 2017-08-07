@@ -40,4 +40,12 @@ describe('Student model', function() {
             done();
         });
     });
+
+    it('Should be invalid if is Active is empty', function(done) {
+        student.validate(function(err) {
+            expect(err.errors.isActive).to.exist;
+            expect(err.errors.isActive.message).to.equal("Is Active is required");
+            done();
+        });
+    });
 });
