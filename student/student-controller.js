@@ -82,6 +82,7 @@ exports.createNewStudent = function (req, res, next) {
     newStudent.grade = req.body.grade;
     newStudent.isAdmin = req.body.isAdmin;
     newStudent.isActive = req.body.isActive;
+    newStudent.preferredClass = req.body.preferredClass;
 
     newStudent.save(function(err) {
       if(err) {
@@ -121,6 +122,10 @@ exports.updateStudent = function (req, res, next) {
 
             if(existingStudent.grade !== req.body.grade){
                 existingStudent.grade = req.body.grade;
+            }
+
+            if(existingStudent.preferredClass !== req.body.preferredClass){
+                existingStudent.preferredClass = req.body.preferredClass;
             }
 
             existingStudent.save(function(err) {

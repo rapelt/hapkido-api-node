@@ -46,6 +46,10 @@ var studentSchema = new Schema({
     type: Boolean,
     required: [true, 'Is Active is required'],
   },
+  preferredClass: {
+    type: String,
+    required: [true, 'Preferred class is required'],
+  }
 
 });
 
