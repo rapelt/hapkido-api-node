@@ -20,7 +20,7 @@ function convertSwagger(){
     sed "s/function:hapkidoApi\/invocations/function:hapkidoApi$4\/invocations/" > $OUTFILE
 }
 
-convertSwagger swagger-test.yaml bgrgxylj3c.execute-api.ap-southeast-2.amazonaws.com staging Staging
+convertSwagger swagger-staging.yaml bgrgxylj3c.execute-api.ap-southeast-2.amazonaws.com staging Staging
 
-convertSwagger swagger-test-prod.yaml cvw4yxgmn1.execute-api.ap-southeast-2.amazonaws.com prod Prod
+convertSwagger swagger-prod.yaml cvw4yxgmn1.execute-api.ap-southeast-2.amazonaws.com prod Prod
 
