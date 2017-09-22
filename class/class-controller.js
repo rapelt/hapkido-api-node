@@ -1,5 +1,7 @@
 var AClass = require('./class');
 var shortid = require('shortid');
+var moment = require('moment');
+var require('mongoose-moment')(mongoose);
 
 exports.getAllClasses = function (req, res, next) {
     AClass.find({}, function (err, classes) {
@@ -14,6 +16,25 @@ exports.getAllClasses = function (req, res, next) {
             return res.status(422).send({error: "no classes found"});
         }
     });
+};
+
+exports.getTodaysClasses = function(req, res, next){
+    console.log("Get todays Classes", req.body);
+    var now = new moment(Date.now(), "DD, MM, YYYY");
+
+    AClass.find({date : now}, function (err, classes) {
+        console.log("Finding Todays Classes");
+        if(err) {
+            return next(err);
+        }
+
+        if (classes) {
+            res.json(classes);
+        } else {
+            return res.status(422).send({error: "no classes found"});
+        }
+    });
+
 };
 
 exports.createNewClasses = function (req, res, next) {

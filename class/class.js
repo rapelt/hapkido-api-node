@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var require('mongoose-moment')(mongoose);
 var Schema = mongoose.Schema;
 
 var classSchema = new Schema({
@@ -18,7 +19,7 @@ var classSchema = new Schema({
         required: [true, 'Is grading is required'],
     },
     date: {
-        type: Object,
+        type: 'Moment',
         required: [true, 'Date is required'],
     },
     startTime: {

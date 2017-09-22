@@ -10,8 +10,6 @@ schemes:
 paths:
   /class/addtoclass/{ClassID}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "ClassID"
         in: "path"
@@ -255,6 +253,54 @@ paths:
           application/json: "{\"statusCode\": 200}"
         passthroughBehavior: "when_no_match"
         type: "mock"
+  /class/todaysclasses:
+    get:
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:845320091708:function:hapkidoApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /student/all:
     get:
       operationId: "getAllStudent"
@@ -350,8 +396,6 @@ paths:
         type: "mock"
   /student/deactivate/{StudentHbId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "StudentHbId"
         in: "path"
@@ -377,8 +421,6 @@ paths:
         type: "aws_proxy"
     options:
       consumes:
-      - "application/json"
-      produces:
       - "application/json"
       responses:
         200:
@@ -455,8 +497,6 @@ paths:
         type: "mock"
   /student/reactivate/{StudentHbId}:
     post:
-      produces:
-      - "application/json"
       parameters:
       - name: "StudentHbId"
         in: "path"
@@ -482,8 +522,6 @@ paths:
         type: "aws_proxy"
     options:
       consumes:
-      - "application/json"
-      produces:
       - "application/json"
       responses:
         200:
@@ -638,10 +676,10 @@ x-amazon-apigateway-gateway-responses:
   DEFAULT_5XX:
     responseParameters:
       gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
   DEFAULT_4XX:
     responseParameters:
       gatewayresponse.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
