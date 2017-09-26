@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var require('mongoose-moment')(mongoose);
+require('mongoose-moment')(mongoose);
 var Schema = mongoose.Schema;
 
 var classSchema = new Schema({
