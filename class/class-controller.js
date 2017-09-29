@@ -1,6 +1,7 @@
 var AClass = require('./class');
 var shortid = require('shortid');
 var _ = require('underscore');
+var moment = require('moment');
 
 exports.getAllClasses = function (req, res, next) {
     AClass.find({}, function (err, classes) {
@@ -19,21 +20,15 @@ exports.getAllClasses = function (req, res, next) {
 
 exports.getTodaysClasses = function(req, res, next){
     console.log("Get todays Classes", req.body);
-    var morning = new Date();
-    morning.setHours(0);
-    morning.setMinutes(0);
-    morning.setSeconds(0);
-    console.log('morning', morning, morning.valueOf());
+
+    var morning2 = moment({hour: 0, minute: 0, seconds: 0});
+
+    var night2 = moment({hour: 23, minute: 59, seconds: 59});
+
+    console.log(morning2, night2);
 
 
-    var night = new Date();
-    night.setHours(23);
-    night.setMinutes(59);
-    night.setSeconds(59);
-    console.log('night', night, night.valueOf());
-
-
-    AClass.find({date : { $gte: morning.valueOf(), $lt: night.valueOf() }}, function (err, classes) {
+    AClass.find({date : { $gte: morning2.valueOf(), $lt: night2.valueOf() }}, function (err, classes) {
         console.log("Finding Todays Classes");
         if(err) {
             return next(err);
