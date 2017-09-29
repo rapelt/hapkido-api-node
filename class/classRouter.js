@@ -8,6 +8,6 @@ router.get('/all', ClassController.getAllClasses);
 router.post('/delete/:id', ClassController.deleteClass);
 router.post('/addtoclass/:id', ClassController.addToClass);
 router.post('/removefromclass/:id', ClassController.removeFromClass);
-router.get('/todaysClasses', ClassController.getTodaysClasses);
+router.get('/todaysclasses', ClassController.getTodaysClasses);
 
 module.exports = router;
