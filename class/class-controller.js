@@ -1,5 +1,6 @@
 var AClass = require('./class');
 var shortid = require('shortid');
+var _ = require('underscore');
 
 exports.getAllClasses = function (req, res, next) {
     AClass.find({}, function (err, classes) {
@@ -28,9 +29,6 @@ exports.getTodaysClasses = function(req, res, next){
     night.setMinutes(59);
     night.setSeconds(59);
 
-    console.log("date search", morning.valueOf(), night.valueOf());
-
-
     AClass.find({date : { $gte: morning.valueOf(), $lt: night.valueOf() }}, function (err, classes) {
         console.log("Finding Todays Classes");
         if(err) {
@@ -50,6 +48,10 @@ exports.createNewClasses = function (req, res, next) {
     console.log("Create Classes", req.body);
 
     var newClassesToCreate = req.body.classes;
+
+    var uniqueList = _.uniq(newClassesToCreate, function(item, key, a) {
+        return item.date;
+    });
 
     var classesToCreate = [];
 
@@ -132,6 +134,7 @@ exports.deleteClass = function (req, res, next) {
 
         if (aclass) {
             if(aclass.attendance.length > 0){
+                console.log("students in attendance");
                 return res.status(422).send({error: "Can not delete class if class has attendance"});
             } else {
                 aclass.remove(function (err, product) {
