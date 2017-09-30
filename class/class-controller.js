@@ -19,18 +19,25 @@ exports.getAllClasses = function (req, res, next) {
 };
 
 exports.getTodaysClasses = function(req, res, next){
-    console.log("Get todays Classes", req.body);
+    console.log("Get todays Classes");
 
-    var morning = moment().add(10, 'h');
-    console.log('morning', morning);
+    var morning;
+    var night;
+    var isLocalHost = process.env.LH;
+
+    if( isLocalHost === 'true') {
+        console.log('is Localhost', isLocalHost);
+        morning = moment();
+        night = moment();
+    } else {
+        morning = moment().add(10, 'h');
+        night = moment().add(10, 'h');
+    }
+
+    console.log(morning, night);
+
     morning.hour(0).minute(0).second(0);
-
-    var night = moment().add(10, 'h');
-    console.log('night', night);
     night.hour(23).minute(59).second(59);
-
-    console.log('morning', morning, 'night', night);
-
 
     AClass.find({date : { $gte: morning.valueOf(), $lt: night.valueOf() }}, function (err, classes) {
         console.log("Finding Todays Classes");
@@ -147,7 +154,7 @@ exports.deleteClass = function (req, res, next) {
                             return res.status(422).send({error: "Class not deleted"});
                         }
                         return res.status(200).send({message: "Class deleted"});
-                    })
+                    });
                 });
             }
         } else {
