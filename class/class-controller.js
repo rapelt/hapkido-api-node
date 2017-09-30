@@ -21,11 +21,14 @@ exports.getAllClasses = function (req, res, next) {
 exports.getTodaysClasses = function(req, res, next){
     console.log("Get todays Classes", req.body);
 
+    var now = moment();
+    console.log('now', now);
+
     var morning2 = moment({hour: 0, minute: 0, seconds: 0});
 
     var night2 = moment({hour: 23, minute: 59, seconds: 59});
 
-    console.log(morning2, night2);
+    console.log('morning', morning2, 'night', night2);
 
 
     AClass.find({date : { $gte: morning2.valueOf(), $lt: night2.valueOf() }}, function (err, classes) {
