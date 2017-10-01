@@ -34,8 +34,6 @@ exports.getTodaysClasses = function(req, res, next){
         night = moment().add(10, 'h');
     }
 
-    console.log(morning, night);
-
     morning.hour(0).minute(0).second(0);
     night.hour(23).minute(59).second(59);
 
@@ -48,7 +46,7 @@ exports.getTodaysClasses = function(req, res, next){
         if (classes) {
             res.json(classes);
         } else {
-            return res.status(422).send({error: "no classes found"});
+            return res.status(422).send({error: "No classes found"});
         }
     });
 
@@ -145,7 +143,7 @@ exports.deleteClass = function (req, res, next) {
         if (aclass) {
             if(aclass.attendance.length > 0){
                 console.log("students in attendance");
-                return res.status(422).send({error: "Can not delete class if class has attendance"});
+                return res.status(422).send({error: "You can not delete a class with student's in attendance. Please remove the students from the class first."});
             } else {
                 aclass.remove(function (err, product) {
                     if (err) return handleError(err);

@@ -82,6 +82,7 @@ exports.createNewStudent = function (req, res, next) {
     newStudent.grade = req.body.grade;
     newStudent.isAdmin = req.body.isAdmin;
     newStudent.isActive = req.body.isActive;
+    newStudent.isKumdoStudent = req.body.isKumdoStudent;
     newStudent.preferredClass = req.body.preferredClass;
 
     newStudent.save(function(err) {
@@ -126,6 +127,14 @@ exports.updateStudent = function (req, res, next) {
 
             if(existingStudent.preferredClass !== req.body.preferredClass){
                 existingStudent.preferredClass = req.body.preferredClass;
+            }
+
+            if(existingStudent.isKumdoStudent === null || existingStudent.isKumdoStudent === undefined){
+                existingStudent.isKumdoStudent = false;
+            }
+
+            if(existingStudent.isKumdoStudent !== req.body.isKumdoStudent){
+                existingStudent.isKumdoStudent = req.body.isKumdoStudent;
             }
 
             existingStudent.save(function(err) {

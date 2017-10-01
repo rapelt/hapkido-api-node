@@ -40,6 +40,9 @@ var studentSchema = new Schema({
     type: Boolean,
     required: [true, 'Is Admin is required'],
   },
+  isKumdoStudent: {
+      type: Boolean,
+  },
   gradingDates: [],
   feedback: [],
   isActive: {
