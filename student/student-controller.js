@@ -1,4 +1,6 @@
 var Student = require('./student');
+var _ = require('underscore');
+var moment = require('moment');
 
 exports.getAllStudents = function (req, res, next) {
     Student.find({}, function (err, students) {
@@ -80,6 +82,7 @@ exports.createNewStudent = function (req, res, next) {
     newStudent.hbId = req.body.hbId;
     newStudent.pinNumber = "0000";
     newStudent.grade = req.body.grade;
+    newStudent.gradingDates = req.body.gradingDates;
     newStudent.isAdmin = req.body.isAdmin;
     newStudent.isActive = req.body.isActive;
     newStudent.isKumdoStudent = req.body.isKumdoStudent;
@@ -205,5 +208,96 @@ exports.reactivateStudent = function (req, res, next) {
         }
     });
 };
+
+exports.removeGrading = function(req, res, next){
+    console.log(" Remove Grading from Student", req.body, req.params.id);
+    var hbId = req.params.id;
+
+    Student.findOne({hbId: hbId}, function (err, existingStudent) {
+        if(err) {
+            console.log(err);
+            return next(err);
+        }
+        if(existingStudent){
+
+            _.each(req.body, function(gradeToRemove){
+                var indexToRemove = _.findIndex(existingStudent.gradingDates, function(grading) {
+                    if(moment(grading.date).isSame(moment(gradeToRemove.date)) && grading.grade === gradeToRemove.grade){
+                        return true;
+                    }
+                    return false;
+                });
+
+                existingStudent.gradingDates.splice(indexToRemove, 1);
+            });
+
+            existingStudent.save(function(err) {
+                if(err) {
+                    console.log("err", err);
+                    if(err.errors && err.errors.hbId) {
+                        return res.status(422).send({error: err.errors.message, body: existingStudent});
+                    }
+                    return next(err);
+                }
+
+                res.json({ studentId: existingStudent._id});
+            });
+        }
+    });
+};
+
+exports.addGrading = function(req, res, next){
+    console.log(" Add Grading to Student", req.body);
+    var hbId = req.params.id;
+
+    Student.findOne({hbId: hbId}, function (err, existingStudent) {
+        if(err) {
+            console.log(err);
+            return next(err);
+        }
+        if(existingStudent){
+            _.each(req.body, function(gradeToAdd){
+                var gradeExists = _.find(existingStudent.gradingDates, function(grading){
+                    if(grading.grade === gradeToAdd.grade){
+                        return true;
+                    }
+                    return false;
+                });
+
+                if(gradeExists){
+                    return res.status(422).send({error: "Student has already graded to that level"});
+                }
+
+                var grade = {
+                    date: gradeToAdd.date,
+                    grade: gradeToAdd.grade
+                };
+
+                existingStudent.gradingDates.push(grade);
+            });
+
+            existingStudent.grade = _.max(existingStudent.gradingDates, function(agrade){
+                return agrade.grade;
+            }).grade;
+
+            existingStudent.gradingDates = _.sortBy(existingStudent.gradingDates, function(grade){
+               return grade.grade;
+            });
+
+            existingStudent.save(function(err) {
+                if(err) {
+                    console.log("err", err);
+                    if(err.errors && err.errors.hbId) {
+                        return res.status(422).send({error: err.errors.message, body: existingStudent});
+                    }
+                    return next(err);
+                }
+
+                res.json({ studentId: existingStudent._id});
+            });
+        }
+    });
+};
+
 
 
