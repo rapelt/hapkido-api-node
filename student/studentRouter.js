@@ -9,8 +9,8 @@ router.get('/all', StudentController.getAllStudents);
 router.post('/update/:id', StudentController.updateStudent);
 router.post('/delete/:id', StudentController.deleteStudent);
 router.get('/:id', StudentController.getStudent);
-router.post('/removeGrading/:id', StudentController.removeGrading);
-router.post('/addGrading/:id', StudentController.addGrading);
+router.post('/removegrading/:id', StudentController.removeGrading);
+router.post('/addgrading/:id', StudentController.addGrading);
 
 router.post('/deactivate/:id', StudentController.deactivateStudent);
 router.post('/reactivate/:id', StudentController.reactivateStudent);
