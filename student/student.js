@@ -25,6 +25,12 @@ var studentSchema = new Schema({
     validate: [validateHbId, 'Hapkido Brisbane Id must start with a hb and end in a 3 digit number'],
     trim: true
   },
+  email: {
+      type: String,
+      required: [true, 'email is required.'],
+      lowercase: true,
+      trim: true
+  },
   pinNumber: {
     type: String,
     required: [true, 'Pin Number is required.'],

@@ -80,6 +80,7 @@ exports.createNewStudent = function (req, res, next) {
     newStudent.name.firstname = req.body.name.firstname;
     newStudent.name.lastname = req.body.name.lastname;
     newStudent.hbId = req.body.hbId;
+    newStudent.email = req.body.email;
     newStudent.pinNumber = "0000";
     newStudent.grade = req.body.grade;
     newStudent.gradingDates = req.body.gradingDates;
@@ -124,6 +125,10 @@ exports.updateStudent = function (req, res, next) {
                 existingStudent.pinNumber = req.body.pinNumber;
             }
 
+            if(existingStudent.email !== req.body.email){
+                existingStudent.email = req.body.email;
+            }
+
             if(existingStudent.grade !== req.body.grade){
                 existingStudent.grade = req.body.grade;
             }
@@ -139,6 +144,8 @@ exports.updateStudent = function (req, res, next) {
             if(existingStudent.isKumdoStudent !== req.body.isKumdoStudent){
                 existingStudent.isKumdoStudent = req.body.isKumdoStudent;
             }
+
+            console.log(existingStudent.validate().ended);
 
             existingStudent.save(function(err) {
                 if(err) {
