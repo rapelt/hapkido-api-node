@@ -156,7 +156,7 @@ exports.updateStudent = function (req, res, next) {
                     return next(err);
                 }
 
-                res.json({ studentId: existingStudent._id});
+                res.json({ studentId: existingStudent.hbId});
             });
         }
     });
@@ -183,7 +183,7 @@ exports.deactivateStudent = function (req, res, next) {
                     return next(err);
                 }
 
-                res.json({ studentId: existingStudent._id});
+                res.json({ studentId: existingStudent.hbId});
             });
         }
     });
@@ -210,7 +210,7 @@ exports.reactivateStudent = function (req, res, next) {
                     return next(err);
                 }
 
-                res.json({ studentId: existingStudent._id});
+                res.json({ studentId: existingStudent.hbId});
             });
         }
     });
