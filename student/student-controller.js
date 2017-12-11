@@ -68,10 +68,10 @@ exports.createNewStudent = function (req, res, next) {
   Student.findOne({hbId: hbId}, function (err, existingStudent) {
     if(err) {
       console.log(err);
-      return next(err);
+        return res.status(500).json({error: "Could not find one"});
     }
     if(existingStudent){
-      return res.status(422).send({error: "hbId is in use"});
+      return res.status(422).json({error: "hbId is in use"});
     }
 
     var newStudent = new Student ();
@@ -98,7 +98,7 @@ exports.createNewStudent = function (req, res, next) {
         return next(err);
       }
 
-      res.json({ studentId: newStudent._id});
+      res.json({ student: newStudent});
     });
   });
 };
@@ -156,15 +156,16 @@ exports.updateStudent = function (req, res, next) {
                     return next(err);
                 }
 
-                res.json({ studentId: existingStudent.hbId});
+                res.json({ student: existingStudent});
             });
         }
     });
 };
 
 exports.deactivateStudent = function (req, res, next) {
-    console.log("Deactivate Student", req.body);
     var hbId = req.params.id;
+
+    console.log("Deactivate Student", hbId);
 
     Student.findOne({hbId: hbId}, function (err, existingStudent) {
         if(err) {
@@ -190,8 +191,9 @@ exports.deactivateStudent = function (req, res, next) {
 };
 
 exports.reactivateStudent = function (req, res, next) {
-    console.log("Reactivate Student", req.body);
     var hbId = req.params.id;
+
+    console.log("Reactivate Student", hbId);
 
     Student.findOne({hbId: hbId}, function (err, existingStudent) {
         if(err) {
