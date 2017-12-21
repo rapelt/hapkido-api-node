@@ -247,9 +247,9 @@ exports.removeGrading = function(req, res, next){
                         return res.status(422).send({error: err.errors.message, body: existingStudent});
                     }
                     return next(err);
+                } else {
+                    res.json({ student: existingStudent});
                 }
-
-                res.json({ studentId: existingStudent._id});
             });
         }
     });
@@ -300,9 +300,10 @@ exports.addGrading = function(req, res, next){
                         return res.status(422).send({error: err.errors.message, body: existingStudent});
                     }
                     return next(err);
+                } else {
+                    res.json({ student: existingStudent});
                 }
 
-                res.json({ studentId: existingStudent._id});
             });
         }
     });

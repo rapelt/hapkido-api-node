@@ -150,8 +150,10 @@ exports.deleteClass = function (req, res, next) {
                     AClass.findOne({classId: classId}, function (err, aclass) {
                         if(aclass){
                             return res.status(422).send({error: "Class not deleted"});
+                        } else {
+                            console.log('deleted');
+                            return res.status(200).send({classid: classId});
                         }
-                        return res.status(200).send({message: "Class deleted"});
                     });
                 });
             }
@@ -194,7 +196,7 @@ exports.addToClass = function (req, res, next) {
             if (err) {
                 return res.status(422).send({error: err});
             }
-            return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId});
+            return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId, studentId: hbId});
         });
     });
 };
@@ -233,7 +235,7 @@ exports.removeFromClass = function (req, res, next) {
             if (err) {
                 return res.status(422).send({error: err});
             }
-            return res.status(200).send({message: "Student " + hbId + " has been removed from class " + classId});
+            return res.status(200).send({message: "Student " + hbId + " has been removed from class " + classId, studentId: hbId});
         });
     });
 };
