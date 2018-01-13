@@ -54,7 +54,6 @@ exports.getTodaysClasses = function(req, res, next){
 
 exports.createNewClasses = function (req, res, next) {
     console.log("Create Classes", req.body);
-
     var newClassesToCreate = req.body.classes;
 
     var uniqueList = _.uniq(newClassesToCreate, function(item, key, a) {
@@ -84,14 +83,10 @@ exports.createNewClasses = function (req, res, next) {
                     newClass.date = aclass.date;
                     newClass.startTime = aclass.startTime;
 
-                    console.log("class", newClass);
-
                     classesToCreate.push(newClass);
-
                 } else {
                     existingClasses.push(existingClass);
                 }
-
                 if(newClassesToCreate.length - 1 === index){
                     fulfill();
                 }
@@ -101,11 +96,15 @@ exports.createNewClasses = function (req, res, next) {
 
     promise.then(()=>{
         var promiseSave = new Promise((fulfill, reject) => {
+            if(classesToCreate.length === 0){
+                fulfill();
+            }
+
             classesToCreate.forEach((aclass, index) => {
                 aclass.save(function (err) {
+                    console.log(err);
                     if (err) {
                         errors.push(err);
-
                     } else {
                         classesCreated.push(aclass);
                     }
@@ -113,19 +112,19 @@ exports.createNewClasses = function (req, res, next) {
                     if(classesToCreate.length - 1 === index){
                         fulfill();
                     }
-
                 });
             });
         });
 
         promiseSave.then(() =>{
             var classesNotCreated = newClassesToCreate.length - classesCreated.length;
-
             if(classesCreated.length === 0){
-                return res.status(422).send({error: errors});
+                return res.status(422).send({error: "No classes created"});
             }
 
             res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
+        }).catch((err) =>{
+            return res.status(422).send({error: "Saving classes errored - Classes created: " + classesCreated.length });
         });
 
     });
