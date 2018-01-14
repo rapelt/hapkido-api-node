@@ -240,6 +240,14 @@ exports.removeGrading = function(req, res, next){
                 existingStudent.gradingDates.splice(indexToRemove, 1);
             });
 
+            existingStudent.grade = _.max(existingStudent.gradingDates, function(agrade){
+                return agrade.grade;
+            }).grade;
+
+            existingStudent.gradingDates = _.sortBy(existingStudent.gradingDates, function(grade){
+                return grade.grade;
+            });
+
             existingStudent.save(function(err) {
                 if(err) {
                     console.log("err", err);
