@@ -22,5 +22,5 @@ function convertSwagger(){
 
 convertSwagger swagger-staging.yaml bgrgxylj3c.execute-api.ap-southeast-2.amazonaws.com staging Staging
 
-convertSwagger swagger-prod.yaml cvw4yxgmn1.execute-api.ap-southeast-2.amazonaws.com prod Prod
+#convertSwagger swagger-prod.yaml cvw4yxgmn1.execute-api.ap-southeast-2.amazonaws.com prod Prod
 
