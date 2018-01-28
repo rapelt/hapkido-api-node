@@ -239,3 +239,23 @@ exports.removeFromClass = function (req, res, next) {
     });
 };
 
+exports.makeClassAGrading = function (req, res, next) {
+    var classId = req.params.id;
+    console.log("Make class a grading", classId);
+
+    AClass.findOne({classId: classId}, function (err, aclass) {
+        if(err) {
+            return next(err);
+        }
+
+        aclass.isGrading = true;
+
+        aclass.save(function (err) {
+            if (err) {
+                return res.status(422).send({error: err});
+            }
+            return res.status(200).send({message: "Class " + classId + " has been made a grading "});
+        });
+    });
+};
+

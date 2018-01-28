@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - '7'
+env:
+  - FOO=foo BAR=bar
+  - FOO=bar BAR=foo
 jobs:
   include:
     - stage: unit tests
