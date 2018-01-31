@@ -13,8 +13,6 @@ exports.dbconnect = function (callback, dbLocation) {
             }
         });
     }
-
-
 };
 
 exports.dbdisconnect = function () {

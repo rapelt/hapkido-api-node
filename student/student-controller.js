@@ -23,14 +23,32 @@ exports.getStudent = function (req, res, next) {
 
     Student.findOne({hbId: hbId}, function (err, student) {
         if(err) {
-          console.log("-----error-----", err);
-          return next(err);
+            console.log("-----error-----", err);
+            return next(err);
         }
 
         if (student) {
-          res.json(student);
+            res.json(student);
         } else {
-          return res.status(422).send({error: "no student found"});
+            return res.status(422).send({error: "no student found"});
+        }
+    });
+};
+
+exports.getStudentEmail = function (req, res, next) {
+    var hbId = req.params.id;
+    console.log("get Student",hbId);
+
+    Student.findOne({hbId: hbId}, function (err, student) {
+        if(err) {
+            console.log("-----error-----", err);
+            return next(err);
+        }
+
+        if (student) {
+            res.json(student.email);
+        } else {
+            return res.status(422).send({error: "No student found"});
         }
     });
 };

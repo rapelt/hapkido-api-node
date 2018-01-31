@@ -7,7 +7,6 @@ const port = process.env.PORT || 8080;
 
 var db = require('./db/dbConnection');
 
-
 app.listen(port, () => {
     db.dbconnect(function () {
         console.log("Connected to Db");
