@@ -1,8 +1,6 @@
 var express = require('express');
 //var AuthController = require('./controllers/auth-controller');
 var StudentController = require('./student-controller');
-var fb = require('../db/firebase');
-
 
 var router = express.Router();
 
