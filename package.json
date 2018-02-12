@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "aws-serverless-express": "^3.0.2",
+    "aws-sdk": "latest",
+    "mysql": "latest",
     "body-parser": "^1.17.1",
     "chai": "^4.1.0",
     "cors": "^2.8.1",
