@@ -18,6 +18,7 @@ exports.mysqlconnect = function (callback, dbLocation) {
             return;
         }
 
+
         console.log('Connected to database.');
     });
 
