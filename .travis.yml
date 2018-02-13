@@ -8,6 +8,7 @@ jobs:
     - stage: deploy to dev
       script: skip
       deploy:
+        if: branch = master
         on: master
         provider: lambda
         function_name: hapkidoApi
@@ -23,6 +24,7 @@ jobs:
     - stage: deploy to staging
       script: skip
       deploy:
+        if: branch = staging
         on: staging
         provider: lambda
         function_name: hapkidoApiStaging
@@ -38,6 +40,7 @@ jobs:
     - stage: deploy to prod
       script: skip
       deploy:
+        if: branch = prod
         on: prod
         provider: lambda
         function_name: hapkidoApiProd
