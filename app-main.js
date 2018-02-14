@@ -11,7 +11,6 @@ var mysql = require('./db/rdsconnect');
 
 app.listen(port, () => {
     db.dbconnect(function () {
-
         console.log("Connected to Db");
     }, config.dbLocation);
 

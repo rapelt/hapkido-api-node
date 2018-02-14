@@ -23,14 +23,16 @@ exports.getAllClassTypes = function (req, res, next) {
     var pool = connection.getpool();
 
     pool.getConnection(function(err, connection) {
-        if (err) throw res.status(422).send(error);
+        if (err) {
+            throw res.status(422).send("Connection error", error);
+        }
 
         // Use the connection
         connection.query('select * from class_type', function (error, results, fields) {
             // And done with the connection.
 
             // Handle error after the release.
-            if (error) throw res.status(422).send(error);
+            if (error) throw res.status(422).send("Query Error", error);
 
             console.log(results);
 

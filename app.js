@@ -8,7 +8,6 @@ const config = require('./config/config.dev');
 var mysql = require('./db/rdsconnect');
 
 exports.handler = (event, context) => {
-    context.callbackWaitsForEmptyEventLoop = false;
     db.dbconnect(function () {
         console.log("Connected to Mongo Db");
     }, config.dbLocation);
