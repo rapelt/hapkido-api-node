@@ -10,7 +10,7 @@ var mysql = require('./db/rdsconnect');
 exports.handler = (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
     db.dbconnect(function () {
-        console.log("Connected to Db");
+        console.log("Connected to Mongo Db");
     }, config.dbLocation);
 
     mysql.mysqlconnect();
