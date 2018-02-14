@@ -2,6 +2,8 @@ var express = require('express');
 var http = require('http');
 var studentRouter = require('./student/studentRouter');
 var classRouter = require('./class/classRouter');
+var classTypeRouter = require('./class_type/class-type-router');
+
 
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -19,6 +21,8 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 
 app.use("/student", studentRouter);
 app.use("/class", classRouter);
+app.use("/classtype", classTypeRouter);
+
 
 
 if(process.env.LH === true) {
