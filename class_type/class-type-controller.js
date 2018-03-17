@@ -1,44 +1,35 @@
 var shortid = require('shortid');
-var _ = require('underscore');
-var moment = require('moment');
+
+var service = require('./class-type-service');
 
 var connection = require('../db/rdsconnect');
 
+var pool = connection.getpool();
+
 exports.getAllClassTypes = function (req, res, next) {
-    /*AClass.find({}, function (err, classes) {
-        console.log("Finding all classes");
-        if(err) {
-            return next(err);
-        }
-
-        if (classes) {
-            res.json(classes);
-        } else {
-            return res.status(422).send({error: "no classes found"});
-        }
-    });*/
-
-    console.log(connection);
-
-    var pool = connection.getpool();
 
     pool.getConnection(function(err, connection) {
         if (err) {
-            throw res.status(422).send("Connection error", error);
+            throw res.status(422).send("Connection error " + error);
         }
 
-        // Use the connection
         connection.query('select * from class_type', function (error, results, fields) {
-            // And done with the connection.
-
-            // Handle error after the release.
-            if (error) throw res.status(422).send("Query Error", error);
-
-            console.log(results);
-
-            res.json(results);
-
             connection.release();
+            if (error) throw res.status(422).send("Query Error " + error);
+            res.json(results);
         });
     });
+};
+
+exports.createClassType = function (req, res, next) {
+
+    var classtype = req.body.class_type;
+    var id = shortid.generate();
+    service.createClassType(id, classtype).then((result) => {
+        res.json(result);
+    }).catch((error) => {
+        res.status(422).send("Query Error " + error);
+    });
+
+
 };

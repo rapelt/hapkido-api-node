@@ -9,8 +9,6 @@ var poolconfig = {
     database : process.env.DATABASE
 };
 
-console.log(poolconfig);
-
 var pool  = mysql.createPool(poolconfig);
 
 exports.mysqlconnect = function (callback, dbLocation) {

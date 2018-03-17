@@ -2,18 +2,23 @@ var Student = require('./student');
 var _ = require('underscore');
 var moment = require('moment');
 
-exports.getAllStudents = function (req, res, next) {
-    Student.find({}, function (err, students) {
-        console.log("Finding all students");
-        if(err) {
-            return next(err);
-        }
+var service = require('./student-service');
+var mapper = require('./student-mapper');
+var memberGradesService = require('../member_grades/member-grades-service');
+var classTypeService = require('../class_type/class-type-service');
+var familyService = require('../family/family-service');
+var controller = require('./student-controller');
 
-        if (students) {
-            res.json(students);
-        } else {
-            return res.status(422).send({error: "no students found"});
-        }
+
+
+exports.getAllStudents = function (req, res, next) {
+    console.log("Finding all students");
+
+    Promise.all([service.getAllStudents(), memberGradesService.getAllGrades(), classTypeService.getAllClassTypes()]).then((all) => {
+        res.json(mapper.mapStudents(all[0], all[1], all[2]));
+
+    }).catch((err) => {
+        console.log(err);
     });
 };
 
@@ -21,17 +26,14 @@ exports.getStudent = function (req, res, next) {
     var hbId = req.params.id;
     console.log("get Student",hbId);
 
-    Student.findOne({hbId: hbId}, function (err, student) {
-        if(err) {
-            console.log("-----error-----", err);
-            return next(err);
-        }
-
-        if (student) {
-            res.json(student);
-        } else {
+    Promise.all([service.getStudent(hbId), memberGradesService.getStudentGrades(hbId), classTypeService.getAllClassTypes()]).then((all) => {
+        if(all[0].length !== 1){
             return res.status(422).send({error: "no student found"});
         }
+        res.json(mapper.mapStudents(all[0], all[1], all[2])[0]);
+
+    }).catch((err) => {
+        console.log(err);
     });
 };
 
@@ -39,144 +41,87 @@ exports.getStudentEmail = function (req, res, next) {
     var hbId = req.params.id;
     console.log("get Student",hbId);
 
-    Student.findOne({hbId: hbId}, function (err, student) {
-        if(err) {
-            console.log("-----error-----", err);
-            return next(err);
-        }
-
-        if (student) {
-            res.json(student.email);
-        } else {
+    service.getStudentEmail(hbId).then((email) => {
+        if(email.length !== 1){
             return res.status(422).send({error: "No student found"});
         }
+        res.send(email[0].email);
+
+    }).catch((err) => {
+        console.log("-----error-----", err);
+        return res.status(422).send({error: "Something went wrong"});
     });
-};
-
-exports.deleteStudent = function (req, res, next) {
-  var hbId = req.params.id;
-  console.log("Delete student", hbId);
-
-  Student.findOne({hbId: hbId}, function (err, student) {
-    if(err) {
-      return next(err);
-    }
-
-    if (student) {
-      student.remove(function (err, product) {
-        if (err) return handleError(err);
-        Student.findOne({hbId: hbId}, function (err, student) {
-          if(student){
-            return res.status(422).send({error: "student not deleted"});
-          }
-          return res.status(200).send({message: "student deleted"});
-        })
-      });
-    } else {
-      // user not found
-      return res.status(422).send({error: "no student found"});
-    }
-  });
 };
 
 exports.createNewStudent = function (req, res, next) {
   console.log("Create Student", req.body);
-  var hbId = req.body.hbId;
+  var student = req.body;
 
-  Student.findOne({hbId: hbId}, function (err, existingStudent) {
-    if(err) {
-      console.log(err);
-        return res.status(500).json({error: "Could not find one"});
-    }
-    if(existingStudent){
-      return res.status(422).json({error: "hbId is in use"});
-    }
+    Promise.all([
+        classTypeService.getClassTypeIdByName(student.preferredClass),
+        familyService.getFamilyByName(student.name.lastname),
+    ]).then((results) => {
+        var id = student.hbId;
+        var firstname = student.name.firstname;
+        var lastname = student.name.lastname;
+        var dob = null;
+        var occupation = null;
+        var is_active = student.isActive;
+        var is_kumdo_student = student.isKumdoStudent;
+        var previous_experience = null;
+        var injury_illness = null;
+        var is_verified = false;
+        var email = student.email;
+        var preferred_class_type_id = results[0];
+        var emergency_contactid = null;
+        var family_id = results[1];
 
-    var newStudent = new Student ();
-    console.log("Add new Student Body", req.body);
-
-    newStudent.name.firstname = req.body.name.firstname;
-    newStudent.name.lastname = req.body.name.lastname;
-    newStudent.hbId = req.body.hbId;
-    newStudent.email = req.body.email;
-    newStudent.pinNumber = "0000";
-    newStudent.grade = req.body.grade;
-    newStudent.gradingDates = req.body.gradingDates;
-    newStudent.isAdmin = req.body.isAdmin;
-    newStudent.isActive = req.body.isActive;
-    newStudent.isKumdoStudent = req.body.isKumdoStudent;
-    newStudent.preferredClass = req.body.preferredClass;
-
-    newStudent.save(function(err) {
-      if(err) {
-          console.log("err", err);
-          if(err.errors && err.errors.hbId) {
-          return res.status(422).send({error: err.errors.hbId.message, body: newStudent});
-        }
-        return next(err);
-      }
-
-      res.json({ student: newStudent});
+        service.createStudent(id, firstname, lastname, dob, occupation, is_active, is_kumdo_student, previous_experience, injury_illness, is_verified, email, preferred_class_type_id, emergency_contactid, family_id).then((result) => {
+            memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date()).then(() => {
+                req.params = { id: student.hbId};
+                controller.getStudent(req, res, next);
+                }).catch((err) => {
+                return res.status(422).json({error: err});
+            });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(422).json({error: err});
+        });
+    }).catch((err) => {
+        console.log(err);
+        return res.status(422).json({error: err});
     });
-  });
 };
 
 exports.updateStudent = function (req, res, next) {
     console.log("Update Student", req.body);
-    var hbId = req.body.hbId;
+    var student = req.body;
 
-    Student.findOne({hbId: hbId}, function (err, existingStudent) {
-        if(err) {
-            console.log(err);
-            return next(err);
-        }
-        if(existingStudent){
-            if(existingStudent.name.firstname !== req.body.name.firstname){
-                existingStudent.name.firstname = req.body.name.firstname;
-            }
+    classTypeService.getClassTypeIdByName(student.preferredClass).then((result) => {
+        console.log(result);
 
-            if(existingStudent.name.lastname !== req.body.name.lastname){
-                existingStudent.name.lastname = req.body.name.lastname;
-            }
-
-            if(existingStudent.pinNumber !== req.body.pinNumber){
-                existingStudent.pinNumber = req.body.pinNumber;
-            }
-
-            if(existingStudent.email !== req.body.email){
-                existingStudent.email = req.body.email;
-            }
-
-            if(existingStudent.grade !== req.body.grade){
-                existingStudent.grade = req.body.grade;
-            }
-
-            if(existingStudent.preferredClass !== req.body.preferredClass){
-                existingStudent.preferredClass = req.body.preferredClass;
-            }
-
-            if(existingStudent.isKumdoStudent === null || existingStudent.isKumdoStudent === undefined){
-                existingStudent.isKumdoStudent = false;
-            }
-
-            if(existingStudent.isKumdoStudent !== req.body.isKumdoStudent){
-                existingStudent.isKumdoStudent = req.body.isKumdoStudent;
-            }
-
-            console.log(existingStudent.validate().ended);
-
-            existingStudent.save(function(err) {
-                if(err) {
-                    console.log("err", err);
-                    if(err.errors && err.errors.hbId) {
-                        return res.status(422).send({error: err.errors.message, body: existingStudent});
-                    }
-                    return next(err);
-                }
-
-                res.json({ student: existingStudent});
-            });
-        }
+        service.updatedStudent(
+            student.hbId,
+            student.name.firstname,
+            student.name.lastname,
+            null,
+            null,
+            student.isActive,
+            student.isKumdoStudent,
+            null,
+            null,
+            false,
+            student.email,
+            result
+        ).then((result) => {
+            controller.getStudent(req, res, next);
+            }).catch((err) => {
+            console.log("-----error-----", err);
+            return res.status(422).send({error: "Something went wrong"});
+        });
+    }).catch((err) => {
+        console.log(err);
+        return res.status(422).json({error: err});
     });
 };
 
@@ -185,26 +130,11 @@ exports.deactivateStudent = function (req, res, next) {
 
     console.log("Deactivate Student", hbId);
 
-    Student.findOne({hbId: hbId}, function (err, existingStudent) {
-        if(err) {
-            console.log(err);
-            return next(err);
-        }
-        if(existingStudent){
-            existingStudent.isActive = false;
-
-            existingStudent.save(function(err) {
-                if(err) {
-                    console.log("err", err);
-                    if(err.errors && err.errors.hbId) {
-                        return res.status(422).send({error: err.errors.message, body: existingStudent});
-                    }
-                    return next(err);
-                }
-
-                res.json({ studentId: existingStudent.hbId});
-            });
-        }
+    service.setIsActiveToFalse(hbId).then((result) => {
+        res.json({ studentId: hbId});
+    }).catch((err) => {
+        console.log("-----error-----", err);
+        return res.status(422).send({error: "Something went wrong"});
     });
 };
 
@@ -213,125 +143,47 @@ exports.reactivateStudent = function (req, res, next) {
 
     console.log("Reactivate Student", hbId);
 
-    Student.findOne({hbId: hbId}, function (err, existingStudent) {
-        if(err) {
-            console.log(err);
-            return next(err);
-        }
-        if(existingStudent){
-            existingStudent.isActive = true;
-
-            existingStudent.save(function(err) {
-                if(err) {
-                    console.log("err", err);
-                    if(err.errors && err.errors.hbId) {
-                        return res.status(422).send({error: err.errors.message, body: existingStudent});
-                    }
-                    return next(err);
-                }
-
-                res.json({ studentId: existingStudent.hbId});
-            });
-        }
+    service.setIsActiveToTrue(hbId).then((result) => {
+        res.json({ studentId: hbId});
+    }).catch((err) => {
+        console.log("-----error-----", err);
+        return res.status(422).send({error: "Something went wrong ", err});
     });
 };
 
 exports.removeGrading = function(req, res, next){
     console.log(" Remove Grading from Student", req.body, req.params.id);
+    var grades = req.body;
     var hbId = req.params.id;
+    var gradePromises = [];
 
-    Student.findOne({hbId: hbId}, function (err, existingStudent) {
-        if(err) {
-            console.log(err);
-            return next(err);
+    _.each(grades, (grade)=> {
+        if(grade.grade !== 0){
+            gradePromises.push(memberGradesService.removeStudentGrade(hbId, grade.grade));
         }
-        if(existingStudent){
+    });
 
-            _.each(req.body, function(gradeToRemove){
-                var indexToRemove = _.findIndex(existingStudent.gradingDates, function(grading) {
-                    if(moment(grading.date).isSame(moment(gradeToRemove.date)) && grading.grade === gradeToRemove.grade){
-                        return true;
-                    }
-                    return false;
-                });
-
-                existingStudent.gradingDates.splice(indexToRemove, 1);
-            });
-
-            existingStudent.grade = _.max(existingStudent.gradingDates, function(agrade){
-                return agrade.grade;
-            }).grade;
-
-            existingStudent.gradingDates = _.sortBy(existingStudent.gradingDates, function(grade){
-                return grade.grade;
-            });
-
-            existingStudent.save(function(err) {
-                if(err) {
-                    console.log("err", err);
-                    if(err.errors && err.errors.hbId) {
-                        return res.status(422).send({error: err.errors.message, body: existingStudent});
-                    }
-                    return next(err);
-                } else {
-                    res.json({ student: existingStudent});
-                }
-            });
-        }
+    Promise.all(gradePromises).then(() => {
+        controller.getStudent(req, res, next);
+    }).catch((err) => {
+        return res.status(422).send({error: "Something went wrong ", err});
     });
 };
 
 exports.addGrading = function(req, res, next){
     console.log(" Add Grading to Student", req.body);
+    var grades = req.body;
     var hbId = req.params.id;
+    var gradePromises = [];
 
-    Student.findOne({hbId: hbId}, function (err, existingStudent) {
-        if(err) {
-            console.log(err);
-            return next(err);
-        }
-        if(existingStudent){
-            _.each(req.body, function(gradeToAdd){
-                var gradeExists = _.find(existingStudent.gradingDates, function(grading){
-                    if(grading.grade === gradeToAdd.grade){
-                        return true;
-                    }
-                    return false;
-                });
+    _.each(grades, (grade)=> {
+        gradePromises.push(memberGradesService.addStudentGrade(hbId, grade.grade, null, new Date(grade.date)));
+    });
 
-                if(gradeExists){
-                    return res.status(422).send({error: "Student has already graded to that level"});
-                }
-
-                var grade = {
-                    date: gradeToAdd.date,
-                    grade: gradeToAdd.grade
-                };
-
-                existingStudent.gradingDates.push(grade);
-            });
-
-            existingStudent.grade = _.max(existingStudent.gradingDates, function(agrade){
-                return agrade.grade;
-            }).grade;
-
-            existingStudent.gradingDates = _.sortBy(existingStudent.gradingDates, function(grade){
-               return grade.grade;
-            });
-
-            existingStudent.save(function(err) {
-                if(err) {
-                    console.log("err", err);
-                    if(err.errors && err.errors.hbId) {
-                        return res.status(422).send({error: err.errors.message, body: existingStudent});
-                    }
-                    return next(err);
-                } else {
-                    res.json({ student: existingStudent});
-                }
-
-            });
-        }
+    Promise.all(gradePromises).then(() => {
+        controller.getStudent(req, res, next);
+    }).catch((err) => {
+        return res.status(422).send({error: "Something went wrong ", err});
     });
 };
 

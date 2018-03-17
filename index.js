@@ -3,6 +3,9 @@ var http = require('http');
 var studentRouter = require('./student/studentRouter');
 var classRouter = require('./class/classRouter');
 var classTypeRouter = require('./class_type/class-type-router');
+var migrationRouter = require('./nosqlmigration/migration-router');
+
+
 
 
 var bodyParser = require('body-parser');
@@ -22,7 +25,7 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 app.use("/student", studentRouter);
 app.use("/class", classRouter);
 app.use("/classtype", classTypeRouter);
-
+app.use("/migration", migrationRouter);
 
 
 if(process.env.LH === true) {
