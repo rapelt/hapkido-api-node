@@ -152,13 +152,13 @@ function createGrade(id, sn, ln, css) {
                 connection.query(q, [id, sn, ln, css], function (error, results, fields) {
                     connection.release();
 
-                    if (error) {
+                    /*if (error) {
                         reject(error);
                     }
 
                     if(results !== undefined && results.affectedRows === 0){
                         reject('Grade already exists');
-                    }
+                    }*/
 
                     resolve(results);
                 });
