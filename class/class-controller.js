@@ -149,6 +149,7 @@ exports.createClasses = function (req, res, next) {
 function createClassesLoop(classes, res){
     if(classesindex < classes.length){
         classesCreation(classes[classesindex]).then((result) => {
+            classes[classesindex].classId = result;
             classesCreated.push(classes[classesindex]);
             classesindex++;
             createClassesLoop(classes, res);
@@ -167,7 +168,7 @@ function classesCreation(aclass) {
     return new Promise((resolve, reject) => {
         Promise.all([classTypeService.getClassTypeIdByName(aclass.classType)]).then((results) => {
             service.createClass(0, aclass.isGrading, new Date(aclass.date), results[0]).then((result) => {
-                resolve();
+                resolve(result);
             }).catch((err) => {
                 console.log(err);
                 reject(err);
