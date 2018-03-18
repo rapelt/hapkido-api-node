@@ -12,7 +12,7 @@ exports.handler = (event, context) => {
         console.log("Connected to Mongo Db");
     }, config.dbLocation);
 
-    mysql.mysqlconnect();
-
-    awsServerlessExpress.proxy(server, event, context);
+    mysql.mysqlconnect().then(() => {
+        awsServerlessExpress.proxy(server, event, context);
+    });
 };

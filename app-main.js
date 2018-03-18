@@ -14,7 +14,8 @@ app.listen(port, () => {
         console.log("Connected to Db");
     }, config.dbLocation);
 
-    mysql.mysqlconnect();
+    mysql.mysqlconnect().then(() => {
+        console.log(`Application is running on port ${port}`);
+    });
 
-    console.log(`Application is running on port ${port}`);
 });

@@ -12,18 +12,20 @@ var poolconfig = {
 var pool  = mysql.createPool(poolconfig);
 
 exports.mysqlconnect = function (callback, dbLocation) {
-    console.log('connecting to rds pool');
+    return new Promise((resolve, reject) => {
+        console.log('connecting to rds pool');
 
-    var pool = this.getpool();
+        var pool = this.getpool();
 
-    pool.getConnection(function(err, connection) {
-        if (err) {
-            console.error('Database connection failed: ' + err.stack);
-            return;
-        }
-        connection.release();
-
-        console.log('Connected to MySQL.');
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                console.error('Database connection failed: ' + err.stack);
+                return;
+            }
+            connection.release();
+            console.log('Connected to MySQL.');
+            resolve();
+        });
     });
 };
 

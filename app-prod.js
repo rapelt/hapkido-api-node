@@ -11,5 +11,7 @@ exports.handler = (event, context) => {
         console.log("Connected to Db");
     }, config.dbLocation);
 
-    awsServerlessExpress.proxy(server, event, context);
+    mysql.mysqlconnect().then(() => {
+        awsServerlessExpress.proxy(server, event, context);
+    });
 };
