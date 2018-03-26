@@ -4,6 +4,7 @@ const app = require('./index');
 const server = awsServerlessExpress.createServer(app);
 var db = require('./db/dbConnection');
 const config = require('./config/config.prod');
+var mysql = require('./db/rdsconnect');
 
 exports.handler = (event, context) => {
     console.log("In handler - Rebekah");

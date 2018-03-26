@@ -4,6 +4,7 @@ const app = require('./index');
 const server = awsServerlessExpress.createServer(app);
 var db = require('./db/dbConnection');
 const config = require('./config/config.staging');
+var mysql = require('./db/rdsconnect');
 
 exports.handler = (event, context) => {
     db.dbconnect(function () {
