@@ -57,18 +57,19 @@ function getClassTypeById(id) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
             if (err) {
+                console.log(err);
                 reject(err);
+            } else {
+                connection.query('select distinct class_type from class_type where class_type_id = ?', [id], function (error, results, fields) {
+                    connection.release();
+
+                    if (error) {
+                        reject(error);
+                    }
+
+                    resolve(results[0]);
+                });
             }
-
-            connection.query('select distinct class_type from class_type where class_type_id = ?', [id], function (error, results, fields) {
-                connection.release();
-
-                if (error) {
-                    reject(error);
-                }
-
-                resolve(results[0]);
-            });
         });
     });
 };
