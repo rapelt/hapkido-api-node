@@ -5,7 +5,7 @@ function createClassType (id, classtype) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -25,7 +25,7 @@ function getClassTypeIdByName(classtype) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -56,7 +56,7 @@ function getClassTypeById(id) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 console.log(err);
                 reject(err);
             } else {
@@ -78,7 +78,7 @@ function getAllClassTypes() {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 

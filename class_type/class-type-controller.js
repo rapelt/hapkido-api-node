@@ -9,7 +9,7 @@ var pool = connection.getpool();
 exports.getAllClassTypes = function (req, res, next) {
 
     pool.getConnection(function(err, connection) {
-        if (err) {
+        if (!connection) {
             throw res.status(422).send("Connection error " + error);
         }
 

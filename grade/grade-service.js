@@ -143,7 +143,7 @@ function createAllGrades () {
 function createGrade(id, sn, ln, css) {
     return new Promise((resolve, reject) => {
             pool.getConnection(function (err, connection) {
-                if (err) {
+                if (!connection) {
                     reject(err);
                 }
 

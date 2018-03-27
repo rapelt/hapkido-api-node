@@ -8,7 +8,7 @@ function createClass (class_id, is_grading, date, class_type_id) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -40,7 +40,7 @@ function getAllClasses () {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -62,7 +62,7 @@ function deleteClass (classid) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -90,7 +90,7 @@ function makeClassAGrading (classid) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 

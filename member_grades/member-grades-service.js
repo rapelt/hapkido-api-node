@@ -7,7 +7,7 @@ var gradeColumns = "grade_id, hb_id, class_id, date";
 function addStudentGrade(hb_id, grade_id, class_id, date) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -33,7 +33,7 @@ function addStudentGrade(hb_id, grade_id, class_id, date) {
 function removeStudentGrade(hb_id, grade_id) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -56,7 +56,7 @@ function getAllGrades() {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -79,7 +79,7 @@ function getStudentGrades(hbid) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 

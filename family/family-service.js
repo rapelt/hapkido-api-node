@@ -7,7 +7,7 @@ function createFamily (family_id, name, contact_address_id) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
@@ -29,7 +29,7 @@ function createFamily (family_id, name, contact_address_id) {
 function getFamilyByName  (name) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
-            if (err) {
+            if (!connection) {
                 reject(err);
             }
 
