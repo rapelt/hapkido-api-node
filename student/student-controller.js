@@ -7,9 +7,8 @@ var mapper = require('./student-mapper');
 var memberGradesService = require('../member_grades/member-grades-service');
 var classTypeService = require('../class_type/class-type-service');
 var familyService = require('../family/family-service');
+var authService = require('../cognito/auth-service');
 var controller = require('./student-controller');
-
-
 
 exports.getAllStudents = function (req, res, next) {
     console.log("Finding all students");
@@ -76,21 +75,40 @@ exports.createNewStudent = function (req, res, next) {
         var emergency_contactid = null;
         var family_id = results[1];
 
-        service.createStudent(id, firstname, lastname, dob, occupation, is_active, is_kumdo_student, previous_experience, injury_illness, is_verified, email, preferred_class_type_id, emergency_contactid, family_id).then((result) => {
-            memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date()).then(() => {
-                req.params = { id: student.hbId};
-                controller.getStudent(req, res, next);
+        service.createStudent(
+            id,
+            firstname,
+            lastname,
+            dob,
+            occupation,
+            is_active,
+            is_kumdo_student,
+            previous_experience,
+            injury_illness,
+            is_verified,
+            email,
+            preferred_class_type_id,
+            emergency_contactid,
+            family_id)
+            .then((result) => {
+                memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date()).then(() => {
+                    authService.createStudentAuth(id, email).then(() => {
+                        req.params = { id: student.hbId};
+                        controller.getStudent(req, res, next);
+                    }).catch(() => {
+
+                    });
                 }).catch((err) => {
+                    return res.status(422).json({error: err});
+                });
+            }).catch((err) => {
+                console.log(err);
                 return res.status(422).json({error: err});
             });
         }).catch((err) => {
             console.log(err);
             return res.status(422).json({error: err});
         });
-    }).catch((err) => {
-        console.log(err);
-        return res.status(422).json({error: err});
-    });
 };
 
 exports.updateStudent = function (req, res, next) {
@@ -131,7 +149,9 @@ exports.deactivateStudent = function (req, res, next) {
     console.log("Deactivate Student", hbId);
 
     service.setIsActiveToFalse(hbId).then((result) => {
+        authService.deactivateStudentAuth(hbId);
         res.json({ studentId: hbId});
+
     }).catch((err) => {
         console.log("-----error-----", err);
         return res.status(422).send({error: "Something went wrong"});
@@ -144,6 +164,7 @@ exports.reactivateStudent = function (req, res, next) {
     console.log("Reactivate Student", hbId);
 
     service.setIsActiveToTrue(hbId).then((result) => {
+        authService.reActivateStudentAuth(hbId);
         res.json({ studentId: hbId});
     }).catch((err) => {
         console.log("-----error-----", err);
