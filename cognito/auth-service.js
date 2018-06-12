@@ -6,7 +6,7 @@ aws.config.update({
 function createStudentAuth (username, email) {
     return new Promise((resolve, reject) => {
         var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
-        cognitoidentityserviceprovider.updateUserPool()
+        cognitoidentityserviceprovider.updateUserPool();
 
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
@@ -96,6 +96,12 @@ function reActivateStudentAuth (username) {
             }
         });
     });
+
+}
+
+function isUserAuthenticated (username, token) {
+
+
 
 }
 
