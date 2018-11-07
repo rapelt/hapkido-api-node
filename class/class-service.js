@@ -1,6 +1,7 @@
 var connection = require('../db/rdsconnect');
 var pool = connection.getpool();
 
+var moment = require('moment');
 var classColumns = "class_id, is_grading, date, class_type_id";
 
 
@@ -113,11 +114,60 @@ function makeClassAGrading (classid) {
     });
 };
 
+//date year-month-day
+function getNextClasses (numberOfClasses = 5, date = moment().format('YYYY-MM-DD')) {
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function (err, connection) {
+            if (!connection) {
+                reject(err);
+            }
+            var query = `select * from class where date > '${date}' order by date limit ${numberOfClasses};`;
+
+            connection.query(query, function (error, results, fields) {
+                connection.release();
+
+                if (error) {
+                    reject(error);
+                }
+                resolve(results);
+            });
+        });
+    });
+};
+
+function getClassesBetweenDates (startDate, endDate) {
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function (err, connection) {
+            if (!connection) {
+                reject(err);
+            }
+            console.log(`select * from class where date > '${moment(startDate).format('YYYY-MM-DD')}' and date < '${moment(endDate).format('YYYY-MM-DD')}' order by date;`);
+
+            var query = `select * from class where date > '${moment(startDate).format('YYYY-MM-DD')}' and date < '${moment(endDate).format('YYYY-MM-DD')}' order by date;`;
+
+            connection.query(query, function (error, results, fields) {
+                connection.release();
+
+                if (error) {
+                    reject(error);
+                }
+                resolve(results);
+            });
+        });
+    });
+};
+
+
+
 
 
 module.exports = {
     createClass: createClass,
     getAllClasses: getAllClasses,
     deleteClass: deleteClass,
-    makeClassAGrading: makeClassAGrading
+    makeClassAGrading: makeClassAGrading,
+    getNextClasses: getNextClasses,
+    getClassesBetweenDates: getClassesBetweenDates
 };

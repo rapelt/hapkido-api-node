@@ -24,6 +24,39 @@ exports.getAllClasses = function (req, res, next) {
     });
 };
 
+exports.getNextClasses = function (req, res, next) {
+    var numberOfClasses = req.body.numberOfClasses;
+    console.log("Finding next classes");
+    service.getNextClasses(numberOfClasses).then((classes) => {
+        mapper.mapClasses(classes).then((newClasses) => {
+            res.json(newClasses);
+        }).catch((err) => {
+            console.log(err);
+        });
+
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
+exports.getClassesBetweenDates = function (req, res, next) {
+    var startDate = req.body.startDate;
+    var endDate = req.body.endDate;
+    console.log(req.body);
+    console.log(`Finding classes between ${startDate} and ${endDate}`);
+
+    service.getClassesBetweenDates(startDate, endDate).then((classes) => {
+        mapper.mapClasses(classes).then((newClasses) => {
+            res.json(newClasses);
+        }).catch((err) => {
+            console.log(err);
+        });
+
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
 /*exports.createNewClasses = function (req, res, next) {
     console.log("Create Classes", req.body);
     var newClassesToCreate = req.body.classes;

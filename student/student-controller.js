@@ -210,3 +210,15 @@ exports.addGrading = function(req, res, next){
 
 
 
+exports.addToNewApp = function (req, res, next) {
+    console.log("Add Student to new app", req.body);
+    var student = req.body;
+
+    authService.createStudentAuth(student.hbId, student.email).then(() => {
+        req.params = { id: student.hbId};
+        controller.getStudent(req, res, next);
+    }).catch(() => {
+        console.log('OMG something went wrong with the user sign up.');
+        return res.status(422).send({error: "Something went wrong"});
+    });
+};

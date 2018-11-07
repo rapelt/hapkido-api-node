@@ -14,6 +14,9 @@ router.get('/getemail/:id', TokenVerification.checkAuth, StudentController.getSt
 router.post('/removegrading/:id', TokenVerification.checkAuth, StudentController.removeGrading);
 router.post('/addgrading/:id', TokenVerification.checkAuth, StudentController.addGrading);
 
+router.post('/addtonewapp/:id', TokenVerification.checkAuth, StudentController.addToNewApp);
+
+
 
 router.post('/deactivate/:id', TokenVerification.checkAuth, StudentController.deactivateStudent);
 router.post('/reactivate/:id', TokenVerification.checkAuth, StudentController.reactivateStudent);
