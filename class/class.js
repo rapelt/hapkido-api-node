@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 require('mongoose-moment')(mongoose);
 var Schema = mongoose.Schema;
 
-
 var classSchema = new Schema({
     classId: {
         type: String,
