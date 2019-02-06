@@ -11,6 +11,7 @@ exports.checkAuth = function (req, res, next) {
     }
 
     console.log("Using Cognito");
+    console.log("New");
 
     if(req.headers.authorization == null){
         res.status('401');
