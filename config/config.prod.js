@@ -1,6 +1,6 @@
 var config = {
     dbLocation: '@ds133162.mlab.com:33162/hapkidoprod',
-    cognito: false
+    cognito: true
 };
 
 module.exports = config;
