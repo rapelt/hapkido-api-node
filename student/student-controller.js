@@ -74,6 +74,8 @@ exports.createNewStudent = function (req, res, next) {
         var preferred_class_type_id = results[0];
         var emergency_contactid = null;
         var family_id = results[1];
+        var joiningDate = student.gradingDates[0].date;
+
 
         service.createStudent(
             id,
@@ -91,7 +93,7 @@ exports.createNewStudent = function (req, res, next) {
             emergency_contactid,
             family_id)
             .then((result) => {
-                memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date()).then(() => {
+                memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date(joiningDate)).then(() => {
                     authService.createStudentAuth(id, email).then(() => {
                         req.params = { id: student.hbId};
                         controller.getStudent(req, res, next);
