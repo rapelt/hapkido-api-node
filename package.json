@@ -6,11 +6,15 @@
   "scripts": {
     "test": "mocha 'test/**/*.js'",
     "zip": "mkdir -p dist/hapkido-api; cp -r controllers models student app.js index.js router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;",
-    "converter": "bash scripts/swaggerConverter.sh"
+    "converter": "bash scripts/swaggerConverter.sh",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly ./app-main.ts",
+    "prod": "tsc && node ./build/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/express": "^4.16.1",
     "aws-sdk": "latest",
     "aws-serverless-express": "^3.0.2",
     "body-parser": "^1.17.1",
@@ -26,6 +30,8 @@
     "mysql": "latest",
     "shortid": "^2.2.8",
     "sinon": "^2.3.8",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "typescript": "^3.4.1",
     "underscore": "^1.8.3"
   }
 }

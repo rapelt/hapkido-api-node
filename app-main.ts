@@ -1,15 +1,17 @@
 "use strict";
 
-const app = require('./index');
+let apps = require('./index');
+
 const config = require('./config/config.dev');
 
-const port = process.env.PORT || 8080;
+let port = process.env.PORT || 8080;
 
 var db = require('./db/dbConnection');
 var mysql = require('./db/rdsconnect');
 
 
-app.listen(port, () => {
+
+apps.listen(port, () => {
     db.dbconnect(function () {
         console.log("Connected to Db");
     }, config.dbLocation);

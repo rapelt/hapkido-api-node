@@ -1,13 +1,12 @@
+"use strict";
 var aws = require('aws-sdk');
 aws.config.update({
     region: 'ap-southeast-2'
 });
-
-function createStudentAuth (username, email) {
-    return new Promise((resolve, reject) => {
-        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
+function createStudentAuth(username, email) {
+    return new Promise(function (resolve, reject) {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         cognitoidentityserviceprovider.updateUserPool();
-
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
             Username: username,
@@ -18,17 +17,17 @@ function createStudentAuth (username, email) {
             TemporaryPassword: 'tempPassword1',
             UserAttributes: [
                 {
-                    Name: 'email', /* required */
+                    Name: 'email',
                     Value: email
                 }
             ]
         };
-
-        cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
+        cognitoidentityserviceprovider.adminCreateUser(params, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
-            } else {
+            }
+            else {
                 addUserToGroup(username);
                 console.log(data);
                 resolve();
@@ -36,75 +35,64 @@ function createStudentAuth (username, email) {
         });
     });
 }
-
 function addUserToGroup(username) {
-    var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
-
+    var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
     var params = {
         UserPoolId: process.env.USER_POOL_ID,
         Username: username,
         GroupName: 'student'
     };
-
-    cognitoidentityserviceprovider.adminAddUserToGroup(params, function(err, data) {
+    cognitoidentityserviceprovider.adminAddUserToGroup(params, function (err, data) {
         if (err) {
             console.log(err, err.stack);
-        } else {
+        }
+        else {
             console.log(data);
         }
     });
 }
-
-function deactivateStudentAuth (username) {
-    return new Promise((resolve, reject) => {
-        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
-
+function deactivateStudentAuth(username) {
+    return new Promise(function (resolve, reject) {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
             Username: username,
         };
-
-        cognitoidentityserviceprovider.adminDisableUser(params, function(err, data) {
+        cognitoidentityserviceprovider.adminDisableUser(params, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
-            } else {
+            }
+            else {
                 console.log(data);
                 resolve();
             }
         });
     });
-
 }
-
-function reActivateStudentAuth (username) {
-    return new Promise((resolve, reject) => {
-        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
-
+function reActivateStudentAuth(username) {
+    return new Promise(function (resolve, reject) {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
             Username: username,
         };
-
-        cognitoidentityserviceprovider.adminEnableUser(params, function(err, data) {
+        cognitoidentityserviceprovider.adminEnableUser(params, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
-            } else {
+            }
+            else {
                 console.log(data);
                 resolve();
             }
         });
     });
-
 }
-
-
-function createTestUser (username, email) {
-    return new Promise((resolve, reject) => {
-        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
+function createTestUser(username, email) {
+    return new Promise(function (resolve, reject) {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         cognitoidentityserviceprovider.updateUserPool();
-
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
             Username: username,
@@ -115,17 +103,17 @@ function createTestUser (username, email) {
             TemporaryPassword: 'test01',
             UserAttributes: [
                 {
-                    Name: 'email', /* required */
+                    Name: 'email',
                     Value: email
                 }
             ]
         };
-
-        cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
+        cognitoidentityserviceprovider.adminCreateUser(params, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
-            } else {
+            }
+            else {
                 addTestUserToGroup(username, 'admin');
                 console.log(data);
                 resolve();
@@ -133,53 +121,44 @@ function createTestUser (username, email) {
         });
     });
 }
-
 function addTestUserToGroup(username, group) {
-    var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
-
+    var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
     var params = {
         UserPoolId: process.env.USER_POOL_ID,
         Username: username,
         GroupName: group
     };
-
-    cognitoidentityserviceprovider.adminAddUserToGroup(params, function(err, data) {
+    cognitoidentityserviceprovider.adminAddUserToGroup(params, function (err, data) {
         if (err) {
             console.log(err, err.stack);
-        } else {
+        }
+        else {
             console.log(data);
         }
     });
 }
-
-function deleteTestUser (username) {
-    return new Promise((resolve, reject) => {
-        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
+function deleteTestUser(username) {
+    return new Promise(function (resolve, reject) {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
         cognitoidentityserviceprovider.updateUserPool();
-
         var params = {
             UserPoolId: process.env.USER_POOL_ID,
             Username: username
         };
-
-        cognitoidentityserviceprovider.adminDeleteUser(params, function(err, data) {
+        cognitoidentityserviceprovider.adminDeleteUser(params, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
-            } else {
+            }
+            else {
                 console.log(data);
                 resolve();
             }
         });
     });
 }
-
-function isUserAuthenticated (username, token) {
-
-
-
+function isUserAuthenticated(username, token) {
 }
-
 module.exports = {
     createStudentAuth: createStudentAuth,
     deactivateStudentAuth: deactivateStudentAuth,
