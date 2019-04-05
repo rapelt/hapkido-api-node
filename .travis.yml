@@ -8,7 +8,7 @@ jobs:
     - stage: build
       script: "npm run build"
     - stage: deploy to dev
-      script: skip
+      script: "cd build"
       deploy:
         on: master
         provider: lambda
@@ -17,7 +17,7 @@ jobs:
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
         runtime: nodejs8.10
         handler_name: handler
-        module_name: build/app
+        module_name: app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
