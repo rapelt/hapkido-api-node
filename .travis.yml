@@ -6,7 +6,7 @@ jobs:
     - stage: unit tests
       script: "npm run test"
     - stage: deploy to dev
-      script: "npm run build && cd build"
+      script: "npm run build"
       deploy:
         on: master
         provider: lambda
@@ -15,7 +15,7 @@ jobs:
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
         runtime: nodejs8.10
         handler_name: handler
-        module_name: app
+        module_name: build/app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
