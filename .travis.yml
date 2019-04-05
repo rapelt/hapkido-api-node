@@ -5,10 +5,8 @@ jobs:
   include:
     - stage: unit tests
       script: "npm run test"
-    - stage: build
-      script: "npm run build"
     - stage: deploy to dev
-      script: "cd build"
+      script: "npm run build && cd build"
       deploy:
         on: master
         provider: lambda
