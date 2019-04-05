@@ -1,18 +1,11 @@
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
-const config = require('../config/config.dev');
-
 
 exports.checkAuth = function (req, res, next) {
-    if(!config.cognito){
+    if(process.env.USE_COGNITO === 'false'){
         console.log("No Cognito");
         next();
         return;
-    }
-
-    if(!config.env === 'prod'){
-        console.log(config.env);
-        next();
     }
 
     console.log("Using Cognito");
