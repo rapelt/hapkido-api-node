@@ -40,6 +40,7 @@ function mapStudents(students, studentGrades, classTypes) {
             "pinNumber": null,
             "email": student.email,
             "hbId": student.hb_id,
+            "familyId": student.family_id,
             "gradingDates": newGrades,
             "name": {
                 "lastname": student.last_name,

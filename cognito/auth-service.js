@@ -5,6 +5,7 @@ aws.config.update({
 
 function createStudentAuth (username, email) {
     return new Promise((resolve, reject) => {
+        console.log('auth service create Auth');
         var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
         cognitoidentityserviceprovider.updateUserPool();
 
@@ -24,13 +25,15 @@ function createStudentAuth (username, email) {
             ]
         };
 
+        console.log('admin create user', params);
+
         cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
             if (err) {
-                console.log(err, err.stack);
+                console.log('Auth Service Success', err, err.stack);
                 reject();
             } else {
                 addUserToGroup(username);
-                console.log(data);
+                console.log('Auth Service Success', data);
                 resolve();
             }
         });
@@ -65,6 +68,34 @@ function deactivateStudentAuth (username) {
         };
 
         cognitoidentityserviceprovider.adminDisableUser(params, function(err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                reject();
+            } else {
+                console.log(data);
+                resolve();
+            }
+        });
+    });
+
+}
+
+function editStudentEmail (username, email) {
+    return new Promise((resolve, reject) => {
+        var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
+
+        var params = {
+            UserPoolId: process.env.USER_POOL_ID,
+            Username: username,
+            UserAttributes: [
+                {
+                    Name: 'email', /* required */
+                    Value: email
+                }
+            ]
+        };
+
+        cognitoidentityserviceprovider.adminUpdateUserAttributes(params, function(err, data) {
             if (err) {
                 console.log(err, err.stack);
                 reject();
@@ -185,5 +216,6 @@ module.exports = {
     deactivateStudentAuth: deactivateStudentAuth,
     reActivateStudentAuth: reActivateStudentAuth,
     createTestUser: createTestUser,
-    deleteTestUser: deleteTestUser
+    deleteTestUser: deleteTestUser,
+    editStudentEmail: editStudentEmail
 };

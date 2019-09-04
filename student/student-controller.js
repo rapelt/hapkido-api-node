@@ -98,12 +98,17 @@ exports.createNewStudent = function (req, res, next) {
             family_id)
             .then((result) => {
                 memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date(joiningDate)).then(() => {
-                    authService.createStudentAuth(id, email).then(() => {
+                    if(process.env.USE_COGNITO !== 'false'){
+                        authService.createStudentAuth(id, email).then(() => {
+                            req.params = { id: student.hbId};
+                            controller.getStudent(req, res, next);
+                        }).catch(() => {
+                        });
+                    } else {
                         req.params = { id: student.hbId};
                         controller.getStudent(req, res, next);
-                    }).catch(() => {
+                    }
 
-                    });
                 }).catch((err) => {
                     return res.status(422).json({error: err});
                 });
@@ -138,8 +143,23 @@ exports.updateStudent = function (req, res, next) {
             student.email,
             result
         ).then((result) => {
-            controller.getStudent(req, res, next);
-            }).catch((err) => {
+
+            if(process.env.USE_COGNITO !== 'false'){
+                authService.editStudentEmail(student.hbId, student.email).then(() => {
+                    req.params = { id: student.hbId};
+                    controller.getStudent(req, res, next);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            } else {
+                req.params = { id: student.hbId};
+                controller.getStudent(req, res, next);
+            }
+
+
+
+
+         }).catch((err) => {
             console.log("-----error-----", err);
             return res.status(422).send({error: "Something went wrong"});
         });
