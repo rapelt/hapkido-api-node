@@ -13,7 +13,7 @@ jobs:
         function_name: hapkidoApi
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs8.10
+        runtime: nodejs12.x
         handler_name: handler
         module_name: build/app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
@@ -28,7 +28,7 @@ jobs:
         function_name: hapkidoApiStaging
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs12.x
         handler_name: handler
         module_name: build/app-staging
         access_key_id: AKIAJLDPHEJGFJSKUX2A
