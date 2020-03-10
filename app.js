@@ -8,11 +8,7 @@ const config = require('./config/config.dev');
 var mysql = require('./db/rdsconnect');
 
 exports.handler = (event, context) => {
-    db.dbconnect(function () {
-        console.log("Connected to Mongo Db");
-    }, config.dbLocation);
-
-    mysql.mysqlconnect().then(() => {
+    mysql.mysqlconnect(null, null).then(() => {
         awsServerlessExpress.proxy(server, event, context);
     });
 };

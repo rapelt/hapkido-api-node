@@ -6,16 +6,16 @@ jobs:
     - stage: unit tests
       script: "npm run test"
     - stage: deploy to dev
-      script: skip
+      script: "npm run build"
       deploy:
         on: master
         provider: lambda
         function_name: hapkidoApi
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs8.10
         handler_name: handler
-        module_name: app
+        module_name: build/app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
@@ -30,7 +30,7 @@ jobs:
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
         runtime: nodejs6.10
         handler_name: handler
-        module_name: app-staging
+        module_name: build/app-staging
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
@@ -45,7 +45,7 @@ jobs:
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
         runtime: nodejs6.10
         handler_name: handler
-        module_name: app-prod
+        module_name: build/app-prod
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:

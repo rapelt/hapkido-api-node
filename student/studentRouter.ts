@@ -2,6 +2,8 @@ var express = require('express');
 //var AuthController = require('./controllers/auth-controller');
 var StudentController = require('./student-controller');
 var TokenVerification = require('../cognito/token-verification');
+var testUserController = require('../cognito/generate-test-user');
+
 
 var router = express.Router();
 
@@ -20,6 +22,9 @@ router.post('/addtonewapp/:id', TokenVerification.checkAuth, StudentController.a
 
 router.post('/deactivate/:id', TokenVerification.checkAuth, StudentController.deactivateStudent);
 router.post('/reactivate/:id', TokenVerification.checkAuth, StudentController.reactivateStudent);
+
+router.post('/createtestuser', testUserController.createTestUser);
+router.post('/deletetestuser', testUserController.deleteTestUser);
 
 
 module.exports = router;

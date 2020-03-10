@@ -8,21 +8,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema marti097_hapkido-staging
+-- Schema hapkido_local
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema marti097_hapkido-staging
+-- Schema hapkido_local
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `marti097_hapkido-staging` DEFAULT CHARACTER SET utf8 ;
-USE `marti097_hapkido-staging` ;
+CREATE SCHEMA IF NOT EXISTS `hapkido_local` DEFAULT CHARACTER SET utf8 ;
+USE `hapkido_local` ;
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`class_type`
+-- Table `hapkido_local`.`class_type`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`class_type` ;
+DROP TABLE IF EXISTS `hapkido_local`.`class_type` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`class_type` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`class_type` (
   `class_type_id` INT NOT NULL AUTO_INCREMENT,
   `class_type` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`class_type_id`))
@@ -30,11 +30,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`contact`
+-- Table `hapkido_local`.`contact`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`contact` ;
+DROP TABLE IF EXISTS `hapkido_local`.`contact` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`contact` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`contact` (
   `address_id` INT NOT NULL AUTO_INCREMENT,
   `street_1` VARCHAR(100) NOT NULL,
   `street_2` VARCHAR(100) NULL,
@@ -47,11 +47,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`family`
+-- Table `hapkido_local`.`family`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`family` ;
+DROP TABLE IF EXISTS `hapkido_local`.`family` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`family` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`family` (
   `family_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `contact_address_id` INT NULL,
@@ -59,18 +59,18 @@ CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`family` (
   INDEX `fk_family_contact1_idx` (`contact_address_id` ASC),
   CONSTRAINT `fk_family_contact1`
     FOREIGN KEY (`contact_address_id`)
-    REFERENCES `marti097_hapkido-staging`.`contact` (`address_id`)
+    REFERENCES `hapkido_local`.`contact` (`address_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`emergency_contact`
+-- Table `hapkido_local`.`emergency_contact`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`emergency_contact` ;
+DROP TABLE IF EXISTS `hapkido_local`.`emergency_contact` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`emergency_contact` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`emergency_contact` (
   `emergency_contact_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `phone_1` VARCHAR(20) NOT NULL,
@@ -80,11 +80,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`member`
+-- Table `hapkido_local`.`member`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`member` ;
+DROP TABLE IF EXISTS `hapkido_local`.`member` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`member` (
   `hb_id` VARCHAR(6) NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NOT NULL,
@@ -105,17 +105,17 @@ CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member` (
   INDEX `fk_member_emergency_contact1_idx` (`emergency_contact_id` ASC),
   CONSTRAINT `fk_member_class_type1`
     FOREIGN KEY (`preferred_class_type_id`)
-    REFERENCES `marti097_hapkido-staging`.`class_type` (`class_type_id`)
+    REFERENCES `hapkido_local`.`class_type` (`class_type_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_member_family1`
     FOREIGN KEY (`family_id`)
-    REFERENCES `marti097_hapkido-staging`.`family` (`family_id`)
+    REFERENCES `hapkido_local`.`family` (`family_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_member_emergency_contact1`
     FOREIGN KEY (`emergency_contact_id`)
-    REFERENCES `marti097_hapkido-staging`.`emergency_contact` (`emergency_contact_id`)
+    REFERENCES `hapkido_local`.`emergency_contact` (`emergency_contact_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -123,11 +123,11 @@ COMMENT = 'emergency_contact_emergency_contact_id';
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`class`
+-- Table `hapkido_local`.`class`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`class` ;
+DROP TABLE IF EXISTS `hapkido_local`.`class` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`class` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`class` (
   `class_id` INT NOT NULL AUTO_INCREMENT,
   `is_grading` TINYINT NOT NULL,
   `date` DATETIME NOT NULL,
@@ -136,18 +136,18 @@ CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`class` (
   INDEX `fk_class_class_type1_idx` (`class_type_id` ASC),
   CONSTRAINT `fk_class_class_type1`
     FOREIGN KEY (`class_type_id`)
-    REFERENCES `marti097_hapkido-staging`.`class_type` (`class_type_id`)
+    REFERENCES `hapkido_local`.`class_type` (`class_type_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`member_class`
+-- Table `hapkido_local`.`member_class`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`member_class` ;
+DROP TABLE IF EXISTS `hapkido_local`.`member_class` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member_class` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`member_class` (
   `hb_id` VARCHAR(6) NOT NULL,
   `class_id` INT NOT NULL,
   PRIMARY KEY (`hb_id`, `class_id`),
@@ -155,23 +155,23 @@ CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member_class` (
   INDEX `fk_member_class_class1_idx` (`class_id` ASC),
   CONSTRAINT `fk_member_class_member1`
     FOREIGN KEY (`hb_id`)
-    REFERENCES `marti097_hapkido-staging`.`member` (`hb_id`)
+    REFERENCES `hapkido_local`.`member` (`hb_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_member_class_class1`
     FOREIGN KEY (`class_id`)
-    REFERENCES `marti097_hapkido-staging`.`class` (`class_id`)
+    REFERENCES `hapkido_local`.`class` (`class_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`grade`
+-- Table `hapkido_local`.`grade`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`grade` ;
+DROP TABLE IF EXISTS `hapkido_local`.`grade` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`grade` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`grade` (
   `grade_id` INT NOT NULL,
   `short_name` VARCHAR(2) NULL,
   `long_name` VARCHAR(20) NULL,
@@ -181,11 +181,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `marti097_hapkido-staging`.`member_grade`
+-- Table `hapkido_local`.`member_grade`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `marti097_hapkido-staging`.`member_grade` ;
+DROP TABLE IF EXISTS `hapkido_local`.`member_grade` ;
 
-CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member_grade` (
+CREATE TABLE IF NOT EXISTS `hapkido_local`.`member_grade` (
   `grade_id` INT NOT NULL,
   `hb_id` VARCHAR(6) NOT NULL,
   `class_id` INT NULL,
@@ -195,17 +195,17 @@ CREATE TABLE IF NOT EXISTS `marti097_hapkido-staging`.`member_grade` (
   INDEX `fk_member_grade_class1_idx` (`class_id` ASC),
   CONSTRAINT `fk_member_grade_grade1`
     FOREIGN KEY (`grade_id`)
-    REFERENCES `marti097_hapkido-staging`.`grade` (`grade_id`)
+    REFERENCES `hapkido_local`.`grade` (`grade_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_member_grade_member1`
     FOREIGN KEY (`hb_id`)
-    REFERENCES `marti097_hapkido-staging`.`member` (`hb_id`)
+    REFERENCES `hapkido_local`.`member` (`hb_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_member_grade_class1`
     FOREIGN KEY (`class_id`)
-    REFERENCES `marti097_hapkido-staging`.`class` (`class_id`)
+    REFERENCES `hapkido_local`.`class` (`class_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

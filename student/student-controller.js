@@ -1,4 +1,3 @@
-var Student = require('./student');
 var _ = require('underscore');
 var moment = require('moment');
 
@@ -18,6 +17,7 @@ exports.getAllStudents = function (req, res, next) {
 
     }).catch((err) => {
         console.log(err);
+        return res.status(422).send({error: err});
     });
 };
 
@@ -56,24 +56,28 @@ exports.createNewStudent = function (req, res, next) {
   console.log("Create Student", req.body);
   var student = req.body;
 
-    Promise.all([
-        classTypeService.getClassTypeIdByName(student.preferredClass),
-        familyService.getFamilyByName(student.name.lastname),
-    ]).then((results) => {
+  const promises = [];
+  promises.push(classTypeService.getClassTypeIdByName(student.preferredClass));
+
+  if(student.familyId === null){
+      promises.push(familyService.getFamilyByName(student.name.lastname));
+  }
+
+    Promise.all(promises).then((results) => {
         var id = student.hbId;
         var firstname = student.name.firstname;
         var lastname = student.name.lastname;
         var dob = null;
         var occupation = null;
         var is_active = student.isActive;
-        var is_kumdo_student = student.isKumdoStudent;
+        var is_kumdo_student = student.isKumdoStudent ? student.isKumdoStudent : false;
         var previous_experience = null;
         var injury_illness = null;
         var is_verified = false;
         var email = student.email;
         var preferred_class_type_id = results[0];
         var emergency_contactid = null;
-        var family_id = results[1];
+        var family_id = student.familyId ? student.familyId : results[1];
         var joiningDate = student.gradingDates[0].date;
 
 
@@ -94,12 +98,17 @@ exports.createNewStudent = function (req, res, next) {
             family_id)
             .then((result) => {
                 memberGradesService.addStudentGrade(student.hbId, student.grade, null, new Date(joiningDate)).then(() => {
-                    authService.createStudentAuth(id, email).then(() => {
+                    if(process.env.USE_COGNITO !== 'false'){
+                        authService.createStudentAuth(id, email).then(() => {
+                            req.params = { id: student.hbId};
+                            controller.getStudent(req, res, next);
+                        }).catch(() => {
+                        });
+                    } else {
                         req.params = { id: student.hbId};
                         controller.getStudent(req, res, next);
-                    }).catch(() => {
+                    }
 
-                    });
                 }).catch((err) => {
                     return res.status(422).json({error: err});
                 });
@@ -134,8 +143,23 @@ exports.updateStudent = function (req, res, next) {
             student.email,
             result
         ).then((result) => {
-            controller.getStudent(req, res, next);
-            }).catch((err) => {
+
+            if(process.env.USE_COGNITO !== 'false'){
+                authService.editStudentEmail(student.hbId, student.email).then(() => {
+                    req.params = { id: student.hbId};
+                    controller.getStudent(req, res, next);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            } else {
+                req.params = { id: student.hbId};
+                controller.getStudent(req, res, next);
+            }
+
+
+
+
+         }).catch((err) => {
             console.log("-----error-----", err);
             return res.status(422).send({error: "Something went wrong"});
         });

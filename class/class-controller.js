@@ -1,14 +1,7 @@
-var AClass = require('./class');
-var shortid = require('shortid');
-var _ = require('underscore');
-var moment = require('moment');
-
 var service = require('./class-service');
 var classTypeService = require('../class_type/class-type-service');
 var attendanceService = require('../class_member/class-member-service');
-
 var mapper = require('./class-mapper');
-
 
 exports.getAllClasses = function (req, res, next) {
     console.log("Finding all classes");

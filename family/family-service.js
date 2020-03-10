@@ -58,9 +58,32 @@ function getFamilyByName  (name) {
     });
 }
 
+function getAllFamilies  (name) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                reject(err);
+            }
+
+            var query = 'select * from family;';
+
+            connection.query(query, function (error, results, fields) {
+                connection.release();
+
+                if (error) {
+                    reject(error);
+                }
+
+                resolve(results);
+            });
+        });
+    });
+}
+
 module.exports = {
     createFamily: createFamily,
-    getFamilyByName: getFamilyByName
+    getFamilyByName: getFamilyByName,
+    getAllFamilies: getAllFamilies
 };
 
 
