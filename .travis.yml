@@ -43,7 +43,7 @@ jobs:
         function_name: hapkidoApiProd
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs12.x
         handler_name: handler
         module_name: build/app-prod
         access_key_id: AKIAJLDPHEJGFJSKUX2A
