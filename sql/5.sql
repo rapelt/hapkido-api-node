@@ -92,14 +92,13 @@ create table photo
         unique (id),
     constraint photo_url_uindex
         unique (url),
-    primary key (id)
 );
 
-alter table photo
-    add primary key (id);
-
-create unique index photo_id_uindex
-	on photo (id);
+# alter table photo
+#     add primary key (id);
+#
+# create unique index photo_id_uindex
+# 	on photo (id);
 
 create table video
 (
@@ -116,8 +115,8 @@ create table video
     primary key (id)
 );
 
-create unique index video_id_uindex
-	on video (id);
+# create unique index video_id_uindex
+# 	on video (id);
 
 create table technique_photo
 (
