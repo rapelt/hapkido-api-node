@@ -13,9 +13,13 @@ exports.getAllStudents = function (req, res, next) {
     console.log("Finding all students");
 
     Promise.all([service.getAllStudents(), memberGradesService.getAllGrades(), classTypeService.getAllClassTypes()]).then((all) => {
+        console.log("Finding all students 1");
+
         res.json(mapper.mapStudents(all[0], all[1], all[2]));
 
     }).catch((err) => {
+        console.log("Finding all students 2");
+
         console.log(err);
         return res.status(422).send({error: err});
     });

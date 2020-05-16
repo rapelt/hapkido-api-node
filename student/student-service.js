@@ -27,21 +27,38 @@ function createStudent(hb_id, first_name, last_name, dob, occupation, is_active,
 };
 
 function getAllStudents() {
+    console.log("Finding all students 3");
 
     return new Promise((resolve, reject) => {
+        console.log("Finding all students 4");
+
         pool.getConnection(function(err, connection) {
+            console.log("Finding all students 5");
+
             if (err) {
+                console.log("Finding all students 6");
+
                 reject(err);
             }
+
+            console.log("Finding all students 7");
+
 
             var query = 'select * from member;';
 
             connection.query(query, function (error, results, fields) {
+                console.log("Finding all students 8");
+
                 connection.release();
+                console.log("Finding all students 9");
+
 
                 if (error) {
+                    console.log("Finding all students 10");
+
                     reject(error);
                 }
+                console.log("Finding all students 11");
 
                 resolve(results);
             });
