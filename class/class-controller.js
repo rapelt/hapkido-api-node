@@ -6,13 +6,21 @@ var mapper = require('./class-mapper');
 exports.getAllClasses = function (req, res, next) {
     console.log("Finding all classes");
     service.getAllClasses().then((classes) => {
+        console.log("Finding all classes 1");
+
         mapper.mapClasses(classes).then((newClasses) => {
+            console.log("Finding all classes 2");
+
             res.json(newClasses);
         }).catch((err) => {
+            console.log("Finding all classes ERROR 2");
+
             console.log(err);
         });
 
     }).catch((err) => {
+        console.log("Finding all classes ERROR 1");
+
         console.log(err);
     });
 };

@@ -38,21 +38,35 @@ function createClass (class_id, is_grading, date, class_type_id) {
 };
 
 function getAllClasses () {
+    console.log("Finding all classes 3");
+
 
     return new Promise((resolve, reject) => {
+        console.log("Finding all classes 4");
+
         pool.getConnection(function (err, connection) {
+            console.log("Finding all classes 5");
+
             if (!connection) {
+                console.log("Finding all classes ERROR 3 - No Connection");
+
                 reject(err);
             }
 
             var query = "select * from class";
 
             connection.query(query, function (error, results, fields) {
+                console.log("Finding all classes 6");
+
                 connection.release();
 
                 if (error) {
+                    console.log("Finding all classes ERROR 4 - Query Error");
+
                     reject(error);
                 }
+                console.log("Finding all classes 7");
+
                 resolve(results);
             });
         });
