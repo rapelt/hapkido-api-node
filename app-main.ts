@@ -10,6 +10,7 @@ var mysql = require('./db/rdsconnect');
 
 
 var app = apps.listen(port, () => {
+    console.log(`Application is running on port ${port}`);
 
     mysql.mysqlconnect().then(() => {
         console.log(`Application is running on port ${port}`);

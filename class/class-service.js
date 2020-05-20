@@ -8,67 +8,68 @@ var classColumns = "class_id, is_grading, date, class_type_id";
 function createClass (class_id, is_grading, date, class_type_id) {
 
     return new Promise((resolve, reject) => {
-        pool.getConnection(function (err, connection) {
-            if (!connection) {
-                reject(err);
+        var q = "insert into class ("+ classColumns  +") select ?, ?, ?, ? from dual where not exists (select date, class_type_id from class where date = ? and class_type_id = ?);";
+
+        pool.query(q, [class_id, is_grading, date, class_type_id, date, class_type_id], function (error, results, fields) {
+            // Connection is automatically released when query resolves
+
+            if (error) {
+                reject(error);
             }
 
-            var q = "insert into class ("+ classColumns  +") select ?, ?, ?, ? from dual where not exists (select date, class_type_id from class where date = ? and class_type_id = ?);";
+            if(results !== undefined && results.affectedRows === 0){
+                reject('Class already exists');
+            }
 
-            connection.query(q, [class_id, is_grading, date, class_type_id, date, class_type_id], function (error, results, fields) {
-                connection.release();
+            if(results !== undefined && results.insertId !== undefined){
+                resolve(results.insertId);
+            }
 
-                if (error) {
-                    reject(error);
-                }
+            resolve(0);
+        })
 
-                if(results !== undefined && results.affectedRows === 0){
-                    reject('Class already exists');
-                }
-
-                if(results !== undefined && results.insertId !== undefined){
-                    resolve(results.insertId);
-                }
-
-                resolve(0);
-
-            });
-        });
+        // pool.getConnection(function (err, connection) {
+        //     if (!connection) {
+        //         reject(err);
+        //     }
+        //
+        //     var q = "insert into class ("+ classColumns  +") select ?, ?, ?, ? from dual where not exists (select date, class_type_id from class where date = ? and class_type_id = ?);";
+        //
+        //     connection.query(q, [class_id, is_grading, date, class_type_id, date, class_type_id], function (error, results, fields) {
+        //         connection.release();
+        //
+        //         if (error) {
+        //             reject(error);
+        //         }
+        //
+        //         if(results !== undefined && results.affectedRows === 0){
+        //             reject('Class already exists');
+        //         }
+        //
+        //         if(results !== undefined && results.insertId !== undefined){
+        //             resolve(results.insertId);
+        //         }
+        //
+        //         resolve(0);
+        //
+        //     });
+        // });
     });
 };
 
 function getAllClasses () {
-    console.log("Finding all classes 3");
-
 
     return new Promise((resolve, reject) => {
-        console.log("Finding all classes 4");
 
-        pool.getConnection(function (err, connection) {
-            console.log("Finding all classes 5");
+        var query = "select * from class";
 
-            if (!connection) {
-                console.log("Finding all classes ERROR 3 - No Connection");
+        pool.query(query, function (error, results, fields) {
+            // connection.release();
 
-                reject(err);
+            if (error) {
+                reject(error);
             }
-
-            var query = "select * from class";
-
-            connection.query(query, function (error, results, fields) {
-                console.log("Finding all classes 6");
-
-                connection.release();
-
-                if (error) {
-                    console.log("Finding all classes ERROR 4 - Query Error");
-
-                    reject(error);
-                }
-                console.log("Finding all classes 7");
-
-                resolve(results);
-            });
+            resolve(results);
         });
     });
 };
