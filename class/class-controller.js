@@ -4,8 +4,8 @@ var attendanceService = require('../class_member/class-member-service');
 var mapper = require('./class-mapper');
 
 exports.getAllClasses = function (req, res, next) {
-    console.log("Finding all classes");
     service.getAllClasses().then((classes) => {
+
         mapper.mapClasses(classes).then((newClasses) => {
             res.json(newClasses);
         }).catch((err) => {

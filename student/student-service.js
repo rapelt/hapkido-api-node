@@ -27,24 +27,16 @@ function createStudent(hb_id, first_name, last_name, dob, occupation, is_active,
 };
 
 function getAllStudents() {
-
     return new Promise((resolve, reject) => {
-        pool.getConnection(function(err, connection) {
-            if (err) {
-                reject(err);
+
+        var query = 'select * from member;';
+
+        pool.query(query, function (error, results, fields) {
+
+            if (error) {
+                reject(error);
             }
-
-            var query = 'select * from member;';
-
-            connection.query(query, function (error, results, fields) {
-                connection.release();
-
-                if (error) {
-                    reject(error);
-                }
-
-                resolve(results);
-            });
+            resolve(results);
         });
     });
 };

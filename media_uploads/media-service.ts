@@ -153,13 +153,8 @@ module.exports = {
 function runQuery(query: string, values: any) {
 
     return new Promise((resolve, reject) => {
-        pool.getConnection(function(err: any, connection: any) {
-            if (err) {
-                reject(err);
-            }
 
-            connection.query(query, values, function (error: any, results: any, fields: any) {
-                connection.release();
+            pool.query(query, values, function (error: any, results: any, fields: any) {
 
                 if (error) {
                     reject(error);
@@ -172,5 +167,4 @@ function runQuery(query: string, values: any) {
                 resolve(results);
             });
         });
-    });
 };

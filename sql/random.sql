@@ -13,3 +13,7 @@ select * from technique_set;
 update technique t SET t.t_title = 'Makko Chigi 5', t.t_description = 'sdf', t.t_grade = 2, t.t_set = 3 WHERE t.`t_id` = 5;
 
 UPDATE technique t SET t.`t_title` = 'Makko Chigi 5' WHERE t.`t_id` = 5;
+
+SHOW VARIABLES LIKE "max_connections";
+
+show status where `variable_name` = 'Threads_connected';
