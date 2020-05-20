@@ -131,7 +131,7 @@ function createAllGrades () {
         });
 
         Promise.all(promises).then((result) => {
-            console.log('blarg');
+            // console.log('blarg');
             resolve();
         }).catch((err) => {
             reject(err);

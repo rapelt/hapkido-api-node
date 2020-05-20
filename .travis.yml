@@ -6,6 +6,7 @@ jobs:
     - stage: unit tests
       script: "npm run test"
     - stage: deploy to dev
+      if: branch = master
       script: "npm run build"
       deploy:
         on: master
@@ -21,6 +22,7 @@ jobs:
         secret_access_key:
           secure: qXf0r4Tmf/+kcmjHKuzvVceDYLUZAFKNSOM9CZpydRP+1KQNhArzafEXSfnR7+nW93azlDsaoS19MTdDJf212ziCz9RN4sS49oM5MIVLjzPzdGTf7efgr1+YRwlXbTz6yeDEeqy7CEShUBLJi+i7fUEcUKJK02TEs4A3eytL9pPKba5Squbl48hZ6b74lEZtbkY6qgUkFyOL2nlJiEq9ojbnZB0hVHiVXhc5u8LXPZYQKn44guVhk5pn2BAYsVjgc/xStoBQSJ6rOrPZBR2ptkuSIuvS/C7RR/c+K/66oPrZSWqcsYOh4vc7Cg4OoRalsgDLZEMg/+N0IzCxGgwENsvwk17ijUus3PNBH2tlp8bgzs4idF3CPRQl813kVZt5u7mRA+Rs4+/X2E7vg+6OuvmtPEm1BGyVRJT5CbN5+s08KZPCN7idjrqsKq6/sQecToBGMDqPMatCQy7em4oj7pViclLuzi7OaJ7//D8RUpj20VRGZirWSyUNSfPKhMet1WWUyWmYWt5PNxx1IWvNwbpVGEQUmr67a3F6ZBEKN7M3UTV3Jt4m59T6NbAsri7u2Xsmu75OauT7mjaP9FIwTDl3i0rpcOyUC5tpRrplSzhI1M3IgVadr07sI1cgIwGz8Qm/UQmZqecZdoOqFpqlFoKFU/po7l5ltkFOLM+BLbU=
     - stage: deploy to staging
+      if: branch = staging
       script: "npm run build"
       deploy:
         on: staging
@@ -36,6 +38,7 @@ jobs:
         secret_access_key:
           secure: qXf0r4Tmf/+kcmjHKuzvVceDYLUZAFKNSOM9CZpydRP+1KQNhArzafEXSfnR7+nW93azlDsaoS19MTdDJf212ziCz9RN4sS49oM5MIVLjzPzdGTf7efgr1+YRwlXbTz6yeDEeqy7CEShUBLJi+i7fUEcUKJK02TEs4A3eytL9pPKba5Squbl48hZ6b74lEZtbkY6qgUkFyOL2nlJiEq9ojbnZB0hVHiVXhc5u8LXPZYQKn44guVhk5pn2BAYsVjgc/xStoBQSJ6rOrPZBR2ptkuSIuvS/C7RR/c+K/66oPrZSWqcsYOh4vc7Cg4OoRalsgDLZEMg/+N0IzCxGgwENsvwk17ijUus3PNBH2tlp8bgzs4idF3CPRQl813kVZt5u7mRA+Rs4+/X2E7vg+6OuvmtPEm1BGyVRJT5CbN5+s08KZPCN7idjrqsKq6/sQecToBGMDqPMatCQy7em4oj7pViclLuzi7OaJ7//D8RUpj20VRGZirWSyUNSfPKhMet1WWUyWmYWt5PNxx1IWvNwbpVGEQUmr67a3F6ZBEKN7M3UTV3Jt4m59T6NbAsri7u2Xsmu75OauT7mjaP9FIwTDl3i0rpcOyUC5tpRrplSzhI1M3IgVadr07sI1cgIwGz8Qm/UQmZqecZdoOqFpqlFoKFU/po7l5ltkFOLM+BLbU=
     - stage: deploy to prod
+      if: branch = prod
       script: "npm run build"
       deploy:
         on: prod

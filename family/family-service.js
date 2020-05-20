@@ -60,22 +60,15 @@ function getFamilyByName  (name) {
 
 function getAllFamilies  (name) {
     return new Promise((resolve, reject) => {
-        pool.getConnection(function(err, connection) {
-            if (err) {
-                reject(err);
+        var query = 'select * from family;';
+
+        pool.query(query, function (error, results, fields) {
+
+            if (error) {
+                reject(error);
             }
 
-            var query = 'select * from family;';
-
-            connection.query(query, function (error, results, fields) {
-                connection.release();
-
-                if (error) {
-                    reject(error);
-                }
-
-                resolve(results);
-            });
+            resolve(results);
         });
     });
 }
