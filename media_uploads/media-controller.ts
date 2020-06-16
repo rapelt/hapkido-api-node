@@ -14,13 +14,11 @@ exports.createVideo = function (req: any, res: any, next: any) {
 exports.createPhoto = function (req: any, res: any, next: any) {
     console.log("Create photo");
     res.json({});
-
 };
 
 exports.uploadPhoto = function (req: any, res: any, next: any) {
     console.log("Upload photo");
     res.json({});
-
 };
 
 exports.uploadVideo = () => {
@@ -65,19 +63,16 @@ exports.uploadVideo = () => {
 exports.updateVideo = function (req: any, res: any, next: any) {
     console.log("Update Video");
     res.json({});
-
 };
 
 exports.updatePhoto = function (req: any, res: any, next: any) {
     console.log("Update Photo");
     res.json({});
-
 };
 
 exports.getAllVideos = function (req: any, res: any, next: any) {
     console.log("Get all videos");
     res.json({});
-
 };
 
 exports.getAllPhotos = function (req: any, res: any, next: any) {
@@ -94,5 +89,4 @@ exports.getVideo = function (req: any, res: any, next: any) {
 exports.getPhoto = function (req: any, res: any, next: any) {
     console.log("Get photo");
     res.json({});
-
 };
