@@ -83,6 +83,7 @@ exports.getAllPhotos = function (req: any, res: any, next: any) {
 exports.getVideo = function (req: any, res: any, next: any) {
     console.log("Get Video");
     res.json({});
+
 };
 
 exports.getPhoto = function (req: any, res: any, next: any) {
