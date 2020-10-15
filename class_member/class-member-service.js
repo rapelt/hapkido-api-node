@@ -34,27 +34,20 @@ function addMemberToClass (hb_id, class_id) {
 function getMembersInClass (class_id) {
 
     return new Promise((resolve, reject) => {
-        pool.getConnection(function(err, connection) {
-            if (err) {
-                reject(err);
+
+        var query = 'select hb_id from member_class where class_id = ?';
+
+        pool.query(query, [class_id], function (error, results, fields) {
+            if (error) {
+                reject(error);
             }
 
-            var query = 'select hb_id from member_class where class_id = ?';
-
-            connection.query(query, [class_id], function (error, results, fields) {
-                connection.release();
-
-                if (error) {
-                    reject(error);
-                }
-
-                var attendance = [];
-                _.each(results, (attended) => {
-                    attendance.push(attended.hb_id);
-                });
-
-                resolve(attendance);
+            var attendance = [];
+            _.each(results, (attended) => {
+                attendance.push(attended.hb_id);
             });
+
+            resolve(attendance);
         });
     });
 }

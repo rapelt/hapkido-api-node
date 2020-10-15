@@ -41,7 +41,7 @@ exports.getAllTechniqueSets = function (req: any, res: any, next:any) {
 
 exports.addNewTechniqueSet = function (req: any, res: any, next:any) {
     console.log("Create Technique Set", req.body);
-    var techniqueSetName = req.body.name;
+    var techniqueSetName = req.body.techniqueSet;
 
     service.addTechniqueSet(techniqueSetName)
         .then((result: any) => {
