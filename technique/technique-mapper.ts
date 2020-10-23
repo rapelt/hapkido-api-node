@@ -1,4 +1,5 @@
-import {TechniqueDataModel, TechniqueModel} from "./technique-model";
+import {TechniqueDataModel, TechniqueGroupDataModel, TechniqueGroupModel, TechniqueModel} from "./technique-model";
+import {TagModel, TechniqueTagServerModel} from "../tag/tag-model";
 
 function mapTechniques(techniques: Array<TechniqueDataModel>, tags: { t_id: number, tag_id: number}[]) {
     const clientTechniques: TechniqueModel[] = techniques.map((technique) => {
@@ -27,7 +28,17 @@ function mapTechniqueToDB(technique: TechniqueModel): TechniqueDataModel {
     };
 }
 
+function mapTagsToTechniqueTags(tags: Array<TagModel>, techniqueId: number): Array<TechniqueTagServerModel> {
+    return tags.map((tag) => {
+        return {
+           t_id: techniqueId,
+           tag_id: tag.id
+        }
+    });
+}
+
 module.exports = {
     mapTechniques: mapTechniques,
-    mapTechniqueToDB: mapTechniqueToDB
+    mapTechniqueToDB: mapTechniqueToDB,
+    mapTagsToTechniqueTags: mapTagsToTechniqueTags
 };

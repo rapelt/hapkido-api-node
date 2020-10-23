@@ -17,12 +17,12 @@ export interface TechniqueDataModel {
     t_set: number
 }
 
-export interface TagModel {
+export interface TechniqueGroupModel {
     id: number,
-    name: string,
+    title: string,
 }
 
-export interface TechniqueGroupModel {
+export interface TechniqueGroupDataModel {
     id: number,
     name: string,
 }

@@ -1,4 +1,4 @@
-import {TechniqueDataModel} from "./technique-model";
+import {TechniqueDataModel, TechniqueGroupDataModel} from "./technique-model";
 
 var connection = require('../db/rdsconnect');
 var pool = connection.getpool();
@@ -7,7 +7,7 @@ var techniqueColumns = "t_id, t_title, t_description, t_grade, t_set";
 var techniqueSetColumns = "id, name";
 
 
-function createTechnique(title: string) {
+function createTechnique(technique: TechniqueDataModel) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -17,7 +17,7 @@ function createTechnique(title: string) {
 
             var query = 'INSERT INTO technique (' + techniqueColumns +  ') VALUES(?, ?, ?, ?, ?);';
 
-            connection.query(query, [0, title, '', 1, 0], function (error: any, results: any, fields: any) {
+            connection.query(query, [0, technique.t_title, technique.t_description, technique.t_grade, technique.t_set], function (error: any, results: any, fields: any) {
                 connection.release();
 
                 if (error) {
@@ -63,7 +63,7 @@ function updateTechnique(technique: TechniqueDataModel) {
     });
 };
 
-function getAllTechniqueSets() {
+function updateTechniqueSet(techniqueSet: TechniqueGroupDataModel) {
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -71,7 +71,58 @@ function getAllTechniqueSets() {
                 reject(err);
             }
 
-            var query = 'select * from technique_set;';
+            var query = `update technique_set set 
+            name = ?
+            where id = ?;`;
+
+            connection.query(query, [techniqueSet.name, techniqueSet.id], function (error: any, results: any, fields: any) {
+                connection.release();
+
+                if (error) {
+                    reject(error);
+                }
+
+                resolve(results);
+            });
+        });
+    });
+};
+
+function deactivateTechniqueSet(techniqueSetID: number) {
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(err: any, connection: any) {
+            if (err) {
+                reject(err);
+            }
+
+            var query = `update technique_set set
+            active = FALSE
+            where id = ?;`;
+
+            connection.query(query, [techniqueSetID], function (error: any, results: any, fields: any) {
+                connection.release();
+
+                if (error) {
+                    reject(error);
+                }
+
+                resolve(results);
+            });
+        });
+    });
+};
+
+
+
+function getAllTechniqueSets() {
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(err: any, connection: any) {
+            if (err) {
+                reject(err);
+            }
+            var query = 'select * from technique_set where active = TRUE;';
 
             connection.query(query, function (error: any, results: any, fields: any) {
                 connection.release();
@@ -217,6 +268,10 @@ module.exports = {
     getAllTechniqueSets: getAllTechniqueSets,
     addTechniqueSet: addTechniqueSet,
     updateTechnique: updateTechnique,
+    updateTechniqueSet: updateTechniqueSet,
     updateTags: updateTags,
-    getTechniqueTags: getTechniqueTags
+    getTechniqueTags: getTechniqueTags,
+    deactivateTechniqueSet: deactivateTechniqueSet,
+    removeTags: removeTags
+
 };
