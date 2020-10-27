@@ -1,6 +1,10 @@
 import Seq from 'sequelize';
 
-const options = require('./sequelize-options.json');
+const options = {
+        "timezone": "+10:00",
+        "dialect": "mysql"
+    }
+;
 
 var poolconfig = {
     // connectionLimit : 10,
