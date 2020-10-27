@@ -19,7 +19,9 @@ exports.mysqlconnect = function (callback, dbLocation) {
         var pool = this.getpool();
 
         pool.getConnection(function(err, connection) {
-            connection.release();
+            if(connection){
+                connection.release();
+            }
             if (err) {
                 console.error('Database connection failed: ' + err.stack);
                 return;
