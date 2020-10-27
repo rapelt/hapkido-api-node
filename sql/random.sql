@@ -39,3 +39,7 @@ SELECT `class`.`class_id` AS `classId`, `class`.`is_grading` AS `isGrading`, `cl
 
 
 select * from member_class where class_id = 662;
+
+select now();
+
+SET time_zone = 'Australia/Brisbane';

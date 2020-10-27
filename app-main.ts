@@ -1,9 +1,5 @@
 "use strict";
-
-
 let apps = require('./index');
-
-const config = require('./config/config.dev');
 
 let port = process.env.PORT || 8090;
 
