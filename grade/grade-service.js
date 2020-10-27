@@ -1,5 +1,4 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 var _ = require('underscore');
 
 var gradeColumns = "grade_id, short_name, long_name, css_class";
@@ -141,6 +140,8 @@ function createAllGrades () {
 };
 
 function createGrade(id, sn, ln, css) {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
             pool.getConnection(function (err, connection) {
                 if (!connection) {

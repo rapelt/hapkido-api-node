@@ -10,13 +10,33 @@ var poolconfig = {
     database : process.env.DATABASE
 };
 
-var pool  = mysql.createPool(poolconfig);
+var poolClosed = false;
 
-exports.mysqlconnect = function (callback, dbLocation) {
+var pool = setPools();
+
+function getPools () {
+    if(!pool){
+        setPools();
+    }
+    return pool;
+};
+
+function setPools () {
+    pool = mysql.createPool(poolconfig);
+    poolClosed = false;
+};
+
+function mysqlconnection(callback, dbLocation) {
     return new Promise((resolve, reject) => {
         console.log('connecting to rds pool');
+        if(poolClosed) {
+            setPools();
+            console.log('new pools');
+        }
+        var pool = getPools();
 
-        var pool = this.getpool();
+        console.log(pool, poolClosed);
+
 
         pool.getConnection(function(err, connection) {
             if(connection){
@@ -32,6 +52,20 @@ exports.mysqlconnect = function (callback, dbLocation) {
     });
 };
 
-exports.getpool = function () {
-    return pool;
-};
+exports.releaseAllConnections = function () {
+    pool = getPools();
+
+    pool.end(function (err) {
+        poolClosed = true;
+        // all connections in the pool have ended
+        console.log('All Connections have ended');
+        mysqlconnection().then(() => {});
+
+    });
+
+    return;
+
+}
+
+exports.getpool = getPools;
+exports.mysqlconnect = mysqlconnection;

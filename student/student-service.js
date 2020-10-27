@@ -1,9 +1,10 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
+// var pool = connection.getpool();
 
 var studentColumns = "hb_id, first_name, last_name, dob, occupation, is_active, is_kumdo_student, previous_experience, injury_illness, is_verified, email, preferred_class_type_id, emergency_contact_id, family_id";
 
 function createStudent(hb_id, first_name, last_name, dob, occupation, is_active, is_kumdo_student, previous_experience, injury_illness, is_verified, email, preferred_class_type_id, emergency_contact_id, family_id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -27,6 +28,8 @@ function createStudent(hb_id, first_name, last_name, dob, occupation, is_active,
 };
 
 function getAllStudents() {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
 
         var query = 'select * from member;';
@@ -42,6 +45,8 @@ function getAllStudents() {
 };
 
 function getStudent(hbid) {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -65,6 +70,8 @@ function getStudent(hbid) {
 };
 
 function getStudentEmail(hbid) {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -88,6 +95,8 @@ function getStudentEmail(hbid) {
 };
 
 function updatedStudent(hb_id, first_name, last_name, dob, occupation, is_active, is_kumdo_student, previous_experience, injury_illness, is_verified, email, preferred_class_type_id) {
+
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -123,6 +132,8 @@ function updatedStudent(hb_id, first_name, last_name, dob, occupation, is_active
 };
 
 function setIsActiveToFalse(hb_id) {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -148,6 +159,7 @@ function setIsActiveToFalse(hb_id) {
 };
 
 function setIsActiveToTrue(hb_id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {

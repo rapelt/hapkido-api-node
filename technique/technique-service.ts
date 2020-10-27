@@ -1,13 +1,13 @@
 import {TechniqueDataModel, TechniqueGroupDataModel} from "./technique-model";
 
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 
 var techniqueColumns = "t_id, t_title, t_description, t_grade, t_set";
 var techniqueSetColumns = "id, name";
 
 
 function createTechnique(technique: TechniqueDataModel) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -36,6 +36,7 @@ function createTechnique(technique: TechniqueDataModel) {
 };
 
 function updateTechnique(technique: TechniqueDataModel) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -64,6 +65,7 @@ function updateTechnique(technique: TechniqueDataModel) {
 };
 
 function updateTechniqueSet(techniqueSet: TechniqueGroupDataModel) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -89,6 +91,7 @@ function updateTechniqueSet(techniqueSet: TechniqueGroupDataModel) {
 };
 
 function deactivateTechniqueSet(techniqueSetID: number) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -116,6 +119,7 @@ function deactivateTechniqueSet(techniqueSetID: number) {
 
 
 function getAllTechniqueSets() {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -138,6 +142,7 @@ function getAllTechniqueSets() {
 };
 
 function addTechniqueSet(techniqueSetName: string) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -168,6 +173,7 @@ function addTechniqueSet(techniqueSetName: string) {
 };
 
 function getAllTechniques() {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -191,6 +197,7 @@ function getAllTechniques() {
 };
 
 function updateTags(t_id: number, tag_id: number) {
+    var pool = connection.getpool();
 
      return removeTags(t_id).then(() => {
         return new Promise((resolve, reject) => {
@@ -217,6 +224,7 @@ function updateTags(t_id: number, tag_id: number) {
 };
 
 function removeTags(t_id: number) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
@@ -240,6 +248,7 @@ function removeTags(t_id: number) {
 };
 
 function getTechniqueTags() {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {

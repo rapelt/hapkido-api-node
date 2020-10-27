@@ -1,9 +1,9 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 var familyColumns = "family_id, name, contact_address_id";
 
 
 function createFamily (family_id, name, contact_address_id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -27,6 +27,8 @@ function createFamily (family_id, name, contact_address_id) {
 }
 
 function getFamilyByName  (name) {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
             if (!connection) {
@@ -59,6 +61,8 @@ function getFamilyByName  (name) {
 }
 
 function getAllFamilies  (name) {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
         var query = 'select * from family;';
 

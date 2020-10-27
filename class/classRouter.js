@@ -5,6 +5,9 @@ var TokenVerification = require('../cognito/token-verification');
 
 var router = express.Router();
 
+router.get('/releaseAllConnection', ClassController.releaseAllConnections);
+
+
 router.post('/create', TokenVerification.checkAuth, ClassController.createClasses);
 router.get('/all', TokenVerification.checkAuth, ClassController.getAllClasses);
 router.post('/delete/:id', TokenVerification.checkAuth, ClassController.deleteClass);

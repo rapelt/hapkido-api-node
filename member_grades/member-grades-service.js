@@ -1,10 +1,11 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 var _ = require('underscore');
 
 var gradeColumns = "grade_id, hb_id, class_id, date";
 
 function addStudentGrade(hb_id, grade_id, class_id, date) {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
             if (!connection) {
@@ -31,6 +32,8 @@ function addStudentGrade(hb_id, grade_id, class_id, date) {
 }
 
 function removeStudentGrade(hb_id, grade_id) {
+    var pool = connection.getpool();
+
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
             if (!connection) {
@@ -53,6 +56,8 @@ function removeStudentGrade(hb_id, grade_id) {
 }
 
 function getAllGrades() {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -76,6 +81,8 @@ function getAllGrades() {
 };
 
 function getStudentGrades(hbid) {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {

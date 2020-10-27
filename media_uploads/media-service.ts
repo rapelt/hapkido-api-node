@@ -3,7 +3,6 @@ import {EnvironmentCredentials} from "aws-sdk";
 import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
 
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 
 var photoColumns = "id, file_name, file_type, original_file_name, folder, size, url";
 var videoColumns = "id, file_name, file_type, original_file_name, folder, url";
@@ -151,6 +150,7 @@ module.exports = {
 };
 
 function runQuery(query: string, values: any) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
 

@@ -1,10 +1,11 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 var memberClassFields = "hb_id, class_id";
 var _ = require('underscore');
 
 
 function addMemberToClass (hb_id, class_id) {
+    var pool = connection.getpool();
+
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {
@@ -32,6 +33,7 @@ function addMemberToClass (hb_id, class_id) {
 }
 
 function getMembersInClass (class_id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
 
@@ -53,6 +55,7 @@ function getMembersInClass (class_id) {
 }
 
 function removeMemberToClass (hb_id, class_id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {

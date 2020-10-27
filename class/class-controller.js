@@ -5,6 +5,8 @@ const Class = require('../models/class');
 const ClassType = require('../models/class_type');
 const Member = require('../models/member');
 
+var db = require('../db/rdsconnect');
+
 exports.getAllClasses = function (req, res, next) {
     console.log("get all classes");
 
@@ -24,6 +26,12 @@ exports.getAllClasses = function (req, res, next) {
     }).catch((err) => {
         return res.status(422).send({error: err});
     });
+};
+
+exports.releaseAllConnections = function (req, res, next) {
+    console.log("Release all connections");
+    db.releaseAllConnections();
+    return res.status(200).send();
 };
 
 exports.getNextClasses = function (req, res, next) {
@@ -199,3 +207,4 @@ function classesCreation(aclass) {
         });
     });
 };
+

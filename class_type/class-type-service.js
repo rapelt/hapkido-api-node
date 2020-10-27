@@ -1,7 +1,7 @@
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 
 function createClassType (id, classtype) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
@@ -22,6 +22,7 @@ function createClassType (id, classtype) {
 };
 
 function getClassTypeIdByName(classtype) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
@@ -53,6 +54,7 @@ function getClassTypeIdByName(classtype) {
 };
 
 function getClassTypeById(id) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
@@ -75,6 +77,7 @@ function getClassTypeById(id) {
 };
 
 function getAllClassTypes() {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err, connection) {

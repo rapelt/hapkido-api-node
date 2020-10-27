@@ -1,11 +1,11 @@
 import {TechniqueTagServerModel} from "../tag/tag-model";
 
 var connection = require('../db/rdsconnect');
-var pool = connection.getpool();
 
 var techniqueTagColumns = "t_id, tag_id";
 
 function addTagToNewTechnique(tags: Array<TechniqueTagServerModel>) {
+    var pool = connection.getpool();
 
     return new Promise((resolve, reject) => {
         pool.getConnection(function(err: any, connection: any) {
