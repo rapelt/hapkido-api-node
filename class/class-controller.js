@@ -1,19 +1,28 @@
 var service = require('./class-service');
-var classTypeService = require('../class_type/class-type-service');
-var attendanceService = require('../class_member/class-member-service');
 var mapper = require('./class-mapper');
 
-exports.getAllClasses = function (req, res, next) {
-    service.getAllClasses().then((classes) => {
+const Class = require('../models/class');
+const ClassType = require('../models/class_type');
+const Member = require('../models/member');
 
-        mapper.mapClasses(classes).then((newClasses) => {
-            res.json(newClasses);
-        }).catch((err) => {
-            console.log(err);
+exports.getAllClasses = function (req, res, next) {
+    console.log("get all classes");
+
+    Class.findAll({
+        include: [{
+            model: Member,
+            attributes: ['hb_id'],
+        }, {
+            model: ClassType,
+        }]
+    }).then((result) => {
+        result = result.map((aclass) => {
+            return mapper.seqClassMapper(aclass);
         });
 
+        res.json(result);
     }).catch((err) => {
-        console.log(err);
+        return res.status(422).send({error: err});
     });
 };
 
@@ -50,58 +59,18 @@ exports.getClassesBetweenDates = function (req, res, next) {
     });
 };
 
-/*exports.createNewClasses = function (req, res, next) {
-    console.log("Create Classes", req.body);
-    var newClassesToCreate = req.body.classes;
-
-    var classesCreated = [];
-    var errors = [];
-    var classesNotCreated = [];
-
-    var allclasses = 0;
-
-    _.each(newClassesToCreate, (aclass) => {
-        classTypeService.getClassTypeIdByName(aclass.classType).then((result) => {
-            service.createClass(0, aclass.isGrading? 1 : 0, new Date(aclass.date), result).then((results) => {
-                aclass.classId = results;
-                classesCreated.push(aclass);
-                allclasses++;
-
-                console.log(newClassesToCreate.length, allclasses);
-
-                if(newClassesToCreate.length === allclasses){
-                    console.log({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-                    res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-                }
-            }).catch((err)=> {
-                allclasses++;
-                classesNotCreated.push(err);
-                errors.push(err);
-                console.log(err);
-
-                console.log(newClassesToCreate.length, allclasses);
-                if(newClassesToCreate.length === allclasses){
-                    console.log({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-                    res.json({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-                }
-            });
-        }).catch((err)=> {
-            allclasses++;
-            classesNotCreated.push(err);
-            errors.push(err);
-        });
-    });
-};*/
-
 exports.deleteClass = function (req, res, next) {
     var classId = req.params.id;
     console.log("Delete class", classId);
 
-    service.deleteClass(classId).then((result) => {
-        console.log(result);
-        return res.status(200).send({classid: classId});
+    Class.findByPk(classId).then((aclass) => {
+        aclass.destroy().then(() => {
+            return res.status(200).send({classid: classId});
+        })
+            .catch((err) => {
+            return res.status(422).send({error: err});
+        });;
     }).catch((err) => {
-        console.log(err);
         return res.status(422).send({error: err});
     });
 };
@@ -111,10 +80,16 @@ exports.addToClass = function (req, res, next) {
     var hbId = req.body.studentId;
     console.log("add to class", classId, hbId);
 
-    attendanceService.addMemberToClass(hbId, classId).then((result) => {
-        return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId, studentId: hbId});
+    Class.findByPk(classId).then((aclass) => {
+        console.log(aclass);
+
+        Member.findByPk(hbId).then((member) => {
+            aclass.addMember(member);
+            return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId, studentId: hbId});
+        }).catch((err) => {
+            return res.status(422).send({error: err});
+        });
     }).catch((err) => {
-        console.log(err);
         return res.status(422).send({error: err});
     });
 };
@@ -124,10 +99,16 @@ exports.removeFromClass = function (req, res, next) {
     var hbId = req.body.studentId;
     console.log("remove from class", classId, hbId);
 
-    attendanceService.removeMemberToClass(hbId, classId).then((result) => {
-        return res.status(200).send({message: "Student " + hbId + " has been removed to class " + classId, studentId: hbId});
+    Class.findByPk(classId).then((aclass) => {
+        console.log(aclass);
+
+        Member.findByPk(hbId).then((member) => {
+            aclass.removeMember(member);
+            return res.status(200).send({message: "Student " + hbId + " has been removed to class " + classId, studentId: hbId});
+        }).catch((err) => {
+            return res.status(422).send({error: err});
+        });
     }).catch((err) => {
-        console.log(err);
         return res.status(422).send({error: err});
     });
 };
@@ -136,11 +117,16 @@ exports.makeClassAGrading = function (req, res, next) {
     var classId = req.params.id;
     console.log("Make class a grading", classId);
 
-    service.makeClassAGrading(classId).then((result) => {
-        console.log(result);
-        return res.status(200).send({message: "Class " + classId + " has been made a grading "});
+    Class.findByPk(classId).then((aclass) => {
+        aclass.update({
+            is_grading: true
+        }).then(() => {
+                return res.status(200).send({message: "Class " + classId + " has been made a grading "});
+        })
+            .catch((err) => {
+                return res.status(422).send({error: err});
+            });;
     }).catch((err) => {
-        console.log(err);
         return res.status(422).send({error: err});
     });
 };
@@ -192,8 +178,16 @@ function createClassesLoop(classes, res){
 
 function classesCreation(aclass) {
     return new Promise((resolve, reject) => {
-        Promise.all([classTypeService.getClassTypeIdByName(aclass.classType)]).then((results) => {
-            service.createClass(0, aclass.isGrading, new Date(aclass.date), results[0]).then((result) => {
+        ClassType.findAll({
+            where: {
+                class_type: aclass.classType
+            }
+        }).then((results) => {
+            Class.create({
+                is_grading: aclass.isGrading,
+                date: new Date(aclass.date),
+                class_type_id: results[0].getDataValue('class_type_id')
+            }).then((result) => {
                 resolve(result);
             }).catch((err) => {
                 console.log(err);
@@ -201,6 +195,7 @@ function classesCreation(aclass) {
             });
         }).catch((err) => {
             console.log(err);
+            reject(err);
         });
     });
 };

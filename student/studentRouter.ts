@@ -19,12 +19,12 @@ router.post('/addgrading/:id', TokenVerification.checkAuth, StudentController.ad
 router.post('/addtonewapp/:id', TokenVerification.checkAuth, StudentController.addToNewApp);
 
 
-
 router.post('/deactivate/:id', TokenVerification.checkAuth, StudentController.deactivateStudent);
 router.post('/reactivate/:id', TokenVerification.checkAuth, StudentController.reactivateStudent);
 
 router.post('/createtestuser', testUserController.createTestUser);
 router.post('/deletetestuser', testUserController.deleteTestUser);
+
 
 
 module.exports = router;

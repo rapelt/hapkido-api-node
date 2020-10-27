@@ -30,18 +30,6 @@ exports.mysqlconnect = function (callback, dbLocation) {
     });
 };
 
-// pool.on('release', function (connection) {
-//     console.log('Connection %d released', connection.threadId);
-// });
-//
-// pool.on('connection', function (connection) {
-//     console.log('Connected %d', connection.threadId);
-// });
-//
-// pool.on('enqueue', function () {
-//     console.log('Waiting for available connection slot');
-// });
-
 exports.getpool = function () {
     return pool;
 };

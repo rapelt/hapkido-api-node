@@ -9,8 +9,18 @@ var familyService = require('../family/family-service');
 var authService = require('../cognito/auth-service');
 var controller = require('./student-controller');
 
+var Member = require('../models/member');
+
 exports.getAllStudents = function (req, res, next) {
     console.log("Finding all students");
+
+    // Member.findAll({
+    // }).then((result) => {
+    //     console.log(JSON.stringify(result));
+    //     res.json(result);
+    // }).catch((err) => {
+    //     return res.status(422).send({error: err});
+    // });
 
     Promise.all([service.getAllStudents(), memberGradesService.getAllGrades(), classTypeService.getAllClassTypes()]).then((all) => {
         res.json(mapper.mapStudents(all[0], all[1], all[2]));
