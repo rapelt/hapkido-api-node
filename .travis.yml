@@ -25,7 +25,7 @@ jobs:
       if: branch = sequalize
       script: "npm run build"
       deploy:
-        on: staging
+        on: sequalize
         provider: lambda
         function_name: hapkidoApiStaging
         region: ap-southeast-2
