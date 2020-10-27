@@ -32,7 +32,7 @@ var app = apps.listen(port, () => {
         console.log(`Application is running on port ${port}`);
     });
 
-    sequelize.sync().then((result: any) => {
+    sequelize.sync({alter: true}).then((result: any) => {
         // console.log(result)
     }).catch((err: any)=> {
         console.log(err);
