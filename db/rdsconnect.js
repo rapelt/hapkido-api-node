@@ -26,6 +26,8 @@ function setPools () {
     poolClosed = false;
 };
 
+var connection;
+
 function mysqlconnection(callback, dbLocation) {
     return new Promise((resolve, reject) => {
         console.log('connecting to rds pool');
@@ -35,7 +37,7 @@ function mysqlconnection(callback, dbLocation) {
         }
         var pool = getPools();
 
-        console.log(pool, poolClosed);
+        // console.log(pool, poolClosed);
 
 
         pool.getConnection(function(err, connection) {

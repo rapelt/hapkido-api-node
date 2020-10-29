@@ -2,15 +2,16 @@ import * as path from "path";
 
 var express = require('express');
 var http = require('http');
-var studentRouter = require('./student/studentRouter');
-var classRouter = require('./class/classRouter');
-var familyRouter = require('./family/family-router');
-var classTypeRouter = require('./class_type/class-type-router');
-var techniqueRouter = require('./technique/technique-router');
-var mediaRouter = require('./media_uploads/media-router');
-var multer = require('multer');
 
-var tagRouter = require('./tag/tag-router');
+var studentRouter = require('./src/student/studentRouter');
+var classRouter = require('./src/class/classRouter');
+var familyRouter = require('./src/family/family-router');
+var classTypeRouter = require('./src/class_type/class-type-router');
+var techniqueRouter = require('./src/technique/technique-router');
+var mediaRouter = require('./src/media_uploads/media-router');
+var tagRouter = require('./src/tag/tag-router');
+
+var multer = require('multer');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
@@ -52,8 +53,6 @@ app.use("/tag", tagRouter);
 app.use("/media", mediaRouter);
 
 app.use(express.static(path.join(__dirname, '/')))
-
-
 
 if(process.env.LH === 'true') {
     var server = http.createServer(app);
