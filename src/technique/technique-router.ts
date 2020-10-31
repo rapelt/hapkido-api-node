@@ -1,5 +1,6 @@
+import TechniqueController from "./technique-controller";
+
 var express = require('express');
-var TechniqueController = require('./technique-controller');
 var TokenVerification = require('../cognito/token-verification');
 
 var router = express.Router();

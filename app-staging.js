@@ -1,19 +1,26 @@
 'use strict';
+import {createConnection} from "typeorm";
 const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./index');
 const server = awsServerlessExpress.createServer(app);
 
-var sequelize = require('./db/sequelize');
-var sequelizeRelations = require('./db/setupSequelizeRealtions');
-
-
 exports.handler = (event, context) => {
-    sequelize.sync().then((result) => {
-        console.log('Sequelize is working');
-        // console.log(result)
-        awsServerlessExpress.proxy(server, event, context);
+    createConnection().then(connection => {
+        console.log('TypeORM is connected: ', connection.isConnected);
+        var app = apps.listen(port, () => {
+            awsServerlessExpress.proxy(server, event, context);
 
-    }).catch((err)=> {
-        console.log(err);
+            // const io = require('./src/io/io').init(app);
+            //
+            // io.on('connection', (socket: any) => {
+            //     console.log('Client Connected');
+            // });
+            //
+            // io.emit('posts', {message: 'I am connected'});
+
+            // io.connect(app, null).then(() => {
+            //     console.log(`IO is connected`);
+            // });
+        });
     })
 };

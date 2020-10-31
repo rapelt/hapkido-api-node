@@ -1,6 +1,7 @@
+import StudentController from "./student-controller";
+
 var express = require('express');
 //var AuthController = require('./controllers/auth-controller');
-var StudentController = require('./student-controller');
 var TokenVerification = require('../cognito/token-verification');
 var testUserController = require('../cognito/generate-test-user');
 

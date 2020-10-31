@@ -46,29 +46,29 @@ EmergencyContact.hasMany(Member, { foreignKey: 'emergency_contact_id'});
 Family.belongsTo(Contact, {contraints: true, onDelete: 'RESTRICT', onUpdate: 'RESTRICT', foreignKey: 'address_id'})
 Contact.hasMany(Family, { foreignKey: 'address_id'});
 
-//Technique
+//TechniqueSet
 // Grade - grade_id
 Technique.belongsTo(Grade, {contraints: true, onDelete: 'RESTRICT', onUpdate: 'RESTRICT', foreignKey: 't_grade'})
 Grade.hasMany(Technique, { foreignKey: 't_grade'});
 
-//Technique - t_id
-//Technique Set - id
+//TechniqueSet - t_id
+//TechniqueSet Set - id
 Technique.belongsTo(TechniqueSet, {contraints: true, onDelete: 'RESTRICT', onUpdate: 'RESTRICT', foreignKey: 't_id'})
 TechniqueSet.hasMany(Technique, { foreignKey: 't_id'});
 
-//Technique - t_id
-//Technique Photo - id
+//TechniqueSet - t_id
+//TechniqueSet Photo - id
 Technique.belongsToMany(Photo, { through: TechniquePhoto, foreignKey: 't_id', onDelete: 'NO ACTION', onUpdate: 'CASCADE' });
 Photo.belongsToMany(Technique, { through: TechniquePhoto, foreignKey: 'id', onDelete: 'NO ACTION', onUpdate: 'CASCADE', });
 
-//Technique - t_id
-//Technique Tag - tag_id
+//TechniqueSet - t_id
+//TechniqueSet Tag - tag_id
 Technique.belongsToMany(ATag, { through: TechniqueTag, foreignKey: 't_id', onDelete: 'NO ACTION', onUpdate: 'CASCADE' });
 ATag.belongsToMany(Technique, { through: TechniqueTag, foreignKey: 'tag_id', onDelete: 'NO ACTION', onUpdate: 'CASCADE', });
 
 
-//Technique - t_id
-//Technique Video - id
+//TechniqueSet - t_id
+//TechniqueSet Video - id
 Technique.belongsToMany(Video, { through: TechniqueVideo, foreignKey: 't_id', onDelete: 'NO ACTION', onUpdate: 'CASCADE' });
 Video.belongsToMany(Technique, { through: TechniqueVideo, foreignKey: 'id', onDelete: 'NO ACTION', onUpdate: 'CASCADE', });
 

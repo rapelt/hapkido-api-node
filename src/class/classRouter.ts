@@ -1,8 +1,6 @@
 var express = require('express');
-var ClassController = require('./class-controller');
 var TokenVerification = require('../cognito/token-verification');
-
-
+import ClassController from "./class-controller";
 var router = express.Router();
 
 router.post('/create', TokenVerification.checkAuth, ClassController.createClasses);
@@ -11,12 +9,13 @@ router.post('/delete/:id', TokenVerification.checkAuth, ClassController.deleteCl
 router.post('/addtoclass/:id', ClassController.addToClass);
 router.post('/removefromclass/:id', ClassController.removeFromClass);
 router.post('/makeclassagrading/:id', TokenVerification.checkAuth, ClassController.makeClassAGrading);
-// router.post('/getnextclasses', ClassController.getNextClasses);
-// router.post('/getclassesbetweendates', ClassController.getClassesBetweenDates);
+
 
 
 /*
 router.get('/todaysclasses', ClassController.getTodaysClasses);
+router.post('/getnextclasses', ClassController.getNextClasses);
+router.post('/getclassesbetweendates', ClassController.getClassesBetweenDates);
 */
 
 module.exports = router;

@@ -1,22 +1,28 @@
-const Tag = require('../models/tag');
+import {Request, Response, NextFunction} from "express";
+import {getRepository, Repository} from "typeorm";
 
-exports.getAllTags = function (req: any, res: any, next:any) {
-    console.log("Get Tags");
-    Tag.findAll().then((result: any) => {
-        res.json(result);
-    }).catch((err: any) => {
-        return res.status(422).json({error: err});
-    });
-};
+import {Tag} from "../entity/tag";
+import {DefaultCatch} from 'catch-decorator-ts'
+import {defaultErrorHandler} from '../common/error-handler';
 
-exports.addNewTags = function (req: any, res: any, next:any) {
-    console.log("Create Tag", req.body);
-    var tagName = req.body.name;
+export default class TagController {
 
-    Tag.findOrCreate({name: tagName}).then((result: any) => {
-        res.json(result);
-    }).catch((err: any) => {
-        return res.status(422).json({error: err});
-    });
+    @DefaultCatch(defaultErrorHandler)
+    static async getAllTags(req: Request, res: Response, next:NextFunction) {
+        const repository: Repository<Tag> = getRepository('Tag');
+        const tags = await repository.find();
+        res.json(tags);
+    };
 
-};
+    @DefaultCatch(defaultErrorHandler)
+    static async addNewTags(req: Request, res: Response, next:NextFunction) {
+        const repository: Repository<Tag> = getRepository('Tag');
+        const newTag = new Tag()
+        newTag.name = req.body.name;
+        const tags = await repository.insert(newTag);
+        res.json(tags.generatedMaps);
+    };
+}
+
+
+

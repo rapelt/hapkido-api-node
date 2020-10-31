@@ -1,10 +1,11 @@
+import TagController from "./tag-controller";
+
 var express = require('express');
-var tagController = require('./tag-controller');
 var TokenVerification = require('../cognito/token-verification');
 
 var router = express.Router();
 
-router.post('/create', TokenVerification.checkAuth, tagController.addNewTags);
-router.get('/all', TokenVerification.checkAuth, tagController.getAllTags);
+router.post('/create', TokenVerification.checkAuth, TagController.addNewTags);
+router.get('/all', TokenVerification.checkAuth, TagController.getAllTags);
 
 module.exports = router;

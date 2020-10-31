@@ -1,31 +1,25 @@
 "use strict";
 let apps = require('./index');
-
 let port = process.env.PORT || 8090;
+import { createConnection } from "typeorm";
 
-var sequelize = require('./db/sequelize');
-var sequelizeRelations = require('./db/setupSequelizeRealtions');
+createConnection().then(connection => {
+    console.log('TypeORM is connected: ', connection.isConnected);
+    var app = apps.listen(port, () => {
 
-var app = apps.listen(port, () => {
-    sequelize.sync({alter: true}).then((result: any) => {
-        // console.log(result)
-        console.log(`Application is running on port ${port}`);
+        const io = require('./src/io/io').init(app);
 
-    }).catch((err: any)=> {
-        console.log(err);
-    })
+        io.on('connection', (socket: any) => {
+            console.log('Client Connected');
+        });
 
-    const io = require('./src/io/io').init(app);
+        io.emit('posts', {message: 'I am connected'});
 
-    io.on('connection', (socket: any) => {
-        console.log('Client Connected');
+        // io.connect(app, null).then(() => {
+        //     console.log(`IO is connected`);
+        // });
     });
+})
 
-    io.emit('posts', {message: 'I am connected'});
-
-    // io.connect(app, null).then(() => {
-    //     console.log(`IO is connected`);
-    // });
-});
 
 

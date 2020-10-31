@@ -1,0 +1,50 @@
+import {Request, Response, NextFunction} from "express";
+import {getRepository, Repository} from "typeorm";
+
+import {ClassType} from "../entity/class-type";
+import {DefaultCatch} from 'catch-decorator-ts'
+import {defaultErrorHandler} from '../common/error-handler';
+
+export default class ClassTypeController {
+
+    @DefaultCatch(defaultErrorHandler)
+    static async getAllClassTypes(req: Request, res: Response, next:NextFunction) {
+        const repository: Repository<ClassType> = getRepository('ClassType');
+        const classTypes = await repository.find();
+        res.json(classTypes);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async createClassType(req: Request, res: Response, next:NextFunction) {
+        var classtypeName = req.body.class_type;
+        const repository: Repository<ClassType> = getRepository('ClassType');
+        const newClassType = new ClassType()
+        newClassType.classType = classtypeName;
+        const classTypes = await repository.insert(newClassType);
+        res.json(classTypes.generatedMaps);
+    };
+}
+
+// exports.getAllClassTypes = function (req, res, next) {
+//
+//     ClassType.findAll().then((results) => {
+//         res.json(results);
+//     }).catch((error) => {
+//         return res.status(422).send("Query Error " + error)
+//     });
+// };
+//
+// exports.createClassType = function (req, res, next) {
+//     var id = shortid.generate();
+//     var classtype = req.body.class_type;
+//
+//     ClassType.create({
+//         class_type_id: id,
+//         class_type: classtype
+//     }).then((results) => {
+//         res.json(results);
+//     }).catch((error) => {
+//         return res.status(422).send("Query Error " + error)
+//     });
+//
+// };
