@@ -4,6 +4,7 @@ export class Attendance1604033490429 implements MigrationInterface {
     name = 'Attendance1604033490429'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("set foreign_key_checks=0");
         await queryRunner.query("ALTER TABLE `member_class` DROP FOREIGN KEY `fk_member_class_class1`");
         await queryRunner.query("ALTER TABLE `member_class` DROP FOREIGN KEY `fk_member_class_member1`");
         await queryRunner.query("CREATE INDEX `IDX_73847e8c47d065f9f86125c973` ON `member_class` (`class_id`)");

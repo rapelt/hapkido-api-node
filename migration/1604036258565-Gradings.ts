@@ -4,6 +4,7 @@ export class Gradings1604036258565 implements MigrationInterface {
     name = 'Gradings1604036258565'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("set foreign_key_checks=0");
         await queryRunner.query("ALTER TABLE `member_grade` DROP FOREIGN KEY `fk_member_grade_member1`");
         await queryRunner.query("ALTER TABLE `member_grade` DROP FOREIGN KEY `fk_member_grade_class1`");
         await queryRunner.query("ALTER TABLE `member_grade` DROP FOREIGN KEY `fk_member_grade_grade1`");

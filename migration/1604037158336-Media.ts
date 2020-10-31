@@ -4,6 +4,7 @@ export class Media1604037158336 implements MigrationInterface {
     name = 'Media1604037158336'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("set foreign_key_checks=0");
         await queryRunner.query("CREATE TABLE `technique_photo` (`t_id` int NOT NULL, `p_id` int NOT NULL, INDEX `IDX_c1ae6c734289e5d71e5198c381` (`t_id`), INDEX `IDX_6c904df35b2aff20c7ea214def` (`p_id`), PRIMARY KEY (`t_id`, `p_id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `technique_video` (`t_id` int NOT NULL, `v_id` int NOT NULL, INDEX `IDX_bfeca42e16c620ad79f0860ef5` (`t_id`), INDEX `IDX_2da0028def0f3d482992f7705b` (`v_id`), PRIMARY KEY (`t_id`, `v_id`)) ENGINE=InnoDB");
         await queryRunner.query("ALTER TABLE `technique_photo` ADD CONSTRAINT `FK_c1ae6c734289e5d71e5198c3811` FOREIGN KEY (`t_id`) REFERENCES `technique`(`t_id`) ON DELETE CASCADE ON UPDATE NO ACTION");

@@ -4,6 +4,7 @@ export class Tags1604036831651 implements MigrationInterface {
     name = 'Tags1604036831651'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("set foreign_key_checks=0");
         await queryRunner.query("CREATE TABLE `photo_tag` (`p_id` int NOT NULL, `tag_id` int NOT NULL, INDEX `IDX_f1d67144bf277b884aa0c981ea` (`p_id`), INDEX `IDX_2aa3561c4258a620412a9e0c3e` (`tag_id`), PRIMARY KEY (`p_id`, `tag_id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `technique_tag` (`t_id` int NOT NULL, `tag_id` int NOT NULL, INDEX `IDX_53b161f688ba2193fa2593cacb` (`t_id`), INDEX `IDX_bee6481ef4988f57cd4ac6d7f9` (`tag_id`), PRIMARY KEY (`t_id`, `tag_id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `video_tag` (`v_id` int NOT NULL, `tag_id` int NOT NULL, INDEX `IDX_ff12c4716e7c2c19aa28f961b0` (`v_id`), INDEX `IDX_8a3ae3a8fee0382ac5874da0a2` (`tag_id`), PRIMARY KEY (`v_id`, `tag_id`)) ENGINE=InnoDB");
