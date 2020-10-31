@@ -1,18 +1,8 @@
 'use strict';
 import {createConnection, getConnectionManager} from "typeorm";
 const awsServerlessExpress = require('aws-serverless-express');
+import * as ormconfig from "./ormconfig";
 
-const connectionManager = getConnectionManager();
-
-if(connectionManager.connections.length === 0){
-    createConnection().then(connection => {
-        console.log('TypeORM is connected: ', connection.isConnected);
-    }).catch((err) => {
-        console.log('Connection Error', err);
-    })
-} else {
-    console.log("connections", connectionManager.connections.length);
-}
 
 let counter = 0;
 
@@ -26,6 +16,22 @@ exports.handler = (event, context, callback) => {
     counter++
     console.log(counter)
     callback(null, { count: counter })
+
+    const connectionManager = getConnectionManager();
+
+    if(connectionManager.connections.length === 0){
+            createConnection().then(connection => {
+                console.log('TypeORM is connected: ', connection.isConnected);
+            }).catch((err) => {
+                console.log('Connection Error', err);
+            })
+        } else {
+        connectionManager.getConnection(ormconfig).then(connection => {
+            console.log('TypeORM is connected: ', connection.isConnected);
+        });
+        console.log("connections", connectionManager.connections.length);
+    }
+
 
     // createConnection().then(connection => {
     //
