@@ -1,12 +1,12 @@
 'use strict';
 import {createConnection} from "typeorm";
 const awsServerlessExpress = require('aws-serverless-express');
-const apps = require('./index');
-const server = awsServerlessExpress.createServer(apps);
 
 exports.handler = (event, context) => {
     createConnection().then(connection => {
         console.log('TypeORM is connected: ', connection.isConnected);
+        const apps = require('./index');
+        const server = awsServerlessExpress.createServer(apps);
         awsServerlessExpress.proxy(server, event, context);
 
         //var app = apps.listen(port, () => {
