@@ -5,20 +5,19 @@ const awsServerlessExpress = require('aws-serverless-express');
 exports.handler = (event, context) => {
     const apps = require('./index');
     const server = awsServerlessExpress.createServer(apps);
-    apps.use(async (req, res, next) => {
+    awsServerlessExpress.proxy(server, event, context);
 
-        const connectionManager = getConnectionManager();
+    const connectionManager = getConnectionManager();
 
-        if(connectionManager.connections.length === 0){
-                createConnection().then(connection => {
-                    console.log('TypeORM is connected: ', connection.isConnected);
-                }).catch((err) => {
-                    console.log('Connection Error', err);
-                })
-            } else {
-            console.log("connections", connectionManager.connections.length);
-        }
-    });
+    if(connectionManager.connections.length === 0){
+            createConnection().then(connection => {
+                console.log('TypeORM is connected: ', connection.isConnected);
+            }).catch((err) => {
+                console.log('Connection Error', err);
+            })
+        } else {
+        console.log("connections", connectionManager.connections.length);
+    }
 
 
     // createConnection().then(connection => {
