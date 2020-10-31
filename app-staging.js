@@ -3,6 +3,17 @@ import {createConnection} from "typeorm";
 const awsServerlessExpress = require('aws-serverless-express');
 
 exports.handler = (event, context) => {
+    // if (error.constructor === AlreadyHasActiveConnectionError) {
+    //     return findConnection();
+    // }
+    // function findConnections
+    // try {
+    //     const connection = await getConnection();
+    //     setConnection(connection);
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
     createConnection().then(connection => {
         console.log('TypeORM is connected: ', connection.isConnected);
         const apps = require('./index');

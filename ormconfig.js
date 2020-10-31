@@ -7,6 +7,7 @@ module.exports = {
     "entities": [process.env.ENTITY],
     "logging": true,
     "cache": true,
+    "keepConnectionAlive": true,
     "synchronize": false,
     "migrations": [process.env.MIGRATIONS],
     "cli": {
