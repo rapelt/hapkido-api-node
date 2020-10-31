@@ -1,32 +1,35 @@
 "use strict";
+
 let apps = require('./index');
+const config = require('./config/config.dev');
 let port = process.env.PORT || 8090;
-import {createConnection, getConnectionManager} from "typeorm";
+import {connectDB} from "./db/typeorm-connect";
 
 
-if(getConnectionManager().connections.length === 0) {
-    createConnection().then(connection => {
-        console.log('TypeORM is connected: ', connection.isConnected);
-        var app = apps.listen(port, () => {
+const startServer = async () => {
+    var app = apps.listen(port, () => {
+        console.log(`Application is running on port ${port}`);
+    });
+};
 
-            const io = require('./src/io/io').init(app);
 
-            io.on('connection', (socket: any) => {
-                console.log('Client Connected');
-            });
+(async () => {
+    await connectDB();
+    await startServer();
+})();
 
-            io.emit('posts', {message: 'I am connected'});
 
-            // io.connect(app, null).then(() => {
-            //     console.log(`IO is connected`);
-            // });
-        });
-    })
-} else {
-    console.log(getConnectionManager().connections.length);
-    console.log('TypeORM is connected: ', getConnectionManager().connections.length);
-
-}
+// const io = require('./io/io').init(app);
+//
+// io.on('connection', (socket: any) => {
+//     console.log('Client Connected');
+// });
+//
+// io.emit('posts', {message: 'I am connected'});
+//
+// // io.connect(app, null).then(() => {
+// //     console.log(`IO is connected`);
+// // });
 
 
 
