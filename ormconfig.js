@@ -8,7 +8,7 @@ module.exports = {
     "logging": true,
     "cache": true,
     "synchronize": false,
-    "migrations": ["migration/*.ts"],
+    "migrations": [process.env.MIGRATIONS],
     "cli": {
         "migrationsDir": "migration"
     }
