@@ -11,7 +11,7 @@ export default class ClassController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllClasses(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> = await getRepository('Class');
         const classes: Array<Class> = await repository.find();
 
         const clientClasses = classes.map((aclass: Class) => {
@@ -24,7 +24,7 @@ export default class ClassController {
     @DefaultCatch(defaultErrorHandler)
     static async deleteClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         await repository.softDelete(classId);
         return res.status(200).send({classid: classId});
     };
@@ -33,8 +33,8 @@ export default class ClassController {
     static async addToClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
         var hbId = req.body.studentId;
-        const repository: Repository<Class> = getRepository('Class');
-        const studentRepository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Class> =  await getRepository('Class');
+        const studentRepository: Repository<Member> =  await getRepository('Member');
         const student: Member = await studentRepository.findOneOrFail(hbId);
         await repository.update(classId, {attendance: [student]})
 
@@ -45,7 +45,7 @@ export default class ClassController {
     static async removeFromClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
         var hbId = req.body.studentId;
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         const aclass = await repository.findOneOrFail(classId);
 
         aclass.attendance = aclass.attendance.filter(member => member.hbId !== hbId)
@@ -58,14 +58,14 @@ export default class ClassController {
     @DefaultCatch(defaultErrorHandler)
     static async makeClassAGrading(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         await repository.update({ classId: classId }, { isGrading: true });
         return res.status(200).send({message: "Class " + classId + " has been made a grading "});
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async createClasses(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         // const tags = await repository.find();
         // res.json(tags);
 

@@ -14,7 +14,7 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllStudents(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const members = await repository.find();
         const clientStudents = members.map((student: Member) => {
             return new StudentClientModel().dbToClient(student);
@@ -26,7 +26,7 @@ export default class StudentController {
     @DefaultCatch(defaultErrorHandler)
     static async getStudent(req: Request, res: Response, next:NextFunction) {
         const hbId = req.params.id;
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const student = await repository.findOneOrFail(hbId);
         const clientStudent = new StudentClientModel().dbToClient(student);
         res.json(clientStudent);
@@ -34,9 +34,9 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async createNewStudent(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const student: StudentClientModel = req.body;
-        const classTypeRespository: Repository<ClassType> = getRepository('ClassType');
+        const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
         const classTypes = await classTypeRespository.find();
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
         const Members = await repository.insert(newMember);
@@ -46,9 +46,9 @@ export default class StudentController {
     @DefaultCatch(defaultErrorHandler)
     static async updateStudent(req: Request, res: Response, next:NextFunction) {
         const student: StudentClientModel = req.body;
-        const classTypeRespository: Repository<ClassType> = getRepository('ClassType');
+        const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
         const classTypes = await classTypeRespository.find();
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
         const Members = await repository.update(student.hbId, newMember);
         res.json(Members.generatedMaps);
@@ -57,7 +57,7 @@ export default class StudentController {
     @DefaultCatch(defaultErrorHandler)
     static async getStudentEmail(req: Request, res: Response, next:NextFunction) {
         const hbId = req.params.id;
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const student = await repository.findOneOrFail(hbId);
         const clientStudent = new StudentClientModel().dbToClient(student);
         res.json(clientStudent.email);
@@ -65,8 +65,8 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async removeGrading(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<MemberGrade> = getRepository('MemberGrade');
-        const memberRepository: Repository<Member> = getRepository('Member');
+        const repository: Repository<MemberGrade> =  await getRepository('MemberGrade');
+        const memberRepository: Repository<Member> =  await getRepository('Member');
         var clientGrades = req.body;
         var hbId = req.params.id;
 
@@ -87,9 +87,9 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async addGrading(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<MemberGrade> = getRepository('MemberGrade');
-        const memberRepository: Repository<Member> = getRepository('Member');
-        const gradeRepository: Repository<Grade> = getRepository('Grade');
+        const repository: Repository<MemberGrade> =  await getRepository('MemberGrade');
+        const memberRepository: Repository<Member> =  await getRepository('Member');
+        const gradeRepository: Repository<Grade> =  await getRepository('Grade');
 
         var clientGrades: Array<{hbId: string, grade: number, date: string}> = req.body;
         var hbId = req.params.id;
@@ -127,7 +127,7 @@ export default class StudentController {
     @DefaultCatch(defaultErrorHandler)
     static async deactivateStudent(req: Request, res: Response, next:NextFunction) {
         var hbId = req.params.id;
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const Members = await repository.update(hbId, { isActive: false});
         res.json(Members.generatedMaps);
     };
@@ -135,7 +135,7 @@ export default class StudentController {
     @DefaultCatch(defaultErrorHandler)
     static async reactivateStudent(req: Request, res: Response, next:NextFunction) {
         var hbId = req.params.id;
-        const repository: Repository<Member> = getRepository('Member');
+        const repository: Repository<Member> =  await getRepository('Member');
         const Members = await repository.update(hbId, { isActive: true});
         res.json(Members.generatedMaps);
     };

@@ -1,7 +1,7 @@
 "use strict";
 let apps = require('./index');
 let port = process.env.PORT || 8090;
-import { createConnection } from "typeorm";
+import {createConnection} from "typeorm";
 
 createConnection().then(connection => {
     console.log('TypeORM is connected: ', connection.isConnected);
