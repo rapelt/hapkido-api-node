@@ -16,7 +16,7 @@ export default class TechniqueController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllTechniques(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Technique> =  await  await getRepository('Technique');
+        const repository: Repository<Technique> =  await getRepository('Technique');
         const techniques = await repository.find();
 
         const clientTechniques = techniques.map((technique: Technique) => {
