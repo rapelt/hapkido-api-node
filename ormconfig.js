@@ -4,7 +4,7 @@ module.exports = {
     "username": process.env.RDS_USERNAME,
     "password": process.env.RDS_PASSWORD,
     "database": process.env.DATABASE,
-    "entities": ["{src, build/src}/entity/*.{js,ts}"],
+    "entities": [process.env.ENTITY],
     "logging": true,
     "cache": true,
     "synchronize": false,
