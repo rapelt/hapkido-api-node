@@ -5,11 +5,10 @@ export const connectDB = async () => {
 
     if(manager.connections.length === 0) {
         await createConnection();
-        console.log('TYPEORM connected', manager.connections.length);
-
+        console.log('New TYPEORM connected', manager.connections.length);
     } else {
         manager.get('default')
-        console.log('TYPEORM connected', manager.connections.length);
+        console.log('Reuse TYPEORM connected', manager.connections.length);
     }
 
 };
