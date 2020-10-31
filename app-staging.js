@@ -2,13 +2,14 @@
 import {createConnection} from "typeorm";
 const awsServerlessExpress = require('aws-serverless-express');
 const apps = require('./index');
-const server = awsServerlessExpress.createServer(app);
+const server = awsServerlessExpress.createServer(apps);
 
 exports.handler = (event, context) => {
     createConnection().then(connection => {
         console.log('TypeORM is connected: ', connection.isConnected);
-        var app = apps.listen(port, () => {
-            awsServerlessExpress.proxy(server, event, context);
+        awsServerlessExpress.proxy(server, event, context);
+
+        //var app = apps.listen(port, () => {
 
             // const io = require('./src/io/io').init(app);
             //
@@ -21,6 +22,6 @@ exports.handler = (event, context) => {
             // io.connect(app, null).then(() => {
             //     console.log(`IO is connected`);
             // });
-        });
+        //});
     })
 };
