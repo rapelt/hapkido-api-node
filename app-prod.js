@@ -1,6 +1,6 @@
 'use strict'
 const awsServerlessExpress = require('aws-serverless-express');
-const app = require('./index');
+const apps = require('./index');
 const server = awsServerlessExpress.createServer(app);
 import { createConnection } from "typeorm";
 
