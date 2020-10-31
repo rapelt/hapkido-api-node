@@ -10,16 +10,40 @@ var poolconfig = {
     database : process.env.DATABASE
 };
 
-var pool  = mysql.createPool(poolconfig);
+var poolClosed = false;
 
-exports.mysqlconnect = function (callback, dbLocation) {
+var pool = setPools();
+
+function getPools () {
+    if(!pool){
+        setPools();
+    }
+    return pool;
+};
+
+function setPools () {
+    pool = mysql.createPool(poolconfig);
+    poolClosed = false;
+};
+
+var connection;
+
+function mysqlconnection(callback, dbLocation) {
     return new Promise((resolve, reject) => {
         console.log('connecting to rds pool');
+        if(poolClosed) {
+            setPools();
+            console.log('new pools');
+        }
+        var pool = getPools();
 
-        var pool = this.getpool();
+        // console.log(pool, poolClosed);
+
 
         pool.getConnection(function(err, connection) {
-            connection.release();
+            if(connection){
+                connection.release();
+            }
             if (err) {
                 console.error('Database connection failed: ' + err.stack);
                 return;
@@ -30,18 +54,20 @@ exports.mysqlconnect = function (callback, dbLocation) {
     });
 };
 
-// pool.on('release', function (connection) {
-//     console.log('Connection %d released', connection.threadId);
-// });
-//
-// pool.on('connection', function (connection) {
-//     console.log('Connected %d', connection.threadId);
-// });
-//
-// pool.on('enqueue', function () {
-//     console.log('Waiting for available connection slot');
-// });
+exports.releaseAllConnections = function () {
+    pool = getPools();
 
-exports.getpool = function () {
-    return pool;
-};
+    pool.end(function (err) {
+        poolClosed = true;
+        // all connections in the pool have ended
+        console.log('All Connections have ended');
+        mysqlconnection().then(() => {});
+
+    });
+
+    return;
+
+}
+
+exports.getpool = getPools;
+exports.mysqlconnect = mysqlconnection;
