@@ -15,7 +15,9 @@ exports.handler = (event, context) => {
                 }).catch((err) => {
                     console.log('Connection Error', err);
                 })
-            }
+            } else {
+            console.log("connections", connectionManager.connections.length);
+        }
     });
 
 

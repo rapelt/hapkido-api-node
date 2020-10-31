@@ -11,6 +11,7 @@ export default class ClassController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllClasses(req: Request, res: Response, next:NextFunction) {
+        console.log("get all classes");
         const repository: Repository<Class> = await getRepository('Class');
         const classes: Array<Class> = await repository.find();
 
