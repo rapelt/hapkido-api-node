@@ -16,7 +16,7 @@ export default class TechniqueController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllTechniques(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Technique> = getRepository('Technique');
+        const repository: Repository<Technique> =  await getRepository('Technique');
         const techniques = await repository.find();
 
         const clientTechniques = techniques.map((technique: Technique) => {
@@ -28,18 +28,18 @@ export default class TechniqueController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllTechniqueSets(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<TechniqueSet> = getRepository('TechniqueSet');
+        const repository: Repository<TechniqueSet> = await getRepository('TechniqueSet');
         const techniqueSets = await repository.find();
         res.json(techniqueSets);
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async createNewTechnique(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Technique> = getRepository('Technique');
+        const repository: Repository<Technique> =  await getRepository('Technique');
 
         const clientTags: Array<TagModel> = req.body.tags;
 
-        const tagRepository: Repository<Tag> = getRepository('Tag');
+        const tagRepository: Repository<Tag> =  await getRepository('Tag');
 
         const technique = new TechniqueClientModel().clientToDB(req.body);
         technique.tags = await tagRepository.findByIds(clientTags);
@@ -51,7 +51,7 @@ export default class TechniqueController {
 
     @DefaultCatch(defaultErrorHandler)
     static async addNewTechniqueSet(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<TechniqueSet> = getRepository('TechniqueSet');
+        const repository: Repository<TechniqueSet> =  await getRepository('TechniqueSet');
         const techniqueResult = await repository.insert({ name: req.body.techniqueSet});
         res.json(techniqueResult.generatedMaps);
     };

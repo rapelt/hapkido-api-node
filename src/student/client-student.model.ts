@@ -21,9 +21,6 @@ export class StudentClientModel {
     paymentType?: string;
 
     dbToClient(db: Member): StudentClientModel {
-
-        // console.log(db);
-
         const student = new StudentClientModel();
 
         student.email = db.email;
@@ -40,8 +37,6 @@ export class StudentClientModel {
         student.grade = 0;
 
         student.gradingDates = db.gradings.map((dbGrading: MemberGrade) => {
-            console.log(dbGrading);
-
             if(student.grade < dbGrading.grade_id) {
                 student.grade = dbGrading.grade_id;
             }
@@ -51,13 +46,11 @@ export class StudentClientModel {
                 grade: dbGrading.grade_id
             }
         })
-
         return student;
     }
 
     clientToDB(student: StudentClientModel, classTypes: ClassType[]): Member {
         const dbStudent = new Member();
-
 
         const classType = classTypes.find((aclassType) => student.preferredClass === aclassType.classType);
 

@@ -14,6 +14,7 @@ import {EmergencyContact} from "./emergency-contact";
 import {Class} from "./class";
 import {Grade} from "./grade";
 import {MemberGrade} from "./member-grade";
+import {MemberClass} from "./member-class";
 
 @Entity()
 export class Member {
@@ -119,8 +120,12 @@ export class Member {
     @JoinColumn({ name: "emergency_contact_id", referencedColumnName: "id" })
     emergency_contact_id!: EmergencyContact
 
-    @ManyToMany(() => Class, { cascade: true})
-    attendance!: Class[];
+    // @ManyToMany(() => Class, { cascade: true})
+    // attendance!: Class[];
+
+    @OneToMany(() => MemberClass, member => member.hb_id, { eager: true})
+    @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
+    attendance!: MemberClass[];
 
     @OneToMany(() => MemberGrade, member => member.hb_id, { eager: true})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })

@@ -9,7 +9,7 @@ export default class FamilyController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllFamiles(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Family> = getRepository('Family');
+        const repository: Repository<Family> =  await getRepository('Family');
         const families = await repository.find();
         res.json(families);
     };

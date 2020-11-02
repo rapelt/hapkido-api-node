@@ -6,12 +6,16 @@ import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
 import {ClientClass} from "./client-class.model";
 import {Member} from "../entity/member";
+import {MemberClass} from "../entity/member-class";
+import {ClassType} from "../entity/class-type";
+import {classCreaterVariables} from "./class.service";
 
 export default class ClassController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllClasses(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Class> = getRepository('Class');
+        console.log("get all classes");
+        const repository: Repository<Class> = await getRepository('Class');
         const classes: Array<Class> = await repository.find();
 
         const clientClasses = classes.map((aclass: Class) => {
@@ -24,7 +28,7 @@ export default class ClassController {
     @DefaultCatch(defaultErrorHandler)
     static async deleteClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         await repository.softDelete(classId);
         return res.status(200).send({classid: classId});
     };
@@ -33,184 +37,81 @@ export default class ClassController {
     static async addToClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
         var hbId = req.body.studentId;
-        const repository: Repository<Class> = getRepository('Class');
-        const studentRepository: Repository<Member> = getRepository('Member');
-        const student: Member = await studentRepository.findOneOrFail(hbId);
-        await repository.update(classId, {attendance: [student]})
 
-        return res.status(200).send({classid: classId});
+        const memberClassRepo: Repository<MemberClass> =  await getRepository('MemberClass');
+        await memberClassRepo.insert({class_id: classId, hb_id: hbId})
+
+        return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId, studentId: hbId});
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async removeFromClass(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
         var hbId = req.body.studentId;
-        const repository: Repository<Class> = getRepository('Class');
-        const aclass = await repository.findOneOrFail(classId);
 
-        aclass.attendance = aclass.attendance.filter(member => member.hbId !== hbId)
+        const memberClassRepo: Repository<MemberClass> =  await getRepository('MemberClass');
+        await memberClassRepo.remove({class_id: classId, hb_id: hbId})
 
-        await repository.save(aclass);
-
-        return res.status(200).send({classid: classId});
+        return res.status(200).send({message: "Student " + hbId + " has been removed to class " + classId, studentId: hbId});
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async makeClassAGrading(req: Request, res: Response, next:NextFunction) {
         var classId = req.params.id;
-        const repository: Repository<Class> = getRepository('Class');
+        const repository: Repository<Class> =  await getRepository('Class');
         await repository.update({ classId: classId }, { isGrading: true });
         return res.status(200).send({message: "Class " + classId + " has been made a grading "});
     };
 
     @DefaultCatch(defaultErrorHandler)
-    static async createClasses(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Class> = getRepository('Class');
-        // const tags = await repository.find();
-        // res.json(tags);
+     static async createClasses(req: Request, res: Response, next:NextFunction) {
 
+        let classCreatorVariables = new classCreaterVariables();
         var classes = req.body.classes;
-        console.log(classes);
 
-        if(classes.length === 0){
+        if (classes) {
+            await ClassController.createClassesLoop(classes, res, classCreatorVariables);
+        } else {
             return res.status(422).send({error: "no classes found"});
         }
-
-        const dbClasses = classes.map((aclass: ClientClass) => {
-            return new ClientClass().clientToDB(aclass);
-        });
-
-        await repository.insert(dbClasses);
-
-        res.status(200).send({errors: 'errors', classes: 'classesCreated', classesNotCreated: 'classesNotCreated'});
     };
+
+    static async createClassesLoop(classes: ClientClass[], res: any, ccv: classCreaterVariables){
+        console.log(ccv.classesindex);
+        if(ccv.classesindex < classes.length) {
+            try {
+                const created_class = await ClassController.classesCreation(classes[ccv.classesindex]);
+                classes[ccv.classesindex].classId = created_class;
+                ccv.classesCreated.push(classes[ccv.classesindex]);
+                ccv.classesindex++;
+                await ClassController.createClassesLoop(classes, res, ccv);
+            } catch (err){
+                ccv.classesNotCreated.push(classes[ccv.classesindex]);
+                ccv.errors.push(err);
+                ccv.classesindex++;
+                await ClassController.createClassesLoop(classes, res, ccv);
+            }
+        } else {
+            res.status(200).send({errors: ccv.errors, classes: ccv.classesCreated, classesNotCreated: ccv.classesNotCreated});
+        }
+    }
+
+
+    static async classesCreation(aclass: ClientClass): Promise<number> {
+        try {
+            const repository: Repository<Class> =  await getRepository('Class');
+            const classTypeRepo: Repository<ClassType> =  await getRepository('ClassType');
+            const classType = await classTypeRepo.findOneOrFail({classType: aclass.classType});
+
+            const dbClass = new ClientClass().clientToDB(aclass, classType);
+
+            const newClass = await repository.insert(dbClass);
+
+            return newClass.raw.insertId;
+
+        } catch (err) {
+            throw new Error(err);
+        }
+    };
+
 }
-
-
-
-//
-// exports.addToClass = function (req, res, next) {
-//     var classId = req.params.id;
-//     var hbId = req.body.studentId;
-//     console.log("add to class", classId, hbId);
-//
-//     Class.findByPk(classId).then((aclass) => {
-//         console.log(aclass);
-//
-//         Member.findByPk(hbId).then((member) => {
-//             aclass.addMember(member);
-//             return res.status(200).send({message: "Student " + hbId + " has been added to class " + classId, studentId: hbId});
-//         }).catch((err) => {
-//             return res.status(422).send({error: err});
-//         });
-//     }).catch((err) => {
-//         return res.status(422).send({error: err});
-//     });
-// };
-//
-// exports.removeFromClass = function (req, res, next) {
-//     var classId = req.params.id;
-//     var hbId = req.body.studentId;
-//     console.log("remove from class", classId, hbId);
-//
-//     Class.findByPk(classId).then((aclass) => {
-//         console.log(aclass);
-//
-//         Member.findByPk(hbId).then((member) => {
-//             aclass.removeMember(member);
-//             return res.status(200).send({message: "Student " + hbId + " has been removed to class " + classId, studentId: hbId});
-//         }).catch((err) => {
-//             return res.status(422).send({error: err});
-//         });
-//     }).catch((err) => {
-//         return res.status(422).send({error: err});
-//     });
-// };
-//
-// exports.makeClassAGrading = function (req, res, next) {
-//     var classId = req.params.id;
-//     console.log("Make class a grading", classId);
-//
-//     Class.findByPk(classId).then((aclass) => {
-//         aclass.update({
-//             is_grading: true
-//         }).then(() => {
-//                 return res.status(200).send({message: "Class " + classId + " has been made a grading "});
-//         })
-//             .catch((err) => {
-//                 return res.status(422).send({error: err});
-//             });;
-//     }).catch((err) => {
-//         return res.status(422).send({error: err});
-//     });
-// };
-//
-//
-//
-//
-//
-//
-// var classesindex = 0;
-// var classesCreated = [];
-// var errors = [];
-// var classesNotCreated = [];
-//
-//
-// exports.createClasses = function (req, res, next) {
-//     classesindex = 0;
-//     classesCreated = [];
-//     errors = [];
-//     classesNotCreated = [];
-//
-//     console.log("Create Classes", req.body);
-//     var classes = req.body.classes;
-//
-//     if (classes) {
-//         createClassesLoop(classes, res);
-//     } else {
-//         return res.status(422).send({error: "no classes found"});
-//     }
-// };
-//
-// function createClassesLoop(classes, res){
-//     if(classesindex < classes.length){
-//         classesCreation(classes[classesindex]).then((result) => {
-//             classes[classesindex].classId = result;
-//             classesCreated.push(classes[classesindex]);
-//             classesindex++;
-//             createClassesLoop(classes, res);
-//         }).catch((err) => {
-//             classesNotCreated.push(classes[classesindex]);
-//             errors.push(err);
-//             classesindex++;
-//             createClassesLoop(classes, res);
-//         });
-//     } else {
-//         res.status(200).send({errors: errors, classes: classesCreated, classesNotCreated: classesNotCreated});
-//     }
-// }
-//
-// function classesCreation(aclass) {
-//     return new Promise((resolve, reject) => {
-//         ClassType.findAll({
-//             where: {
-//                 class_type: aclass.classType
-//             }
-//         }).then((results) => {
-//             Class.create({
-//                 is_grading: aclass.isGrading,
-//                 date: new Date(aclass.date),
-//                 class_type_id: results[0].getDataValue('class_type_id')
-//             }).then((result) => {
-//                 resolve(result);
-//             }).catch((err) => {
-//                 console.log(err);
-//                 reject(err);
-//             });
-//         }).catch((err) => {
-//             console.log(err);
-//             reject(err);
-//         });
-//     });
-// };
-//

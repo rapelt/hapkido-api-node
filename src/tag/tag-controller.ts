@@ -9,14 +9,14 @@ export default class TagController {
 
     @DefaultCatch(defaultErrorHandler)
     static async getAllTags(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Tag> = getRepository('Tag');
+        const repository: Repository<Tag> =  await getRepository('Tag');
         const tags = await repository.find();
         res.json(tags);
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async addNewTags(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Tag> = getRepository('Tag');
+        const repository: Repository<Tag> =  await getRepository('Tag');
         const newTag = new Tag()
         newTag.name = req.body.name;
         const tags = await repository.insert(newTag);
