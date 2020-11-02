@@ -123,7 +123,7 @@ export class Member {
     // @ManyToMany(() => Class, { cascade: true})
     // attendance!: Class[];
 
-    @OneToMany(() => MemberClass, member => member.hb_id, { eager: true})
+    @OneToMany(() => MemberClass, member => member.hb_id, { eager: false})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
     attendance!: MemberClass[];
 

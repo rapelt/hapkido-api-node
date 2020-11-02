@@ -9,6 +9,7 @@ import {Member} from "../entity/member";
 import {MemberClass} from "../entity/member-class";
 import {ClassType} from "../entity/class-type";
 import {classCreaterVariables} from "./class.service";
+import {measure} from "../common/performance.decorator";
 
 export default class ClassController {
 
