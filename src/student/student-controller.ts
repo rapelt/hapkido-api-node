@@ -9,14 +9,17 @@ import {MemberGrade} from "../entity/member-grade";
 import {Grade} from "../entity/grade";
 import {ClassType} from "../entity/class-type";
 import {Family} from "../entity/family";
+import {measure} from "../common/performance.decorator";
 var authService = require('../cognito/auth-service');
 
 export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
+    @measure
     static async getAllStudents(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<Member> =  await getRepository('Member');
         const members = await repository.find();
+
         const clientStudents = members.map((student: Member) => {
             return new StudentClientModel().dbToClient(student);
         })
