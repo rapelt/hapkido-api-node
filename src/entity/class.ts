@@ -26,8 +26,7 @@ export class Class {
     @Column({
         type: "datetime",
         nullable: false,
-        name: 'date',
-        unique: true
+        name: 'date'
     })
     date!: Date;
 
