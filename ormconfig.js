@@ -4,7 +4,7 @@ module.exports = {
     "username": process.env.RDS_USERNAME,
     "password": process.env.RDS_PASSWORD,
     "database": process.env.DATABASE,
-    "entities": ['build/src/entity/*.js'],
+    "entities": [process.env.ENTITY],
     "logging": true,
     "cache": true,
     "keepConnectionAlive": true,
@@ -14,6 +14,3 @@ module.exports = {
         "migrationsDir": "migration"
     }
 }
-
-
-//process.env.ENTITY

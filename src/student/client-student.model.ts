@@ -46,7 +46,6 @@ export class StudentClientModel {
                 grade: dbGrading.grade_id
             }
         })
-
         return student;
     }
 

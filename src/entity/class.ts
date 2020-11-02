@@ -5,11 +5,10 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
-    ManyToOne, JoinColumn, ManyToMany, JoinTable
+    ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany
 } from "typeorm";
 import {ClassType} from "./class-type";
-import {Member} from "./member";
-import {MemberGrade} from "./member-grade";
+import {MemberClass} from "./member-class";
 
 @Entity()
 export class Class {
@@ -28,6 +27,7 @@ export class Class {
         type: "datetime",
         nullable: false,
         name: 'date',
+        unique: true
     })
     date!: Date;
 
@@ -35,17 +35,9 @@ export class Class {
     @JoinColumn({ name: "class_type_id", referencedColumnName: "id" })
     classType!: ClassType
 
-    @ManyToMany(() => Member, { cascade: true})
-    @JoinTable({ name: "member_class",
-        joinColumn: {
-            name: "class_id",
-            referencedColumnName: "classId"
-        },
-        inverseJoinColumn: {
-            name: "hb_id",
-            referencedColumnName: "hbId"
-        }})
-    attendance!: Member[];
+    @OneToMany(() => MemberClass, aclass => aclass.class_id, { eager: true})
+    @JoinColumn({ name: "class_id", referencedColumnName: "classId" })
+    attendance!: MemberClass[];
 
     @CreateDateColumn()
     createdAt!: Date;

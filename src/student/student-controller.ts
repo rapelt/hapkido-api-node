@@ -8,6 +8,7 @@ import {StudentClientModel} from "./client-student.model";
 import {MemberGrade} from "../entity/member-grade";
 import {Grade} from "../entity/grade";
 import {ClassType} from "../entity/class-type";
+import {Family} from "../entity/family";
 var authService = require('../cognito/auth-service');
 
 export default class StudentController {
@@ -38,20 +39,36 @@ export default class StudentController {
         const student: StudentClientModel = req.body;
         const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
         const classTypes = await classTypeRespository.find();
+
+        const familyRespository: Repository<Family> =  await getRepository('Family');
+
+        if(student.familyId === null){
+            const family = await familyRespository.save({ name: student.name.lastname});
+            console.log(family);
+            student.familyId = family.family_id;
+        }
+
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
-        const Members = await repository.insert(newMember);
-        res.json(Members.generatedMaps);
+        await repository.insert(newMember);
+
+        const dbstudent = await repository.findOneOrFail(student.hbId);
+        const clientStudent = new StudentClientModel().dbToClient(dbstudent);
+        res.json(clientStudent);
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async updateStudent(req: Request, res: Response, next:NextFunction) {
+        console.log(req.body);
         const student: StudentClientModel = req.body;
         const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
         const classTypes = await classTypeRespository.find();
         const repository: Repository<Member> =  await getRepository('Member');
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
-        const Members = await repository.update(student.hbId, newMember);
-        res.json(Members.generatedMaps);
+        await repository.update(student.hbId, newMember);
+
+        const dbstudent = await repository.findOneOrFail(student.hbId);
+        const clientStudent = new StudentClientModel().dbToClient(dbstudent);
+        res.json(clientStudent);
     };
 
     @DefaultCatch(defaultErrorHandler)
@@ -129,7 +146,7 @@ export default class StudentController {
         var hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
         const Members = await repository.update(hbId, { isActive: false});
-        res.json(Members.generatedMaps);
+        res.json({ studentId: hbId});
     };
 
     @DefaultCatch(defaultErrorHandler)
@@ -137,7 +154,7 @@ export default class StudentController {
         var hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
         const Members = await repository.update(hbId, { isActive: true});
-        res.json(Members.generatedMaps);
+        res.json({ studentId: hbId});
     };
 
     @DefaultCatch(defaultErrorHandler)
