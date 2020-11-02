@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from "express";
+import {NextFunction, Request, Response} from "express";
 import {getRepository, Repository} from "typeorm";
 
 import {Member} from "../entity/member";
@@ -10,6 +10,7 @@ import {Grade} from "../entity/grade";
 import {ClassType} from "../entity/class-type";
 import {Family} from "../entity/family";
 import {measure} from "../common/performance.decorator";
+
 var authService = require('../cognito/auth-service');
 
 export default class StudentController {
@@ -40,9 +41,10 @@ export default class StudentController {
     static async createNewStudent(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<Member> =  await getRepository('Member');
         const student: StudentClientModel = req.body;
-        const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
-        const classTypes = await classTypeRespository.find();
-
+        console.log(student);
+        const classTypeRepository: Repository<ClassType> =  await getRepository('ClassType');
+        const classTypes = await classTypeRepository.find();
+        const memberGradeRepo: Repository<MemberGrade> =  await getRepository('MemberGrade');
         const familyRespository: Repository<Family> =  await getRepository('Family');
 
         if(student.familyId === null){
@@ -53,6 +55,16 @@ export default class StudentController {
 
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
         await repository.insert(newMember);
+
+        if (student.gradingDates) {
+            const {date, grade} = student.gradingDates[0];
+            await memberGradeRepo.insert({
+                hb_id: student.hbId,
+                grade_id: grade,
+                date: date
+            });
+        }
+
 
         const dbstudent = await repository.findOneOrFail(student.hbId);
         const clientStudent = new StudentClientModel().dbToClient(dbstudent);
