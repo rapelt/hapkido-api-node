@@ -7,13 +7,10 @@ import {
     DeleteDateColumn,
     ManyToOne, JoinColumn, ManyToMany, JoinTable
 } from "typeorm";
-import {ClassType} from "./class-type";
 import {Grade} from "./grade";
 import {TechniqueSet} from "./technique-set";
-import {Member} from "./member";
 import {Tag} from "./tag";
-import {Photo} from "./photo";
-import {Video} from "./video";
+import {Media} from "./media";
 
 @Entity()
 export class Technique {
@@ -63,29 +60,17 @@ export class Technique {
         }})
     tags!: Tag[];
 
-    @ManyToMany(() => Photo)
-    @JoinTable({ name: "technique_photo",
+    @ManyToMany(() => Media)
+    @JoinTable({ name: "technique_media",
         joinColumn: {
             name: "t_id",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {
-            name: "p_id",
+            name: "m_id",
             referencedColumnName: "id"
         }})
-    photos!: Photo[];
-
-    @ManyToMany(() => Video)
-    @JoinTable({ name: "technique_video",
-        joinColumn: {
-            name: "t_id",
-            referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-            name: "v_id",
-            referencedColumnName: "id"
-        }})
-    videos!: Video[];
+    media!: Media[];
 
     @CreateDateColumn()
     createdAt!: Date;

@@ -1,4 +1,3 @@
-import {PhotoDataModel, VideoDataModel} from "./media-model";
 import {EnvironmentCredentials} from "aws-sdk";
 import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
 

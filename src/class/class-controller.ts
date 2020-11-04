@@ -5,20 +5,20 @@ import {Class} from "../entity/class";
 import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
 import {ClientClass} from "./client-class.model";
-import {Member} from "../entity/member";
 import {MemberClass} from "../entity/member-class";
 import {ClassType} from "../entity/class-type";
 import {classCreaterVariables} from "./class.service";
 import {measure} from "../common/performance.decorator";
 
+
 export default class ClassController {
 
     @DefaultCatch(defaultErrorHandler)
+    @measure
     static async getAllClasses(req: Request, res: Response, next:NextFunction) {
         console.log("get all classes");
         const repository: Repository<Class> = await getRepository('Class');
         const classes: Array<Class> = await repository.find();
-
         const clientClasses = classes.map((aclass: Class) => {
             return new ClientClass().dbToClient(aclass);
         })

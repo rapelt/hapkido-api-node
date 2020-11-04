@@ -15,12 +15,22 @@ var multer = require('multer');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
+// const io = require('./src/io/io')
 
 let app = express();
 // let socketIO = require('socket.io');
 
 
-var whitelist = ['http://localhost:4200', 'http://hapkido-admin-staging.s3-website-ap-southeast-2.amazonaws.com', ' http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com'];
+var whitelist = [
+    'http://localhost:4200',
+    'capacitor://localhost',
+    'ionic://localhost',
+    'http://localhost',
+    'http://localhost:8080',
+    'http://localhost:8100',
+    'http://hapkido-admin-staging.s3-website-ap-southeast-2.amazonaws.com',
+    'http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com'
+];
 var corsOptions = {
     origin: function (origin: any, callback: any) {
         if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
@@ -61,6 +71,9 @@ if(process.env.LH === 'true') {
     console.log(port, host);
     server.listen(port, host);
 }
+
+
+
 
 module.exports = app;
 

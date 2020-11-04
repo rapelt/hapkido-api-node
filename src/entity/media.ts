@@ -11,7 +11,7 @@ import {Tag} from "./tag";
 import {Member} from "./member";
 
 @Entity()
-export class Photo {
+export class Media {
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -57,10 +57,34 @@ export class Photo {
     })
     size!: string;
 
+    @Column({
+        type: "varchar",
+        length: 20,
+        nullable: true,
+        name: 'upload_status'
+    })
+    uploadStatus!: string;
+
+    @Column({
+        type: "varchar",
+        length: 20,
+        nullable: true,
+        name: 'published_status'
+
+    })
+    publishedStatus!: string;
+
+    @Column({
+        type: "int",
+        nullable: true,
+        name: 'views'
+    })
+    views!: number;
+
     @ManyToMany(() => Tag)
-    @JoinTable({ name: "photo_tag",
+    @JoinTable({ name: "media_tag",
         joinColumn: {
-            name: "p_id",
+            name: "m_id",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {

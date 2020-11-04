@@ -16,7 +16,7 @@ export class ClientClass {
          client.classType = db.classType.classType;
          client.date = db.date.toISOString();
          client.isGrading = db.isGrading;
-         client.attendance = db.attendance.map((member) => member.hb_id);
+         client.attendance = db.attendance.map((member) => member.hb_id.toLowerCase());
 
         return client;
     }
