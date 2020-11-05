@@ -46,7 +46,7 @@ export class Media {
     @Column({
         type: "varchar",
         length: 400,
-        nullable: false
+        nullable: true
     })
     url!: string;
 

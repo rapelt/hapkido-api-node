@@ -60,7 +60,7 @@ export class Technique {
         }})
     tags!: Tag[];
 
-    @ManyToMany(() => Media)
+    @ManyToMany(() => Media, {cascade: true, eager: true})
     @JoinTable({ name: "technique_media",
         joinColumn: {
             name: "t_id",
