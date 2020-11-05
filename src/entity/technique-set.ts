@@ -2,7 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColu
 
 @Entity()
 export class TechniqueSet {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ name: 'id'})
     id!: number;
 
     @Column({
@@ -16,7 +16,6 @@ export class TechniqueSet {
     @Column({
         type: "boolean",
         nullable: false,
-        unique: true,
         default: true,
         name: 'is_active'
     })

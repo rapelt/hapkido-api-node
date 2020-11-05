@@ -6,10 +6,23 @@ let port = process.env.PORT || 8090;
 import {connectDB} from "./db/typeorm-connect";
 
 
+
 const startServer = async () => {
     var app = apps.listen(port, () => {
         console.log(`Application is running on port ${port}`);
+
+        const io = require('./src/io/io').init(app);
+
+        io.on('connection', (socket: any) => {
+            console.log('Client Connected');
+
+            io.emit('posts', {message: 'I am connected'});
+
+        });
+
     });
+
+
 };
 
 
@@ -18,19 +31,17 @@ const startServer = async () => {
     await startServer();
 })();
 
-
-// const io = require('./io/io').init(app);
+// const io = require('./src/io/io').init(apps);
 //
 // io.on('connection', (socket: any) => {
-//     console.log('Client Connected');
+//     console.log('Io Client Connected');
 // });
 //
 // io.emit('posts', {message: 'I am connected'});
 //
-// // io.connect(app, null).then(() => {
-// //     console.log(`IO is connected`);
-// // });
-
+// io.connect(apps, null).then(() => {
+//     console.log(`IO is connected`);
+// });
 
 
 

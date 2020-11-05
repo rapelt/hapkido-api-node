@@ -1,11 +1,15 @@
 import {Technique} from "../entity/technique";
+import {TechniqueSet} from "../entity/technique-set";
 
 export class TechniqueClientModel {
     title!: string;
     id!: number;
     description!: string;
     grade!: number;
-    techniqueSet!: number;
+    techniqueSet!: {
+        name: string,
+        id: number
+    };
 
     videos!: [];
     photos!: [];
@@ -18,7 +22,10 @@ export class TechniqueClientModel {
         technique.description = db.description;
         technique.grade = db.grade.id;
         technique.title = db.title;
-        technique.techniqueSet = db.techniqueSet.id;
+        technique.techniqueSet = {
+            id: db.techniqueSet.id,
+            name: db.techniqueSet.name
+        }
 
         technique.tags = db.tags.map((tag) => tag.id);
 
@@ -31,7 +38,7 @@ export class TechniqueClientModel {
         technique.title = client.title;
         technique.description = client.description;
         technique.t_grade = client.grade;
-        technique.t_set = client.techniqueSet;
+        technique.t_set = client.techniqueSet.id;
         technique.id = client.id;
 
         //Tags

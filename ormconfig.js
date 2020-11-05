@@ -5,7 +5,7 @@ module.exports = {
     "password": process.env.RDS_PASSWORD,
     "database": process.env.DATABASE,
     "entities": [process.env.ENTITY],
-    "logging": true,
+    "logging": false,
     "cache": true,
     "keepConnectionAlive": true,
     "synchronize": false,

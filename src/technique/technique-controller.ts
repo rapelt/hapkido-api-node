@@ -52,8 +52,12 @@ export default class TechniqueController {
     @DefaultCatch(defaultErrorHandler)
     static async addNewTechniqueSet(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<TechniqueSet> =  await getRepository('TechniqueSet');
-        const techniqueResult = await repository.insert({ name: req.body.techniqueSet});
-        res.json(techniqueResult.generatedMaps);
+        const newTehcniqueSet = new TechniqueSet();
+        newTehcniqueSet.name = req.body.techniqueSet
+        newTehcniqueSet.isActive = true;
+        console.log(newTehcniqueSet);
+        const techniqueResult = await repository.save(newTehcniqueSet);
+        res.json(techniqueResult);
     };
 }
 

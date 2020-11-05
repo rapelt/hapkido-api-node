@@ -25,8 +25,8 @@ export class StudentClientModel {
 
         student.email = db.email;
         student.name = {
-            firstname: db.firstname,
-            lastname: db.lastname
+            firstname: db.firstname.charAt(0).toUpperCase() + db.firstname.slice(1),
+            lastname: db.lastname.charAt(0).toUpperCase() + db.lastname.slice(1)
         };
         student.hbId = db.hbId;
         student.isAdmin = false;
@@ -57,7 +57,7 @@ export class StudentClientModel {
         dbStudent.email = student.email;
         dbStudent.firstname = student.name.firstname;
         dbStudent.lastname = student.name.lastname;
-        dbStudent.hbId = student.hbId;
+        dbStudent.hbId = student.hbId.toLowerCase();
         dbStudent.isActive = student.isActive;
         dbStudent.family_id = student.familyId;
         dbStudent.preferred_class_type_id = classType ? classType.id : 0;
