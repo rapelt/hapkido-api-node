@@ -37,12 +37,15 @@ export default class TechniqueController {
     static async createNewTechnique(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<Technique> =  await getRepository('Technique');
 
-        const clientTags: Array<TagModel> = req.body.tags;
+        const clientTags: Array<TagModel> = req.body.tags || [];
 
         const tagRepository: Repository<Tag> =  await getRepository('Tag');
 
         const technique = new TechniqueClientModel().clientToDB(req.body);
-        technique.tags = await tagRepository.findByIds(clientTags);
+
+        if(clientTags.length > 0) {
+            technique.tags = await tagRepository.findByIds(clientTags);
+        }
 
         const techniqueResult = await repository.insert(technique);
 
