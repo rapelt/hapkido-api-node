@@ -1,51 +1,72 @@
 language: node_js
 node_js:
-- '7'
+- '10.9'
 jobs:
   include:
     - stage: unit tests
       script: "npm run test"
+    - stage: migrations
+      script: "npm run run-migration"
     - stage: deploy to dev
-      script: skip
+      if: branch = master
+      script: "npm run build"
       deploy:
         on: master
         provider: lambda
         function_name: hapkidoApi
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs12.x
         handler_name: handler
-        module_name: app
+        module_name: build/app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
           secure: qXf0r4Tmf/+kcmjHKuzvVceDYLUZAFKNSOM9CZpydRP+1KQNhArzafEXSfnR7+nW93azlDsaoS19MTdDJf212ziCz9RN4sS49oM5MIVLjzPzdGTf7efgr1+YRwlXbTz6yeDEeqy7CEShUBLJi+i7fUEcUKJK02TEs4A3eytL9pPKba5Squbl48hZ6b74lEZtbkY6qgUkFyOL2nlJiEq9ojbnZB0hVHiVXhc5u8LXPZYQKn44guVhk5pn2BAYsVjgc/xStoBQSJ6rOrPZBR2ptkuSIuvS/C7RR/c+K/66oPrZSWqcsYOh4vc7Cg4OoRalsgDLZEMg/+N0IzCxGgwENsvwk17ijUus3PNBH2tlp8bgzs4idF3CPRQl813kVZt5u7mRA+Rs4+/X2E7vg+6OuvmtPEm1BGyVRJT5CbN5+s08KZPCN7idjrqsKq6/sQecToBGMDqPMatCQy7em4oj7pViclLuzi7OaJ7//D8RUpj20VRGZirWSyUNSfPKhMet1WWUyWmYWt5PNxx1IWvNwbpVGEQUmr67a3F6ZBEKN7M3UTV3Jt4m59T6NbAsri7u2Xsmu75OauT7mjaP9FIwTDl3i0rpcOyUC5tpRrplSzhI1M3IgVadr07sI1cgIwGz8Qm/UQmZqecZdoOqFpqlFoKFU/po7l5ltkFOLM+BLbU=
     - stage: deploy to staging
-      script: skip
+      if: branch = staging
+      script: "npm run build"
       deploy:
         on: staging
         provider: lambda
         function_name: hapkidoApiStaging
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs12.x
         handler_name: handler
-        module_name: app-staging
+        module_name: build/app-staging
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:
           secure: qXf0r4Tmf/+kcmjHKuzvVceDYLUZAFKNSOM9CZpydRP+1KQNhArzafEXSfnR7+nW93azlDsaoS19MTdDJf212ziCz9RN4sS49oM5MIVLjzPzdGTf7efgr1+YRwlXbTz6yeDEeqy7CEShUBLJi+i7fUEcUKJK02TEs4A3eytL9pPKba5Squbl48hZ6b74lEZtbkY6qgUkFyOL2nlJiEq9ojbnZB0hVHiVXhc5u8LXPZYQKn44guVhk5pn2BAYsVjgc/xStoBQSJ6rOrPZBR2ptkuSIuvS/C7RR/c+K/66oPrZSWqcsYOh4vc7Cg4OoRalsgDLZEMg/+N0IzCxGgwENsvwk17ijUus3PNBH2tlp8bgzs4idF3CPRQl813kVZt5u7mRA+Rs4+/X2E7vg+6OuvmtPEm1BGyVRJT5CbN5+s08KZPCN7idjrqsKq6/sQecToBGMDqPMatCQy7em4oj7pViclLuzi7OaJ7//D8RUpj20VRGZirWSyUNSfPKhMet1WWUyWmYWt5PNxx1IWvNwbpVGEQUmr67a3F6ZBEKN7M3UTV3Jt4m59T6NbAsri7u2Xsmu75OauT7mjaP9FIwTDl3i0rpcOyUC5tpRrplSzhI1M3IgVadr07sI1cgIwGz8Qm/UQmZqecZdoOqFpqlFoKFU/po7l5ltkFOLM+BLbU=
     - stage: deploy to prod
-      script: skip
+      if: branch = prod
+      script: "npm run build"
       deploy:
         on: prod
         provider: lambda
         function_name: hapkidoApiProd
         region: ap-southeast-2
         role: arn:aws:iam::845320091708:role/lambda_basic_execution
-        runtime: nodejs6.10
+        runtime: nodejs12.x
         handler_name: handler
-        module_name: app-prod
+        module_name: build/app-prod
+        access_key_id: AKIAJLDPHEJGFJSKUX2A
+        timeout: 35
+        secret_access_key:
+          secure: qXf0r4Tmf/+kcmjHKuzvVceDYLUZAFKNSOM9CZpydRP+1KQNhArzafEXSfnR7+nW93azlDsaoS19MTdDJf212ziCz9RN4sS49oM5MIVLjzPzdGTf7efgr1+YRwlXbTz6yeDEeqy7CEShUBLJi+i7fUEcUKJK02TEs4A3eytL9pPKba5Squbl48hZ6b74lEZtbkY6qgUkFyOL2nlJiEq9ojbnZB0hVHiVXhc5u8LXPZYQKn44guVhk5pn2BAYsVjgc/xStoBQSJ6rOrPZBR2ptkuSIuvS/C7RR/c+K/66oPrZSWqcsYOh4vc7Cg4OoRalsgDLZEMg/+N0IzCxGgwENsvwk17ijUus3PNBH2tlp8bgzs4idF3CPRQl813kVZt5u7mRA+Rs4+/X2E7vg+6OuvmtPEm1BGyVRJT5CbN5+s08KZPCN7idjrqsKq6/sQecToBGMDqPMatCQy7em4oj7pViclLuzi7OaJ7//D8RUpj20VRGZirWSyUNSfPKhMet1WWUyWmYWt5PNxx1IWvNwbpVGEQUmr67a3F6ZBEKN7M3UTV3Jt4m59T6NbAsri7u2Xsmu75OauT7mjaP9FIwTDl3i0rpcOyUC5tpRrplSzhI1M3IgVadr07sI1cgIwGz8Qm/UQmZqecZdoOqFpqlFoKFU/po7l5ltkFOLM+BLbU=
+    - stage: deploy to Dev
+      if: branch = typeorm
+      script: "npm run build"
+      deploy:
+        on: typeorm
+        provider: lambda
+        function_name: hapkidoApi
+        region: ap-southeast-2
+        role: arn:aws:iam::845320091708:role/lambda_basic_execution
+        runtime: nodejs12.x
+        handler_name: handler
+        module_name: build/app
         access_key_id: AKIAJLDPHEJGFJSKUX2A
         timeout: 35
         secret_access_key:

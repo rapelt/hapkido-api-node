@@ -5,12 +5,24 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha 'test/**/*.js'",
-    "zip": "mkdir -p dist/hapkido-api; cp -r controllers models student app.js index.js router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;",
-    "converter": "bash scripts/swaggerConverter.sh"
+    "zip": "mkdir -p dist/hapkido-api; cp -r controllers src/models src/student app.js index.ts router.js node_modules package.json dist/hapkido-api; cd dist/hapkido-api; zip -r -q -1 ../hapkido-api.zip .;",
+    "converter": "bash scripts/swaggerConverter.sh",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly ./app-main.ts",
+    "prod": "tsc && node ./build/app.js",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "migrate": "ts-node ./node_modules/.bin/typeorm migration:generate -n",
+    "run-migration": "ts-node ./node_modules/.bin/typeorm migration:run",
+    "revert-migration": "ts-node ./node_modules/.bin/typeorm migration:revert"
+
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bluebird": "^3.5.32",
+    "@types/express": "^4.16.1",
+    "@types/node": "^14.14.5",
+    "@types/validator": "^13.1.0",
     "aws-sdk": "latest",
     "aws-serverless-express": "^3.0.2",
     "body-parser": "^1.17.1",
@@ -23,9 +35,21 @@
     "moment": "^2.18.1",
     "mongoose": "^4.7.1",
     "mongoose-moment": "^0.1.3",
-    "mysql": "latest",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.3.5",
+    "sequelize-auto": "^0.6.4",
     "shortid": "^2.2.8",
     "sinon": "^2.3.8",
+    "socket.io": "^2.3.0",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "typeorm": "^0.2.28",
+    "typescript": "^3.4.1",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "catch-decorator-ts": "0.0.2"
   }
 }

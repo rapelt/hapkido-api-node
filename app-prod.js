@@ -1,18 +1,28 @@
 'use strict'
 const awsServerlessExpress = require('aws-serverless-express');
-const app = require('./index');
-const server = awsServerlessExpress.createServer(app);
-var db = require('./db/dbConnection');
-const config = require('./config/config.prod');
-var mysql = require('./db/rdsconnect');
+const apps = require('./index');
+const server = awsServerlessExpress.createServer(apps);
+import { createConnection } from "typeorm";
 
 exports.handler = (event, context) => {
-    console.log("In handler - Rebekah");
-    db.dbconnect(function () {
-        console.log("Connected to Db");
-    }, config.dbLocation);
-
-    mysql.mysqlconnect().then(() => {
+    createConnection().then(connection => {
+        console.log('TypeORM is connected: ', connection.isConnected);
         awsServerlessExpress.proxy(server, event, context);
-    });
+
+        //var app = apps.listen(port, () => {
+
+        // const io = require('./src/io/io').init(app);
+        //
+        // io.on('connection', (socket: any) => {
+        //     console.log('Client Connected');
+        // });
+        //
+        // io.emit('posts', {message: 'I am connected'});
+
+        // io.connect(app, null).then(() => {
+        //     console.log(`IO is connected`);
+        // });
+        //});
+    })
 };
+
