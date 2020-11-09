@@ -1,28 +1,18 @@
 'use strict'
+import {connectDB} from "./db/typeorm-connect";
+
 const awsServerlessExpress = require('aws-serverless-express');
 const apps = require('./index');
 const server = awsServerlessExpress.createServer(apps);
-import { createConnection } from "typeorm";
 
-exports.handler = (event, context) => {
-    createConnection().then(connection => {
-        console.log('TypeORM is connected: ', connection.isConnected);
+exports.handler = (event, context, callback) => {
+    const startServer = async () => {
         awsServerlessExpress.proxy(server, event, context);
+    };
 
-        //var app = apps.listen(port, () => {
+    (async () => {
+        await connectDB();
+        await startServer();
+    })();
 
-        // const io = require('./src/io/io').init(app);
-        //
-        // io.on('connection', (socket: any) => {
-        //     console.log('Client Connected');
-        // });
-        //
-        // io.emit('posts', {message: 'I am connected'});
-
-        // io.connect(app, null).then(() => {
-        //     console.log(`IO is connected`);
-        // });
-        //});
-    })
 };
-
