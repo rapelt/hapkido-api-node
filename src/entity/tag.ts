@@ -11,6 +11,13 @@ export class Tag {
     })
     name!: string;
 
+    @Column({
+        type: "varchar",
+        length: 40,
+        default: '#104EA3'
+    })
+    colour!: string;
+
     @CreateDateColumn()
     createdAt!: Date;
 

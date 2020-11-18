@@ -9,12 +9,12 @@ exports.checkAuth = function (req, res, next) {
     }
 
     console.log("Using Cognito");
-    console.log("New");
 
     if(req.headers.authorization == null){
+        console.log('Unauthorized');
+
         res.status('401');
         res.send('Unauthorized');
-        console.log('Unauthorized');
         return;
     }
 
