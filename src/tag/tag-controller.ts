@@ -19,8 +19,9 @@ export default class TagController {
         const repository: Repository<Tag> =  await getRepository('Tag');
         const newTag = new Tag()
         newTag.name = req.body.name;
-        const tags = await repository.insert(newTag);
-        res.json(tags.generatedMaps);
+        newTag.colour = req.body.colour
+        const tags: Tag = await repository.save(newTag);
+        res.json(tags);
     };
 }
 

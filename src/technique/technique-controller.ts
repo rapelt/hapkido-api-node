@@ -11,9 +11,12 @@ import {TechniqueClientModel} from "./technique-client.model";
 import {Member} from "../entity/member";
 import {StudentClientModel} from "../student/client-student.model";
 import {Tag} from "../entity/tag";
+import {Grade} from "../entity/grade";
+import {measure} from "../common/performance.decorator";
 
 export default class TechniqueController {
 
+    @measure
     @DefaultCatch(defaultErrorHandler)
     static async getAllTechniques(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<Technique> =  await getRepository('Technique');
@@ -26,6 +29,7 @@ export default class TechniqueController {
         res.json(clientTechniques);
     };
 
+    @measure
     @DefaultCatch(defaultErrorHandler)
     static async getAllTechniqueSets(req: Request, res: Response, next:NextFunction) {
         const repository: Repository<TechniqueSet> = await getRepository('TechniqueSet');
@@ -41,15 +45,19 @@ export default class TechniqueController {
 
         const tagRepository: Repository<Tag> =  await getRepository('Tag');
 
+        console.log(req.body);
+
         const technique = new TechniqueClientModel().clientToDB(req.body);
 
         if(clientTags.length > 0) {
             technique.tags = await tagRepository.findByIds(clientTags);
         }
 
-        const techniqueResult = await repository.insert(technique);
+        const techniqueResult = await repository.save(technique);
+        const dbtechnique = await repository.findOneOrFail(techniqueResult.id);
+        const clientTechnique = new TechniqueClientModel().dbToClient(dbtechnique);
 
-        res.json(techniqueResult.generatedMaps);
+        res.json(clientTechnique);
     };
 
     @DefaultCatch(defaultErrorHandler)
@@ -60,6 +68,58 @@ export default class TechniqueController {
         newTehcniqueSet.isActive = true;
         console.log(newTehcniqueSet);
         const techniqueResult = await repository.save(newTehcniqueSet);
+        res.json(techniqueResult);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async updateTechniqueSet(req: Request, res: Response, next:NextFunction) {
+        console.log("Update TechniqueSet Set", req.body);
+        const repository: Repository<TechniqueSet> =  await getRepository('TechniqueSet');
+
+        const dbtechniqueSet = await repository.findOneOrFail(req.body.id);
+        dbtechniqueSet.name = req.body.name;
+
+        const techniqueResult = await repository.save(dbtechniqueSet);
+        res.json(techniqueResult);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async updateTechnique(req: Request, res: Response, next:NextFunction) {
+        console.log("Update TechniqueSet", req.body);
+        const clientTechnique: TechniqueClientModel = req.body;
+        const repository: Repository<Technique> =  await getRepository('Technique');
+        const tagRepository: Repository<Tag> =  await getRepository('Tag');
+        const gradeRepo: Repository<Grade> =  await getRepository('Grade');
+
+        const dbTechnique = await repository.findOneOrFail(req.body.id);
+
+        dbTechnique.description = clientTechnique.description;
+        dbTechnique.t_grade = clientTechnique.grade;
+        dbTechnique.title = clientTechnique.title;
+        dbTechnique.tags = await tagRepository.findByIds(clientTechnique.tags);
+        dbTechnique.grade = await gradeRepo.findOneOrFail(clientTechnique.grade);
+
+        console.log('dbtechnique', dbTechnique);
+
+        const techniqueResult = await repository.save(dbTechnique);
+
+        console.log('result', techniqueResult);
+
+        const dbtechnique = await repository.findOneOrFail(techniqueResult.id);
+        const newClientTechnique = new TechniqueClientModel().dbToClient(dbtechnique);
+        console.log(newClientTechnique);
+        res.json(newClientTechnique);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async deactivateTechniqueSet(req: Request, res: Response, next:NextFunction) {
+        console.log("Update TechniqueSet Set", req.body);
+        const repository: Repository<TechniqueSet> =  await getRepository('TechniqueSet');
+
+        const dbtechniqueSet = await repository.findOneOrFail(req.body.id);
+        dbtechniqueSet.isActive = false;
+
+        const techniqueResult = await repository.save(dbtechniqueSet);
         res.json(techniqueResult);
     };
 }
@@ -74,67 +134,6 @@ export default class TechniqueController {
 
 
 
-//
-// exports.createNewTechnique = function (req: any, res: any, next:any) {
-//     console.log("Create TechniqueSet", req.body);
-//
-//     const clientTags: Array<TagModel> = req.body.tags;
-//
-//     let clientTechnique: TechniqueModel = {
-//         id: 0,
-//         title: req.body.title,
-//         description: req.body.description || '',
-//         grade: req.body.grade || 0,
-//         techniqueSet: req.body.techniqueSet,
-//     }
-//
-//     const serverModel = mapper.mapTechniqueToDB(clientTechnique);
-//
-//     console.log(serverModel);
-//
-//     Technique.create(serverModel)
-//         .then((result1: any) => {
-//             console.log(result1);
-//             const serverTagModel = mapper.mapTagsToTechniqueTags(clientTags, result1.t_id);
-//             TechniqueTag.bulkCreate(serverTagModel).then((result: any) => {
-//                 res.json(mapper.dbToTechnqiue(result1, result));
-//             }).catch((err: any) => {
-//                 return res.status(422).json({error: err});
-//             });
-//             // clientTechnique.id = result;
-//         }).catch((err:any) => {
-//         console.log(err);
-//         return res.status(422).json({error: err});
-//     });
-//
-// };
-//
-// exports.getAllTechniqueSets = function (req: any, res: any, next:any) {
-//     console.log("Get TechniqueSet Sets");
-//
-//     TechniqueSet.findAll().then((result: any) => {
-//         res.json(result);
-//     }).catch((err:any) => {
-//         console.log(err);
-//         return res.status(422).json({error: err});
-//     });
-//
-// };
-//
-// exports.addNewTechniqueSet = function (req: any, res: any, next:any) {
-//     console.log("Create TechniqueSet Set", req.body);
-//     var techniqueSetName = req.body.techniqueSet;
-//
-//     TechniqueSet.create({
-//         id: 0,
-//         name: techniqueSetName
-//     }).then((result: any) => {
-//         res.json(result);
-//     }).catch((err:any) => {
-//         console.log(err);
-//         return res.status(422).json({error: err});
-//     });
-// };
 // //
 // // exports.updateTechnique = function (req: any, res: any, next:any) {
 // //     console.log("Update TechniqueSet", req.body);

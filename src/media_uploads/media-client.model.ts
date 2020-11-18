@@ -11,14 +11,16 @@ export class MediaClientModel {
     folder!: string;
     size?: string;
     url!: string;
-    tags?: number[];
+    tags!: number[];
     uploadStatus!: string;
     publishedStatus!: string;
     views!: number;
+    updatedAt!: Date;
 
     dbToClient(db: Media): MediaClientModel {
         const client = new MediaClientModel();
 
+        client.id = db.id;
         client.file_name = db.file_name;
         client.file_type = db.file_type;
         client.folder = db.folder;
@@ -28,6 +30,10 @@ export class MediaClientModel {
         client.size = db.size;
         client.views = db.views;
         client.url = db.url;
+        client.updatedAt = db.updatedAt
+
+        client.tags = db.tags.map((tag) => tag.id);
+
 
 
         return client;

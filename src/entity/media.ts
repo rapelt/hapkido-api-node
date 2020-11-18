@@ -81,7 +81,7 @@ export class Media {
     })
     views!: number;
 
-    @ManyToMany(() => Tag)
+    @ManyToMany(() => Tag, { eager: true, cascade: true})
     @JoinTable({ name: "media_tag",
         joinColumn: {
             name: "m_id",

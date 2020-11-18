@@ -48,7 +48,7 @@ export class Technique {
     @JoinColumn({ name: "t_set", referencedColumnName: "id" })
     techniqueSet!: TechniqueSet;
 
-    @ManyToMany(() => Tag, { eager: true})
+    @ManyToMany(() => Tag, { eager: true, cascade: true})
     @JoinTable({ name: "technique_tag",
         joinColumn: {
             name: "t_id",

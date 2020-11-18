@@ -11,9 +11,9 @@ router.get('/all', TokenVerification.checkAuth, TechniqueController.getAllTechni
 router.post('/set/create', TokenVerification.checkAuth, TechniqueController.addNewTechniqueSet);
 router.get('/set/all', TokenVerification.checkAuth, TechniqueController.getAllTechniqueSets);
 
-// router.post('/update/:id', TokenVerification.checkAuth, TechniqueController.updateTechnique);
-// router.post('/set/update/:id', TokenVerification.checkAuth, TechniqueController.updateTechniqueSet);
-// router.post('/set/deactivate/:id', TokenVerification.checkAuth, TechniqueController.deactivateTechniqueSet);
+router.post('/update/:id', TokenVerification.checkAuth, TechniqueController.updateTechnique);
+router.post('/set/update/:id', TokenVerification.checkAuth, TechniqueController.updateTechniqueSet);
+router.post('/set/deactivate/:id', TokenVerification.checkAuth, TechniqueController.deactivateTechniqueSet);
 
 
 
