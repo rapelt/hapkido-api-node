@@ -54,7 +54,8 @@ export default class StudentController {
         }
 
         const newMember = new StudentClientModel().clientToDB(student, classTypes);
-        await repository.insert(newMember);
+
+        const newstudent = await repository.insert(newMember);
 
         if (student.gradingDates) {
             const {date, grade} = student.gradingDates[0];
@@ -64,7 +65,6 @@ export default class StudentController {
                 date: date
             });
         }
-
 
         const dbstudent = await repository.findOneOrFail(student.hbId);
         const clientStudent = new StudentClientModel().dbToClient(dbstudent);
@@ -165,6 +165,27 @@ export default class StudentController {
     };
 
     @DefaultCatch(defaultErrorHandler)
+    static async deactivateStudentFromCognito(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        authService.deactivateStudentAuth(hbId).then(() => {
+            next();
+        }).catch((err: any) => {
+            return res.status(422).send({error: "Something went wrong with disabling student", err});
+        })
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async reactivateStudentFromCognito(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        authService.reActivateStudentAuth(hbId).then(() => {
+            next();
+        }).catch((err: any) => {
+            return res.status(422).send({error: "Something went wrong with re-enabling student", err});
+        })
+
+    };
+
+    @DefaultCatch(defaultErrorHandler)
     static async reactivateStudent(req: Request, res: Response, next:NextFunction) {
         var hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
@@ -179,7 +200,7 @@ export default class StudentController {
 
             authService.createStudentAuth(student.hbId, student.email).then(() => {
                 req.params = { id: student.hbId};
-                this.getStudent(req, res, next);
+                next();
             }).catch(() => {
                 console.log('OMG something went wrong with the user sign up.');
                 return res.status(422).send({error: "Something went wrong"});
