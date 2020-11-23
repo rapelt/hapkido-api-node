@@ -56,15 +56,15 @@ export class MediaClientModel {
         return media;
     }
 
-    clientToNewDB(file_name: string, file_type: string, folder: string, size: string): Media {
+    clientToNewDB(mediaData: Media): Media {
         const media =  new Media();
 
-        media.file_name = file_name;
-        media.file_type = file_type;
-        media.folder = folder;
+        media.file_name = mediaData.file_name;
+        media.file_type = mediaData.file_type;
+        media.folder = mediaData.folder;
         media.publishedStatus = 'Draft';
         media.uploadStatus = 'In Progress';
-        media.size = size;
+        media.size = '';
         media.views = 0;
         media.url = '';
 
