@@ -55,6 +55,21 @@ export default class MediaController {
     };
 
     @DefaultCatch(defaultErrorHandler)
+    static async updateViews(req: Request, res: Response, next:NextFunction) {
+        console.log('Update media', req.body);
+        var mediaId = req.params.id;
+        const repository: Repository<Media> =  await getRepository('Media');
+        const media = await repository.findOneOrFail({id: mediaId});
+
+        media.views = media.views + 1;
+
+        const savedMedia = await repository.save(media);
+        const clientMedia = new MediaClientModel().dbToClient(savedMedia);
+
+        res.json(clientMedia);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
     static async getMedia(req: Request, res: Response, next:NextFunction) {
         res.json({});
     };

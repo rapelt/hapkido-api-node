@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {getRepository, Repository} from "typeorm";
+import {getConnection, getRepository, Repository} from "typeorm";
 
 import {Member} from "../entity/member";
 import {DefaultCatch} from 'catch-decorator-ts'
@@ -10,6 +10,9 @@ import {Grade} from "../entity/grade";
 import {ClassType} from "../entity/class-type";
 import {Family} from "../entity/family";
 import {measure} from "../common/performance.decorator";
+import {Technique} from "../entity/technique";
+import {UnwatchedTechniques} from "../entity/unwatched-techniques";
+import {FavouriteTechniques} from "../entity/favourite-techniques";
 
 var authService = require('../cognito/auth-service');
 
@@ -39,13 +42,17 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async createNewStudent(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Member> =  await getRepository('Member');
         const student: StudentClientModel = req.body;
         console.log(student);
+
+        const repository: Repository<Member> =  await getRepository('Member');
         const classTypeRepository: Repository<ClassType> =  await getRepository('ClassType');
-        const classTypes = await classTypeRepository.find();
+        const techniqueRepo: Repository<Technique> =  await getRepository('Technique');
+        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
         const memberGradeRepo: Repository<MemberGrade> =  await getRepository('MemberGrade');
         const familyRespository: Repository<Family> =  await getRepository('Family');
+
+        const classTypes = await classTypeRepository.find();
 
         if(student.familyId === null){
             const family = await familyRespository.save({ name: student.name.lastname});
@@ -65,6 +72,18 @@ export default class StudentController {
                 date: date
             });
         }
+
+        let techniqueIDs: UnwatchedTechniques[] = [];
+
+        const t_ids = await techniqueRepo.find( { t_grade: student.grade + 1});
+        t_ids.forEach((t) => {
+            let newUnwatchedTechnique = new UnwatchedTechniques();
+            newUnwatchedTechnique.t_id = t.id;
+            newUnwatchedTechnique.hb_id = student.hbId;
+            techniqueIDs.push(newUnwatchedTechnique);
+        })
+
+        await unwatchedRepo.save(techniqueIDs);
 
         const dbstudent = await repository.findOneOrFail(student.hbId);
         const clientStudent = new StudentClientModel().dbToClient(dbstudent);
@@ -112,9 +131,7 @@ export default class StudentController {
             await repository.remove(grade2);
         }
 
-        const student = await memberRepository.findOneOrFail(hbId);
-        const clientStudent = new StudentClientModel().dbToClient(student);
-        res.json(clientStudent);
+        next();
     };
 
     @DefaultCatch(defaultErrorHandler)
@@ -151,10 +168,140 @@ export default class StudentController {
 
         await repository.save(grades);
 
-        student = await memberRepository.findOneOrFail(hbId);
+        next();
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async addUnwatchedTechniques(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var clientGrades: Array<{hbId: string, grade: number, date: string}> = req.body;
+
+        const memberRepository: Repository<Member> =  await getRepository('Member');
+        const techniqueRepo: Repository<Technique> =  await getRepository('Technique');
+        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
+
+        let techniqueIDs: UnwatchedTechniques[] = [];
+
+        if(clientGrades.length >= 1) {
+            const t_ids = await techniqueRepo.find( { t_grade: clientGrades[0].grade});
+            t_ids.forEach((t) => {
+                let newUnwatchedTechnique = new UnwatchedTechniques();
+                newUnwatchedTechnique.t_id = t.id;
+                newUnwatchedTechnique.hb_id = hbId;
+                techniqueIDs.push(newUnwatchedTechnique);
+            })
+        }
+
+        if(clientGrades.length >= 2) {
+            const t_ids = await techniqueRepo.find( { t_grade: clientGrades[1].grade});
+            t_ids.forEach((t) => {
+                let newUnwatchedTechnique = new UnwatchedTechniques();
+                newUnwatchedTechnique.t_id = t.id;
+                newUnwatchedTechnique.hb_id = hbId;
+                techniqueIDs.push(newUnwatchedTechnique);
+            })
+        }
+
+        await unwatchedRepo.save(techniqueIDs);
+
+        const student = await memberRepository.findOneOrFail(hbId);
         const clientStudent = new StudentClientModel().dbToClient(student);
         res.json(clientStudent);
     };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async removeUnwatchedTechniques(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var clientGrades: Array<{hbId: string, grade: number, date: string}> = req.body;
+
+        const memberRepository: Repository<Member> =  await getRepository('Member');
+        const techniqueRepo: Repository<Technique> =  await getRepository('Technique');
+        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
+
+        const all_t_ids: number[] = [];
+
+        if(clientGrades.length >= 1) {
+            const t_ids = await techniqueRepo.find( { t_grade: clientGrades[0].grade});
+            t_ids.forEach((t) => {
+                all_t_ids.push(t.id);
+            })
+        }
+
+        if(clientGrades.length >= 2) {
+            const t_ids = await techniqueRepo.find( { t_grade: clientGrades[1].grade});
+            t_ids.forEach((t) => {
+                all_t_ids.push(t.id);
+            })
+        }
+
+        const uwTechniques = await StudentController.getUWTIds(all_t_ids, hbId);
+
+        await unwatchedRepo.remove(uwTechniques);
+
+        const student = await memberRepository.findOneOrFail(hbId);
+        const clientStudent = new StudentClientModel().dbToClient(student);
+        res.json(clientStudent);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async addUnwatchedTechnique(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var techniqueId = req.body.techniqueId;
+        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
+
+        const unwatchedTechnique = new UnwatchedTechniques();
+        unwatchedTechnique.hb_id = hbId;
+        unwatchedTechnique.t_id = techniqueId;
+        await unwatchedRepo.insert(unwatchedTechnique);
+
+        res.json({ studentId: hbId, techniqueId: techniqueId});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async removeUnwatchedTechnique(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var techniqueId = req.body.techniqueId;
+        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
+
+        const unwatchedTechnique = await unwatchedRepo.findOneOrFail({ hb_id: hbId, t_id: techniqueId});
+        await unwatchedRepo.remove(unwatchedTechnique);
+
+        res.json({ studentId: hbId, techniqueId: techniqueId});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async addFavourite(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var techniqueId = req.body.techniqueId;
+        const favouriteRepo: Repository<FavouriteTechniques> =  await getRepository('FavouriteTechniques');
+
+        const unwatchedTechnique = new UnwatchedTechniques();
+        unwatchedTechnique.hb_id = hbId;
+        unwatchedTechnique.t_id = techniqueId;
+        await favouriteRepo.insert(unwatchedTechnique);
+
+        res.json({ studentId: hbId, techniqueId: techniqueId});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async removeFavourite(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        var techniqueId = req.body.techniqueId;
+        const favouriteRepo: Repository<FavouriteTechniques> =  await getRepository('FavouriteTechniques');
+
+        const favouriteTechnique = await favouriteRepo.findOneOrFail({ hb_id: hbId, t_id: techniqueId});
+        await favouriteRepo.remove(favouriteTechnique);
+
+        res.json({ studentId: hbId, techniqueId: techniqueId});
+    };
+
+    static async getUWTIds(ids: number[], hb_id: string) {
+        return getRepository(UnwatchedTechniques)
+            .createQueryBuilder()
+            .where("hb_id = :id", { id: hb_id })
+            .andWhere("t_id IN (:...ids)", { ids: ids }).getMany();
+    }
+
 
     @DefaultCatch(defaultErrorHandler)
     static async deactivateStudent(req: Request, res: Response, next:NextFunction) {

@@ -7,6 +7,7 @@ router.post('/create', TokenVerification.checkAuth, MediaController.createMedia)
 router.post('/authenticateUploadMedia', TokenVerification.checkAuth, MediaController.authenticateUploadMedia);
 router.post('/update/:id', TokenVerification.checkAuth, MediaController.updateMedia);
 router.get('/all', TokenVerification.checkAuth, MediaController.getAllMedias);
+router.post('/update-views/:id', TokenVerification.checkAuth, MediaController.updateViews);
 router.get('/:id', TokenVerification.checkAuth, MediaController.getMedia);
 
 

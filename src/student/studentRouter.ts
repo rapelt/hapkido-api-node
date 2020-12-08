@@ -14,8 +14,8 @@ router.post('/update/:id', TokenVerification.checkAuth, StudentController.update
 router.get('/:id', TokenVerification.checkAuth, StudentController.getStudent);
 router.get('/getemail/:id', TokenVerification.checkAuth, StudentController.getStudentEmail);
 
-router.post('/removegrading/:id', TokenVerification.checkAuth, StudentController.removeGrading);
-router.post('/addgrading/:id', TokenVerification.checkAuth, StudentController.addGrading);
+router.post('/removegrading/:id', TokenVerification.checkAuth, StudentController.removeGrading, StudentController.removeUnwatchedTechniques);
+router.post('/addgrading/:id', TokenVerification.checkAuth, StudentController.addGrading, StudentController.addUnwatchedTechniques);
 
 router.post('/addtonewapp/:id', TokenVerification.checkAuth, StudentController.addToNewApp);
 
@@ -25,6 +25,12 @@ router.post('/reactivate/:id', TokenVerification.checkAuth, StudentController.re
 
 router.post('/createtestuser', testUserController.createTestUser);
 router.post('/deletetestuser', testUserController.deleteTestUser);
+
+router.post('/unwatchedTechnique/add/:id', TokenVerification.checkAuth, StudentController.addUnwatchedTechnique);
+router.post('/unwatchedTechnique/remove/:id', TokenVerification.checkAuth, StudentController.removeUnwatchedTechnique);
+
+router.post('/favourite/add/:id', TokenVerification.checkAuth, StudentController.addFavourite);
+router.post('/favourite/remove/:id', TokenVerification.checkAuth, StudentController.removeFavourite);
 
 
 

@@ -64,4 +64,16 @@ export class StudentClientModel {
 
         return dbStudent;
     }
+
+    static getMemberGrade(gradings: MemberGrade[]): number {
+        let grade = 0;
+
+        gradings.map((dbGrading: MemberGrade) => {
+            if(grade < dbGrading.grade_id) {
+                grade = dbGrading.grade_id;
+            }
+        })
+
+        return grade;
+    }
 }
