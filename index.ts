@@ -34,7 +34,11 @@ var whitelist = [
     'http://localhost:8080',
     'http://localhost:8100',
     'http://hapkido-admin-staging.s3-website-ap-southeast-2.amazonaws.com',
-    'http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com'
+    'http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com',
+    'http://hapkido-student-staging.s3-website-ap-southeast-2.amazonaws.com/',
+    'http://hapkido-student-site.s3-website-ap-southeast-2.amazonaws.com/',
+    'http://admin.happkido.com.au/',
+    'http://student.happkido.com.au/'
 ];
 var corsOptions = {
     origin: function (origin: any, callback: any) {
