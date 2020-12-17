@@ -7,12 +7,18 @@ import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
 import {TagModel} from "../tag/tag-model";
 import {TechniqueModel} from "./technique-model";
-import {TechniqueClientModel} from "./technique-client.model";
+import {TechniqueClientModel} from "./admin-technique-client.model";
 import {Member} from "../entity/member";
-import {StudentClientModel} from "../student/client-student.model";
+import {AdminStudentClientModel} from "../student/admin-student-client.model";
 import {Tag} from "../entity/tag";
 import {Grade} from "../entity/grade";
 import {measure} from "../common/performance.decorator";
+import {MemberGrade} from "../entity/member-grade";
+import moment from "moment";
+import {UnwatchedTechniques} from "../entity/unwatched-techniques";
+import {StudentTechniqueClientModel} from "./student-technique-client.model";
+import {FavouriteTechniques} from "../entity/favourite-techniques";
+import {Questions} from "../entity/questions";
 
 export default class TechniqueController {
 
@@ -25,6 +31,53 @@ export default class TechniqueController {
         const clientTechniques = techniques.map((technique: Technique) => {
             return new TechniqueClientModel().dbToClient(technique);
         })
+
+        res.json(clientTechniques);
+    };
+
+
+    @measure
+    @DefaultCatch(defaultErrorHandler)
+    static async getAllTechniquesForAStudent(req: Request, res: Response, next:NextFunction) {
+        console.log('getting techniques')
+        const repository: Repository<Technique> =  await getRepository('Technique');
+        const memberrepo: Repository<Member> =  await getRepository('Member');
+        const unwatchedTechRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
+        const questionsRepo: Repository<Questions> =  await getRepository('Questions');
+        const favouriteRepo: Repository<FavouriteTechniques> =  await getRepository('FavouriteTechniques');
+
+        var hbId = req.params.id;
+        const member = await memberrepo.findOneOrFail(hbId);
+        const grade = AdminStudentClientModel.getMemberGrade(member.gradings);
+
+        // const techniques =
+        //     await repository.createQueryBuilder('t')
+        //     .leftJoinAndSelect("t.techniqueSet", 't_st')
+        //     .leftJoinAndSelect("t.tags", 'tags')
+        //     .leftJoinAndSelect("t.media", 'media')
+        //     .leftJoinAndSelect("media.tags", 'moretags')
+        //     .leftJoinAndSelect("t.grade", 'grade')
+        //     .where("t.t_grade <= :grade", { grade: AdminStudentClientModel.getMemberGrade(member.gradings) + 1 })
+        //     .getMany();
+
+        const techniques = await repository.find();
+
+
+        const unwatchedTechniques = await unwatchedTechRepo.find({hb_id: hbId});
+        const favouriteTechniques = await favouriteRepo.find({hb_id: hbId});
+        const questions = await questionsRepo.find();
+
+
+
+        //Map to client Model
+
+
+        const clientTechniques = techniques.map((technique: Technique) => {
+            return new StudentTechniqueClientModel().dbToClient(technique, unwatchedTechniques, favouriteTechniques, grade, questions);
+        })
+
+        console.log('returning getting techniques')
+
 
         res.json(clientTechniques);
     };

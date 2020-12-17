@@ -1,11 +1,14 @@
 var aws = require('aws-sdk');
 aws.config.update({
-    region: 'ap-southeast-2'
+    region: 'ap-southeast-2',
 });
+
+aws.config.update({accessKeyId: process.env.AWS_KEY, secretAccessKey: process.env.AWS_SECRET});
 
 function createStudentAuth (username, email) {
     return new Promise((resolve, reject) => {
         console.log('auth service create Auth');
+
         var cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
         cognitoidentityserviceprovider.updateUserPool();
 
@@ -28,9 +31,10 @@ function createStudentAuth (username, email) {
         console.log('admin create user', params);
 
         cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
+            console.log('Err and Data', err, data);
             if (err) {
                 console.log('Auth Service Success', err, err.stack);
-                reject();
+                reject(err);
             } else {
                 addUserToGroup(username);
                 console.log('Auth Service Success', data);

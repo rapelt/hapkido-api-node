@@ -18,6 +18,7 @@ export class TechniqueClientModel {
     tags!: number[];
     media!: MediaClientModel[];
 
+
     dbToClient(db: Technique): TechniqueClientModel {
         const technique = new TechniqueClientModel();
 

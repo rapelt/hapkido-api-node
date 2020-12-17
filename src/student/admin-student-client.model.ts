@@ -5,7 +5,7 @@ import {Family} from "../entity/family";
 import {ClassType} from "../entity/class-type";
 import {MemberGrade} from "../entity/member-grade";
 
-export class StudentClientModel {
+export class AdminStudentClientModel {
     name!: {
         firstname: string,
         lastname: string
@@ -20,8 +20,8 @@ export class StudentClientModel {
     familyId!: number;
     paymentType?: string;
 
-    dbToClient(db: Member): StudentClientModel {
-        const student = new StudentClientModel();
+    dbToClient(db: Member): AdminStudentClientModel {
+        const student = new AdminStudentClientModel();
 
         student.email = db.email;
         student.name = {
@@ -49,7 +49,7 @@ export class StudentClientModel {
         return student;
     }
 
-    clientToDB(student: StudentClientModel, classTypes: ClassType[]): Member {
+    clientToDB(student: AdminStudentClientModel, classTypes: ClassType[]): Member {
         const dbStudent = new Member();
 
         const classType = classTypes.find((aclassType) => student.preferredClass === aclassType.classType);
@@ -63,5 +63,17 @@ export class StudentClientModel {
         dbStudent.preferred_class_type_id = classType ? classType.id : 0;
 
         return dbStudent;
+    }
+
+    static getMemberGrade(gradings: MemberGrade[]): number {
+        let grade = 0;
+
+        gradings.map((dbGrading: MemberGrade) => {
+            if(grade < dbGrading.grade_id) {
+                grade = dbGrading.grade_id;
+            }
+        })
+
+        return grade;
     }
 }

@@ -1,95 +1,49 @@
-import {EnvironmentCredentials} from "aws-sdk";
-import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
-
 var aws = require('aws-sdk');
 aws.config.update({
     region: 'ap-southeast-2'
 });
 
-function uploadVideo(file: any, folder: string, filename: string, v_type: string): ManagedUpload {
-    aws.config.accessKeyId = process.env.AWS_KEY;
-    aws.config.secretAccessKey = process.env.AWS_SECRET;
-
-    const bucket = new aws.S3({
-        params: { Bucket: 'hapkido-uploaded-videos' },
+async function s3BucketUploadAuth(filename: string, filetype: string, folder: string, bucket: string): Promise<any> {
+    aws.config.update({
+        accessKeyId: process.env.AWS_KEY,
+        secretAccessKey: process.env.AWS_SECRET,
+        region: 'ap-southeast-2',
+        signatureVersion: 'v4',
     });
 
     const params = {
-        Key:
-            'inputs/' + folder +
-            filename.replace(/\s/g, '-') +
-            '.' +
-            v_type.split('/')[1],
-        Body: file,
+        Bucket: folder,
+        Key: filename,
+        Expires: 40 * 60,
+        ContentType: filetype
     };
 
-    console.log(params);
+    const options = {
+        signatureVersion: 'v4',
+        region: 'ap-southeast-2',
+        endpoint: new aws.Endpoint('http://'+ bucket +'.s3.amazonaws.com'),
+        useAccelerateEndpoint: false,
+        s3ForcePathStyle: true,
+    }
 
-     return bucket.upload(params, null, (err: any, res: any) => {
-            // console.log('error', err);
-            // console.log('response', res);
+    const client = new aws.S3(options);
+
+    const form = await (new Promise((resolve, reject) => {
+        client.getSignedUrl('putObject', params, (err: any, data: any) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
+            }
         });
-
-        // var request =  bucket.putObject(params).toPromise();
-};
-
-function uploadPhoto(file: any, folder: string, filename: string, v_type: string): ManagedUpload {
-    aws.config.accessKeyId = process.env.AWS_KEY;
-    aws.config.secretAccessKey = process.env.AWS_SECRET;
-
-    const bucket = new aws.S3({
-        params: { Bucket: 'hapkido-convert-videos' },
-    });
-
-    const params = {
-        Key:
-            folder +
-            filename.replace(/\s/g, '-') +
-            '.' +
-            v_type.split('/')[1],
-        Body: file,
+    }));
+    return {
+        form: form
     };
-
-    console.log(params);
-
-    return bucket.upload(params, null, (err: any, res: any) => {
-        // console.log('error', err);
-        // console.log('response', res);
-    });
-
-    // var request =  bucket.putObject(params).toPromise();
 };
 
-function uploadDocument(file: any, folder: string, filename: string, v_type: string): ManagedUpload {
-    aws.config.accessKeyId = process.env.AWS_KEY;
-    aws.config.secretAccessKey = process.env.AWS_SECRET;
 
-    const bucket = new aws.S3({
-        params: { Bucket: 'hapkido-convert-videos' },
-    });
-
-    const params = {
-        Key:
-            folder +
-            filename.replace(/\s/g, '-') +
-            '.' +
-            v_type.split('/')[1],
-        Body: file,
-    };
-
-    console.log(params);
-
-    return bucket.upload(params, null, (err: any, res: any) => {
-        // console.log('error', err);
-        // console.log('response', res);
-    });
-
-    // var request =  bucket.putObject(params).toPromise();
-};
 
 module.exports = {
-    uploadVideo: uploadVideo,
-    uploadPhoto: uploadPhoto,
-    uploadDocument: uploadDocument,
-
+    s3BucketUploadAuth: s3BucketUploadAuth
 };

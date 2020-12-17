@@ -9,6 +9,8 @@ var familyRouter = require('./src/family/family-router');
 var classTypeRouter = require('./src/class_type/class-type-router');
 var techniqueRouter = require('./src/technique/technique-router');
 var mediaRouter = require('./src/media_uploads/media-router');
+var questionRouter = require('./src/question/question-router');
+
 var tagRouter = require('./src/tag/tag-router');
 
 var multer = require('multer');
@@ -23,13 +25,20 @@ let app = express();
 
 var whitelist = [
     'http://localhost:4200',
+    'http://localhost:8000',
+    'http://localhost:3200',
     'capacitor://localhost',
     'ionic://localhost',
+    'http://192.168.43.172:4200',
     'http://localhost',
     'http://localhost:8080',
     'http://localhost:8100',
     'http://hapkido-admin-staging.s3-website-ap-southeast-2.amazonaws.com',
-    'http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com'
+    'http://hapkido-admin-site.s3-website-ap-southeast-2.amazonaws.com',
+    'http://hapkido-student-staging.s3-website-ap-southeast-2.amazonaws.com',
+    'http://hapkido-student-site.s3-website-ap-southeast-2.amazonaws.com',
+    'http://admin.happkido.com.au',
+    'http://student.happkido.com.au'
 ];
 var corsOptions = {
     origin: function (origin: any, callback: any) {
@@ -37,7 +46,7 @@ var corsOptions = {
             // console.log('Allowed');
             callback(null, true)
         } else {
-            // console.log('Blocked');
+            console.log(origin);
             callback(new Error('Not allowed by CORS'))
         }
     },
@@ -61,6 +70,8 @@ app.use("/classtype", classTypeRouter);
 app.use("/technique", techniqueRouter);
 app.use("/tag", tagRouter);
 app.use("/media", mediaRouter);
+app.use("/question", questionRouter);
+
 
 app.use(express.static(path.join(__dirname, '/')))
 
@@ -68,6 +79,8 @@ if(process.env.LH === 'true') {
     var server = http.createServer(app);
     let port = process.env.PORT || 8090;
     var host = process.env.HOST || '127.0.0.1';
+    // var host = '192.168.43.172';
+
     console.log(port, host);
     server.listen(port, host);
 }

@@ -15,6 +15,7 @@ import {Class} from "./class";
 import {Grade} from "./grade";
 import {MemberGrade} from "./member-grade";
 import {MemberClass} from "./member-class";
+import {UnwatchedTechniques} from "./unwatched-techniques";
 
 @Entity()
 export class Member {
@@ -125,11 +126,15 @@ export class Member {
 
     @OneToMany(() => MemberClass, member => member.hb_id, { eager: false})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
-    attendance!: MemberClass[];
+    attendance!: Promise<MemberClass[]>;
 
     @OneToMany(() => MemberGrade, member => member.hb_id, { eager: true})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
     gradings!: MemberGrade[];
+
+    @OneToMany(() => UnwatchedTechniques, member => member.hb_id, { eager: false})
+    @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
+    unwatchedTechniques!: UnwatchedTechniques[];
 
     @CreateDateColumn()
     createdAt!: Date;
