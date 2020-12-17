@@ -126,7 +126,7 @@ export class Member {
 
     @OneToMany(() => MemberClass, member => member.hb_id, { eager: false})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })
-    attendance!: MemberClass[];
+    attendance!: Promise<MemberClass[]>;
 
     @OneToMany(() => MemberGrade, member => member.hb_id, { eager: true})
     @JoinColumn({ name: "hb_id", referencedColumnName: "hb_id" })

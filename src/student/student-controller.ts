@@ -4,7 +4,7 @@ import {getConnection, getRepository, Repository} from "typeorm";
 import {Member} from "../entity/member";
 import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
-import {StudentClientModel} from "./client-student.model";
+import {AdminStudentClientModel} from "./admin-student-client.model";
 import {MemberGrade} from "../entity/member-grade";
 import {Grade} from "../entity/grade";
 import {ClassType} from "../entity/class-type";
@@ -12,8 +12,6 @@ import {Family} from "../entity/family";
 import {measure} from "../common/performance.decorator";
 import {Technique} from "../entity/technique";
 import {UnwatchedTechniques} from "../entity/unwatched-techniques";
-import {FavouriteTechniques} from "../entity/favourite-techniques";
-
 var authService = require('../cognito/auth-service');
 
 export default class StudentController {
@@ -25,7 +23,7 @@ export default class StudentController {
         const members = await repository.find();
 
         const clientStudents = members.map((student: Member) => {
-            return new StudentClientModel().dbToClient(student);
+            return new AdminStudentClientModel().dbToClient(student);
         })
 
         res.json(clientStudents);
@@ -36,14 +34,13 @@ export default class StudentController {
         const hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
         const student = await repository.findOneOrFail(hbId);
-        const clientStudent = new StudentClientModel().dbToClient(student);
+        const clientStudent = new AdminStudentClientModel().dbToClient(student);
         res.json(clientStudent);
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async createNewStudent(req: Request, res: Response, next:NextFunction) {
-        const student: StudentClientModel = req.body;
-        console.log(student);
+        const student: AdminStudentClientModel = req.body;
 
         const repository: Repository<Member> =  await getRepository('Member');
         const classTypeRepository: Repository<ClassType> =  await getRepository('ClassType');
@@ -56,11 +53,10 @@ export default class StudentController {
 
         if(student.familyId === null){
             const family = await familyRespository.save({ name: student.name.lastname});
-            console.log(family);
             student.familyId = family.family_id;
         }
 
-        const newMember = new StudentClientModel().clientToDB(student, classTypes);
+        const newMember = new AdminStudentClientModel().clientToDB(student, classTypes);
 
         const newstudent = await repository.insert(newMember);
 
@@ -86,22 +82,21 @@ export default class StudentController {
         await unwatchedRepo.save(techniqueIDs);
 
         const dbstudent = await repository.findOneOrFail(student.hbId);
-        const clientStudent = new StudentClientModel().dbToClient(dbstudent);
+        const clientStudent = new AdminStudentClientModel().dbToClient(dbstudent);
         res.json(clientStudent);
     };
 
     @DefaultCatch(defaultErrorHandler)
     static async updateStudent(req: Request, res: Response, next:NextFunction) {
-        console.log(req.body);
-        const student: StudentClientModel = req.body;
+        const student: AdminStudentClientModel = req.body;
         const classTypeRespository: Repository<ClassType> =  await getRepository('ClassType');
         const classTypes = await classTypeRespository.find();
         const repository: Repository<Member> =  await getRepository('Member');
-        const newMember = new StudentClientModel().clientToDB(student, classTypes);
+        const newMember = new AdminStudentClientModel().clientToDB(student, classTypes);
         await repository.update(student.hbId, newMember);
 
         const dbstudent = await repository.findOneOrFail(student.hbId);
-        const clientStudent = new StudentClientModel().dbToClient(dbstudent);
+        const clientStudent = new AdminStudentClientModel().dbToClient(dbstudent);
         res.json(clientStudent);
     };
 
@@ -110,7 +105,7 @@ export default class StudentController {
         const hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
         const student = await repository.findOneOrFail(hbId);
-        const clientStudent = new StudentClientModel().dbToClient(student);
+        const clientStudent = new AdminStudentClientModel().dbToClient(student);
         res.json(clientStudent.email);
     };
 
@@ -205,7 +200,7 @@ export default class StudentController {
         await unwatchedRepo.save(techniqueIDs);
 
         const student = await memberRepository.findOneOrFail(hbId);
-        const clientStudent = new StudentClientModel().dbToClient(student);
+        const clientStudent = new AdminStudentClientModel().dbToClient(student);
         res.json(clientStudent);
     };
 
@@ -239,60 +234,8 @@ export default class StudentController {
         await unwatchedRepo.remove(uwTechniques);
 
         const student = await memberRepository.findOneOrFail(hbId);
-        const clientStudent = new StudentClientModel().dbToClient(student);
+        const clientStudent = new AdminStudentClientModel().dbToClient(student);
         res.json(clientStudent);
-    };
-
-    @DefaultCatch(defaultErrorHandler)
-    static async addUnwatchedTechnique(req: Request, res: Response, next:NextFunction) {
-        var hbId = req.params.id;
-        var techniqueId = req.body.techniqueId;
-        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
-
-        const unwatchedTechnique = new UnwatchedTechniques();
-        unwatchedTechnique.hb_id = hbId;
-        unwatchedTechnique.t_id = techniqueId;
-        await unwatchedRepo.insert(unwatchedTechnique);
-
-        res.json({ studentId: hbId, techniqueId: techniqueId});
-    };
-
-    @DefaultCatch(defaultErrorHandler)
-    static async removeUnwatchedTechnique(req: Request, res: Response, next:NextFunction) {
-        var hbId = req.params.id;
-        var techniqueId = req.body.techniqueId;
-        const unwatchedRepo: Repository<UnwatchedTechniques> =  await getRepository('UnwatchedTechniques');
-
-        const unwatchedTechnique = await unwatchedRepo.findOneOrFail({ hb_id: hbId, t_id: techniqueId});
-        await unwatchedRepo.remove(unwatchedTechnique);
-
-        res.json({ studentId: hbId, techniqueId: techniqueId});
-    };
-
-    @DefaultCatch(defaultErrorHandler)
-    static async addFavourite(req: Request, res: Response, next:NextFunction) {
-        var hbId = req.params.id;
-        var techniqueId = req.body.techniqueId;
-        const favouriteRepo: Repository<FavouriteTechniques> =  await getRepository('FavouriteTechniques');
-
-        const unwatchedTechnique = new UnwatchedTechniques();
-        unwatchedTechnique.hb_id = hbId;
-        unwatchedTechnique.t_id = techniqueId;
-        await favouriteRepo.insert(unwatchedTechnique);
-
-        res.json({ studentId: hbId, techniqueId: techniqueId});
-    };
-
-    @DefaultCatch(defaultErrorHandler)
-    static async removeFavourite(req: Request, res: Response, next:NextFunction) {
-        var hbId = req.params.id;
-        var techniqueId = req.body.techniqueId;
-        const favouriteRepo: Repository<FavouriteTechniques> =  await getRepository('FavouriteTechniques');
-
-        const favouriteTechnique = await favouriteRepo.findOneOrFail({ hb_id: hbId, t_id: techniqueId});
-        await favouriteRepo.remove(favouriteTechnique);
-
-        res.json({ studentId: hbId, techniqueId: techniqueId});
     };
 
     static async getUWTIds(ids: number[], hb_id: string) {
@@ -301,7 +244,6 @@ export default class StudentController {
             .where("hb_id = :id", { id: hb_id })
             .andWhere("t_id IN (:...ids)", { ids: ids }).getMany();
     }
-
 
     @DefaultCatch(defaultErrorHandler)
     static async deactivateStudent(req: Request, res: Response, next:NextFunction) {
@@ -329,7 +271,6 @@ export default class StudentController {
         }).catch((err: any) => {
             return res.status(422).send({error: "Something went wrong with re-enabling student", err});
         })
-
     };
 
     @DefaultCatch(defaultErrorHandler)
@@ -354,55 +295,3 @@ export default class StudentController {
             });
     };
 }
-
-
-
-
-
-//
-// exports.removeGrading = function(req, res, next){
-//     console.log(" Remove Grading from Student", req.body, req.params.id);
-//     var grades = req.body;
-//     var hbId = req.params.id;
-//     var gradePromises = [];
-//
-//     grades.map((grade)=> {
-//     return {
-//                 hb_id: hbId,
-//                 grade_id: grade.grade
-//             }
-//     });
-//
-//     MemberGrade.destroy({
-//         where: gradePromises
-//     }).then(() => {
-//         controller.getStudent(req, res, next);
-//     }).catch((err) => {
-//         return res.status(422).send({error: "Something went wrong ", err});
-//     });
-// };
-//
-// exports.addGrading = function(req, res, next){
-//     console.log(" Add Grading to Student", req.body, req.params.id);
-//     var grades = req.body;
-//     var hbId = req.params.id;
-//     var gradePromises = [];
-//
-//
-//     gradePromises = grades.map((grade) => {
-//         return {
-//             hb_id: hbId,
-//             grade_id: grade.grade,
-//             class_id: null,
-//             date: new Date(grade.date)
-//         };
-//     });
-//
-//     MemberGrade.bulkCreate(gradePromises).then(() => {
-//         controller.getStudent(req, res, next);
-//     }).catch((err) => {
-//         return res.status(422).send({error: "Something went wrong ", err});
-//     });
-// };
-//
-

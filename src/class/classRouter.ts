@@ -9,12 +9,12 @@ router.post('/delete/:id', TokenVerification.checkAuth, ClassController.deleteCl
 router.post('/addtoclass/:id', ClassController.addToClass);
 router.post('/removefromclass/:id', ClassController.removeFromClass);
 router.post('/makeclassagrading/:id', TokenVerification.checkAuth, ClassController.makeClassAGrading);
+router.get('/getnextclasses', ClassController.getNextClasses);
 
 
 
 /*
 router.get('/todaysclasses', ClassController.getTodaysClasses);
-router.post('/getnextclasses', ClassController.getNextClasses);
 router.post('/getclassesbetweendates', ClassController.getClassesBetweenDates);
 */
 

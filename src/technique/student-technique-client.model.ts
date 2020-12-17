@@ -5,7 +5,7 @@ import {MediaClientModel} from "../media_uploads/media-client.model";
 import {QuestionsClientModel} from "../question/questions-client.model";
 import {Questions} from "../entity/questions";
 
-export class TechniqueStudentClientModel {
+export class StudentTechniqueClientModel {
     title!: string;
     id!: number;
     description!: string;
@@ -27,8 +27,8 @@ export class TechniqueStudentClientModel {
     updatedAt!: Date;
 
 
-    dbToClient(db: Technique, unwatchedTechniques: any[],  favourites: any[],  grade: number, questions: Questions[]): TechniqueStudentClientModel {
-        const technique = new TechniqueStudentClientModel();
+    dbToClient(db: Technique, unwatchedTechniques: any[],  favourites: any[],  grade: number, questions: Questions[]): StudentTechniqueClientModel {
+        const technique = new StudentTechniqueClientModel();
 
         technique.id = db.id;
         technique.description = db.description;

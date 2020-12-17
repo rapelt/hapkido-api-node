@@ -7,16 +7,16 @@ import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
 import {TagModel} from "../tag/tag-model";
 import {TechniqueModel} from "./technique-model";
-import {TechniqueClientModel} from "./technique-client.model";
+import {TechniqueClientModel} from "./admin-technique-client.model";
 import {Member} from "../entity/member";
-import {StudentClientModel} from "../student/client-student.model";
+import {AdminStudentClientModel} from "../student/admin-student-client.model";
 import {Tag} from "../entity/tag";
 import {Grade} from "../entity/grade";
 import {measure} from "../common/performance.decorator";
 import {MemberGrade} from "../entity/member-grade";
 import moment from "moment";
 import {UnwatchedTechniques} from "../entity/unwatched-techniques";
-import {TechniqueStudentClientModel} from "./technique-student-client.model";
+import {StudentTechniqueClientModel} from "./student-technique-client.model";
 import {FavouriteTechniques} from "../entity/favourite-techniques";
 import {Questions} from "../entity/questions";
 
@@ -48,7 +48,7 @@ export default class TechniqueController {
 
         var hbId = req.params.id;
         const member = await memberrepo.findOneOrFail(hbId);
-        const grade = StudentClientModel.getMemberGrade(member.gradings);
+        const grade = AdminStudentClientModel.getMemberGrade(member.gradings);
 
         // const techniques =
         //     await repository.createQueryBuilder('t')
@@ -57,7 +57,7 @@ export default class TechniqueController {
         //     .leftJoinAndSelect("t.media", 'media')
         //     .leftJoinAndSelect("media.tags", 'moretags')
         //     .leftJoinAndSelect("t.grade", 'grade')
-        //     .where("t.t_grade <= :grade", { grade: StudentClientModel.getMemberGrade(member.gradings) + 1 })
+        //     .where("t.t_grade <= :grade", { grade: AdminStudentClientModel.getMemberGrade(member.gradings) + 1 })
         //     .getMany();
 
         const techniques = await repository.find();
@@ -73,7 +73,7 @@ export default class TechniqueController {
 
 
         const clientTechniques = techniques.map((technique: Technique) => {
-            return new TechniqueStudentClientModel().dbToClient(technique, unwatchedTechniques, favouriteTechniques, grade, questions);
+            return new StudentTechniqueClientModel().dbToClient(technique, unwatchedTechniques, favouriteTechniques, grade, questions);
         })
 
         console.log('returning getting techniques')
