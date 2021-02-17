@@ -1,5 +1,7 @@
 import {Technique} from "../entity/technique";
 import {TechniqueSet} from "../entity/technique-set";
+import {Media} from "../entity/media";
+import {MediaClientModel} from "../media_uploads/media-client.model";
 
 export class TechniqueClientModel {
     title!: string;
@@ -14,6 +16,8 @@ export class TechniqueClientModel {
     videos!: [];
     photos!: [];
     tags!: number[];
+    media!: MediaClientModel[];
+
 
     dbToClient(db: Technique): TechniqueClientModel {
         const technique = new TechniqueClientModel();
@@ -28,6 +32,9 @@ export class TechniqueClientModel {
         }
 
         technique.tags = db.tags.map((tag) => tag.id);
+        technique.media = db.media.map((m) => {
+            return new MediaClientModel().dbToClient(m);
+        });
 
         return technique;
     }

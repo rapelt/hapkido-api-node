@@ -9,6 +9,7 @@ import {MemberClass} from "../entity/member-class";
 import {ClassType} from "../entity/class-type";
 import {classCreaterVariables} from "./class.service";
 import {measure} from "../common/performance.decorator";
+import moment from "moment";
 
 
 export default class ClassController {
@@ -19,6 +20,30 @@ export default class ClassController {
         console.log("get all classes");
         const repository: Repository<Class> = await getRepository('Class');
         const classes: Array<Class> = await repository.find();
+        const clientClasses = classes.map((aclass: Class) => {
+            return new ClientClass().dbToClient(aclass);
+        })
+
+        res.json(clientClasses);
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async getNextClasses(req: Request, res: Response, next:NextFunction) {
+        console.log("get all classes");
+        const repository: Repository<Class> = await getRepository('Class');
+
+        const startdate = new Date();
+        const enddate = moment(new Date()).add(1, 'week').toDate();
+
+        const classes: Array<Class> = await repository
+            .createQueryBuilder("class")
+            .leftJoinAndSelect("class.classType", 'ct_id')
+            .leftJoinAndSelect("class.attendance", 'att')
+            .where("class.date > :startdate && class.date < :enddate", { startdate: startdate, enddate: enddate })
+            .getMany();
+
+        console.log(classes);
+
         const clientClasses = classes.map((aclass: Class) => {
             return new ClientClass().dbToClient(aclass);
         })

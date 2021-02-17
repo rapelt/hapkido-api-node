@@ -20,6 +20,10 @@ const startServer = async () => {
 
         });
 
+        io.on('connect_failed', function() {
+            console.log("Sorry, there seems to be an issue with the connection!");
+        })
+
     });
 
 

@@ -5,12 +5,14 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
-    ManyToOne, JoinColumn, ManyToMany, JoinTable
+    ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany
 } from "typeorm";
 import {Grade} from "./grade";
 import {TechniqueSet} from "./technique-set";
 import {Tag} from "./tag";
 import {Media} from "./media";
+import {UnwatchedTechniques} from "./unwatched-techniques";
+import {Questions} from "./questions";
 
 @Entity()
 export class Technique {
@@ -48,7 +50,7 @@ export class Technique {
     @JoinColumn({ name: "t_set", referencedColumnName: "id" })
     techniqueSet!: TechniqueSet;
 
-    @ManyToMany(() => Tag, { eager: true})
+    @ManyToMany(() => Tag, { eager: true, cascade: true})
     @JoinTable({ name: "technique_tag",
         joinColumn: {
             name: "t_id",
@@ -71,6 +73,14 @@ export class Technique {
             referencedColumnName: "id"
         }})
     media!: Media[];
+
+    @OneToMany(() => UnwatchedTechniques, technique => technique.t_id, { eager: false})
+    @JoinColumn({ name: "t_id", referencedColumnName: "t_id" })
+    unwatchedTechniques!: UnwatchedTechniques[];
+
+    @ManyToMany(() => Questions, question => question.id, { eager: false})
+    @JoinColumn({ name: "id", referencedColumnName: "id" })
+    questions!: Questions[];
 
     @CreateDateColumn()
     createdAt!: Date;
