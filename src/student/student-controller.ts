@@ -259,7 +259,9 @@ export default class StudentController {
         authService.deactivateStudentAuth(hbId).then(() => {
             next();
         }).catch((err: any) => {
-            return res.status(422).send({error: "Something went wrong with disabling student", err});
+            next();
+            // Not all students are in cognito
+            // return res.status(422).send({error: "Something went wrong with disabling student", err});
         })
     };
 
@@ -269,7 +271,9 @@ export default class StudentController {
         authService.reActivateStudentAuth(hbId).then(() => {
             next();
         }).catch((err: any) => {
-            return res.status(422).send({error: "Something went wrong with re-enabling student", err});
+            next();
+            // Not all students are in cognito
+            // return res.status(422).send({error: "Something went wrong with re-enabling student", err});
         })
     };
 

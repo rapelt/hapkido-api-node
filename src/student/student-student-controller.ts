@@ -29,7 +29,10 @@ export default class StudentStudentController {
         const classes = await classRepo.findByIds(ids);
 
         const clientStudent = new StudentStudentClientModel().dbToClient(student, classes);
+
         res.json(clientStudent);
+
+
     };
 
     @DefaultCatch(defaultErrorHandler)
