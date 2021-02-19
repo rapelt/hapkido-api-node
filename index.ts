@@ -10,6 +10,8 @@ var classTypeRouter = require('./src/class_type/class-type-router');
 var techniqueRouter = require('./src/technique/technique-router');
 var mediaRouter = require('./src/media_uploads/media-router');
 var questionRouter = require('./src/question/question-router');
+var graphRouter = require('./src/graph/graph-router');
+
 
 var tagRouter = require('./src/tag/tag-router');
 
@@ -71,6 +73,7 @@ app.use("/technique", techniqueRouter);
 app.use("/tag", tagRouter);
 app.use("/media", mediaRouter);
 app.use("/question", questionRouter);
+app.use("/graph", graphRouter);
 
 
 app.use(express.static(path.join(__dirname, '/')))
