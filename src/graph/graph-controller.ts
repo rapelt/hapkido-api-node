@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import {getRepository, Repository} from "typeorm";
+import {Between, getRepository, Repository} from "typeorm";
 
 import {DefaultCatch} from 'catch-decorator-ts'
 import {defaultErrorHandler} from '../common/error-handler';
@@ -32,9 +32,30 @@ export default class GraphController {
     };
 
     static async getDataBetweenDates(req: Request, res: Response, next:NextFunction) {
-        const repository: Repository<Family> =  await getRepository('Family');
-        const families = await repository.find();
-        res.json(families);
+        const dates = req.body;
+        const start = new Date(dates.start);
+        const finish = new Date(dates.finish);
+        console.log(start, finish)
+
+        const studentRepository: Repository<Member> =  await getRepository('Member');
+        const classRepository: Repository<Class> = await getRepository('Class');
+
+        const members = await studentRepository.find({ select: ['hbId', 'firstname', 'lastname'], relations: ['gradings', 'preferredClass']});
+        const classes: Array<Class> = await classRepository.find(
+            {
+                select: ['classId', 'date'], relations: ['attendance', 'classType'],
+                where: [{'date': Between(start, finish)}]
+            });
+
+        const clientStudents = members.map((student: Member) => {
+            return new GraphMapper().mapStudentToGraph(student);
+        })
+
+        const clientClasses = classes.map((aclass: Class) => {
+            return new GraphMapper().mapClassToGraph(aclass);
+        })
+
+        res.json({classes: clientClasses, students: clientStudents});
     };
 }
 
