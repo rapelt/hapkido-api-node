@@ -1,7 +1,6 @@
 import {Media} from "../entity/media";
 
 var service = require('./media-service');
-var ioConnection = require('../io/io');
 import {Request, Response, NextFunction} from "express";
 import {getRepository, Repository} from "typeorm";
 import {DefaultCatch} from 'catch-decorator-ts'
@@ -9,6 +8,7 @@ import {defaultErrorHandler} from '../common/error-handler';
 import {Technique} from "../entity/technique";
 import {MediaClientModel} from "./media-client.model";
 import {Tag} from "../entity/tag";
+import {measure} from "../common/performance.decorator";
 
 export default class MediaController {
 
@@ -75,6 +75,7 @@ export default class MediaController {
     };
 
     @DefaultCatch(defaultErrorHandler)
+    @measure
     static async authenticateUploadMedia(req: Request, res: Response, next:NextFunction) {
         console.log(req.body);
         const mediaData: Media = req.body.media;
@@ -96,7 +97,7 @@ export default class MediaController {
         newMedia.tags = [];
 
         const result = await service.s3BucketUploadAuth(req.body.filename, req.body.filetype, req.body.folder, req.body.bucket);
-        console.log(result);
+        console.log('Upload Authentication Results', req.body.filename, result);
         res.json({result: result, media: newMedia});
     };
 }
