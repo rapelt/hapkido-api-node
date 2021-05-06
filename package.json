@@ -47,7 +47,7 @@
     "ts-node-dev": "^1.0.0-pre.32",
     "typeorm": "^0.2.28",
     "typescript": "^3.4.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "catch-decorator-ts": "0.0.2"
