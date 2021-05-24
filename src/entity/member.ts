@@ -8,11 +8,8 @@ import {
     ManyToOne, JoinColumn, PrimaryColumn, ManyToMany, JoinTable, OneToMany
 } from "typeorm";
 import {ClassType} from "./class-type";
-import {Moment} from "moment";
 import {Family} from "./family";
 import {EmergencyContact} from "./emergency-contact";
-import {Class} from "./class";
-import {Grade} from "./grade";
 import {MemberGrade} from "./member-grade";
 import {MemberClass} from "./member-class";
 import {UnwatchedTechniques} from "./unwatched-techniques";
@@ -98,7 +95,7 @@ export class Member {
     @Column({
         type: "varchar",
         length: 100,
-        nullable: false,
+        nullable: true,
         name: 'email',
     })
     email!: string;
@@ -112,6 +109,22 @@ export class Member {
 
     @Column({ type: "int", nullable: false })
     family_id!: number;
+
+    @Column({
+        type: "boolean",
+        nullable: false,
+        name: 'has_app_login',
+        default: false
+    })
+    hasAppLogin!: boolean;
+
+    @Column({
+        type: "boolean",
+        nullable: false,
+        name: 'is_enabled_in_app',
+        default: false
+    })
+    isEnabledInApp!: boolean;
 
     @ManyToOne(() => Family, family => family.family_id, { nullable: false, eager: true})
     @JoinColumn({ name: "family_id", referencedColumnName: "family_id" })

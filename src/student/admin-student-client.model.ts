@@ -19,6 +19,8 @@ export class AdminStudentClientModel {
     preferredClass!: string;
     familyId!: number;
     paymentType?: string;
+    hasAppLogin!: boolean;
+    hasAppAccess!: boolean;
 
     dbToClient(db: Member): AdminStudentClientModel {
         const student = new AdminStudentClientModel();
@@ -33,6 +35,8 @@ export class AdminStudentClientModel {
         student.isActive = db.isActive;
         student.preferredClass = db.preferredClass.classType;
         student.familyId = db.family_id;
+        student.hasAppLogin = db.hasAppLogin;
+        student.hasAppAccess = db.isEnabledInApp;
 
         student.grade = 0;
 
