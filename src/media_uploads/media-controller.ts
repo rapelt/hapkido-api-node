@@ -77,7 +77,7 @@ export default class MediaController {
     @DefaultCatch(defaultErrorHandler)
     @measure
     static async authenticateUploadMedia(req: Request, res: Response, next:NextFunction) {
-        console.log(req.body);
+        console.log('Get Auth for Media Upload', req.body);
         const mediaData: Media = req.body.media;
 
         const techniqueRepo: Repository<Technique> =  await getRepository('Technique');
@@ -97,7 +97,7 @@ export default class MediaController {
         newMedia.tags = [];
 
         const result = await service.s3BucketUploadAuth(req.body.filename, req.body.filetype, req.body.folder, req.body.bucket);
-        console.log('Upload Authentication Results', req.body.filename, result);
+        console.log('Get Auth for Media Upload - Result - technique id ' + techniqueId, result);
         res.json({result: result, media: newMedia});
     };
 }

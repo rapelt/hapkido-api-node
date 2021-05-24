@@ -101,6 +101,29 @@ export default class StudentController {
     };
 
     @DefaultCatch(defaultErrorHandler)
+    static async updateEmail(req: Request, res: Response, next:NextFunction) {
+        const hbId = req.params.id;
+        const email: string = req.body.email;
+        const repository: Repository<Member> =  await getRepository('Member');
+        const updatedMember = await repository.update(hbId, { email: email});
+
+        res.json({ studentId: hbId, email: email});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async updateEmailInCognito(req: Request, res: Response, next:NextFunction) {
+        const hbId = req.params.id;
+        const email: string = req.body.email;
+
+        authService.editStudentEmail(hbId, email).then(() => {
+            next();
+        }).catch(() => {
+            console.log('OMG something went wrong with the user sign up.');
+            return res.status(422).send({error: "Something went wrong"});
+        });
+    };
+
+    @DefaultCatch(defaultErrorHandler)
     static async getStudentEmail(req: Request, res: Response, next:NextFunction) {
         const hbId = req.params.id;
         const repository: Repository<Member> =  await getRepository('Member');
@@ -287,15 +310,42 @@ export default class StudentController {
 
     @DefaultCatch(defaultErrorHandler)
     static async addToNewApp(req: Request, res: Response, next:NextFunction) {
-            console.log("Add Student to new app", req.body);
-            var student = req.body;
+        console.log("Add Student to new app", req.body);
 
-            authService.createStudentAuth(student.hbId, student.email).then(() => {
-                req.params = { id: student.hbId};
-                next();
-            }).catch(() => {
-                console.log('OMG something went wrong with the user sign up.');
-                return res.status(422).send({error: "Something went wrong"});
-            });
+        const hbId = req.params.id;
+        const repository: Repository<Member> =  await getRepository('Member');
+        const student = await repository.findOneOrFail(hbId);
+
+        authService.createStudentAuth(student.hbId, student.email).then(() => {
+            req.params = { id: student.hbId};
+            next();
+        }).catch(() => {
+            console.log('OMG something went wrong with the user sign up.');
+            return res.status(422).send({error: "Something went wrong"});
+        });
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async saveHasLogin(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        const repository: Repository<Member> =  await getRepository('Member');
+        const Members = await repository.update(hbId, { hasAppLogin: true, isEnabledInApp: true});
+        res.json({ studentId: hbId});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async saveAppDeactivation(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        const repository: Repository<Member> =  await getRepository('Member');
+        const Members = await repository.update(hbId, { isEnabledInApp: false});
+        res.json({ studentId: hbId});
+    };
+
+    @DefaultCatch(defaultErrorHandler)
+    static async saveAppReactivation(req: Request, res: Response, next:NextFunction) {
+        var hbId = req.params.id;
+        const repository: Repository<Member> =  await getRepository('Member');
+        const Members = await repository.update(hbId, { isEnabledInApp: true});
+        res.json({ studentId: hbId});
     };
 }
