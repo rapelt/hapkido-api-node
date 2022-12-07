@@ -28,7 +28,7 @@
     "body-parser": "^1.17.1",
     "chai": "^4.1.0",
     "cors": "^2.8.1",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "jsonwebtoken": "^8.2.1",
     "jwt-simple": "^0.5.1",
     "mocha": "^3.4.2",
